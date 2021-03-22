@@ -31,7 +31,7 @@ namespace C3D_Pascal_AirMax
             }
             else
             {
-                var result = MessageBox.Show("Analisis correcto");
+                var result = MessageBox.Show("Analisis incorrecto");
             }
 
         }
