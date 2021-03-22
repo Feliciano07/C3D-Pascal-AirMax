@@ -1,0 +1,17 @@
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.csprojAssemblyReference.cache
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D_Pascal_AirMax.Form1.resources
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.csproj.GenerateResource.cache
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.AssemblyInfoInputs.cache
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.AssemblyInfo.cs
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.csproj.CoreCompileInputs.cache
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\bin\Debug\netcoreapp3.1\C3D-Pascal-AirMax.exe
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\bin\Debug\netcoreapp3.1\C3D-Pascal-AirMax.deps.json
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\bin\Debug\netcoreapp3.1\C3D-Pascal-AirMax.runtimeconfig.json
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\bin\Debug\netcoreapp3.1\C3D-Pascal-AirMax.runtimeconfig.dev.json
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\bin\Debug\netcoreapp3.1\C3D-Pascal-AirMax.dll
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\bin\Debug\netcoreapp3.1\C3D-Pascal-AirMax.pdb
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\bin\Debug\netcoreapp3.1\Irony.dll
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.csproj.CopyComplete
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.dll
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.pdb
+C:\Users\Fernando Chajon\Desktop\Compiladores2\C3D-Pascal-AirMax\obj\Debug\netcoreapp3.1\C3D-Pascal-AirMax.genruntimeconfig.cache
