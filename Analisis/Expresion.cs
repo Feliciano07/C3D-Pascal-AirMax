@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using C3D_Pascal_AirMax.Abstract;
-using C3D_Pascal_AirMax.Expresion;
+using C3D_Pascal_AirMax.Expresion.Aritmeticas;
 using C3D_Pascal_AirMax.TipoDatos;
+using C3D_Pascal_AirMax.Expresion.Constantes;
 using Irony.Parsing;
 
 namespace C3D_Pascal_AirMax.Analisis
@@ -22,17 +21,16 @@ namespace C3D_Pascal_AirMax.Analisis
                 switch (toke)
                 {
                     case "+":
-
-                        break;
+                        return new Suma(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
+                        
                     case "-":
-
-                        break;
+                        return new Resta(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
+                        
                     case "*":
-
-                        break;
+                        return new Multiplicacion(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
+                        
                     case "/":
-
-                        break;
+                        return new Division(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "mod":
 
                         break;
@@ -79,27 +77,27 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "entero":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new Constante(linea, columna, new Primitivo(Objeto.TipoObjeto.INTEGER, valor));
+                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.INTEGER, valor);
                         }
                     case "cadena":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new Constante(linea, columna, new Primitivo(Objeto.TipoObjeto.STRING, valor));
+                            break;
                         }
                     case "decimal":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new Constante(linea, columna, new Primitivo(Objeto.TipoObjeto.REAL, valor));
+                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.REAL, valor);
                         }
                     case "true":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new Constante(linea, columna, new Primitivo(Objeto.TipoObjeto.BOOLEAN, valor));
+                            break;
                         }
                     case "false":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new Constante(linea, columna, new Primitivo(Objeto.TipoObjeto.BOOLEAN, valor));
+                            break;
                         }
 
                 }

@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace C3D_Pascal_AirMax.Abstract
+namespace C3D_Pascal_AirMax.TipoDatos
 {
-    public abstract class Objeto
+    public class Objeto
     {
         public enum TipoObjeto : int
         {
-            STRING =0,
+            STRING = 0,
             INTEGER = 1,
             REAL = 2,
             BOOLEAN = 3,
             VOID = 4,
             ARRAY = 5,
             OBJECTS = 6,
+            NULO = 10
         }
 
         private TipoObjeto tipo;
@@ -28,7 +29,6 @@ namespace C3D_Pascal_AirMax.Abstract
             return this.tipo;
         }
 
-        public abstract object getValor();
 
     }
 }

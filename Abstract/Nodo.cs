@@ -26,7 +26,7 @@ namespace C3D_Pascal_AirMax.Abstract
         }
 
 
-        public abstract Retorno ejecutar();
+        public abstract Retorno compilar();
 
 
     }

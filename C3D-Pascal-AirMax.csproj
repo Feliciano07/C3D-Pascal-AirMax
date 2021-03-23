@@ -13,4 +13,9 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Expresion\Logicas\" />
+    <Folder Include="Expresion\Relacionales\" />
+  </ItemGroup>
+
 </Project>

@@ -229,8 +229,8 @@ namespace C3D_Pascal_AirMax.Analisis
             instrucciones.Rule = MakePlusRule(instrucciones, instruccion);
 
             // todo esto es lo que estaria arriba antes del main, exepto exp
-            instruccion.Rule =
-                                variable
+            instruccion.Rule = exp
+                              | variable
                               | constante
                               | arrays
                               | objectos
