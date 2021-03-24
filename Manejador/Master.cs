@@ -1,4 +1,5 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
+using C3D_Pascal_AirMax.Enviroment;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,7 @@ namespace C3D_Pascal_AirMax.Manejador
     {
         private static readonly Master instancia = new Master();
         private LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
+        private LinkedList<Error> lista_errores = new LinkedList<Error>();
         private int temporal = 0;
         private int label = 0;
         private LinkedList<string> codigo = new LinkedList<string>();
@@ -26,12 +28,25 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             this.instrucciones.AddLast(nodo);
         }
+        public void addError(Error error)
+        {
+            this.lista_errores.AddLast(error);
+        }
 
         public void ejecutar()
         {
+            Entorno entorno = new Entorno();
+
             foreach(Nodo node in this.instrucciones)
             {
-                node.compilar();
+                try
+                {
+                    node.compilar(entorno);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
             }
         }
 
@@ -46,6 +61,7 @@ namespace C3D_Pascal_AirMax.Manejador
         }
 
         
+        // ********************* Generar codigo ********************
         public string newTemporal()
         {
             string tem = "T" + this.temporal;

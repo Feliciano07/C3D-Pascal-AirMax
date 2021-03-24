@@ -4,6 +4,7 @@ using System.Text;
 using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Manejador;
 using C3D_Pascal_AirMax.TipoDatos;
+using C3D_Pascal_AirMax.Enviroment;
 
 namespace C3D_Pascal_AirMax.Expresion.Constantes
 {
@@ -18,7 +19,7 @@ namespace C3D_Pascal_AirMax.Expresion.Constantes
             this.valor = valor;
         }
 
-        public override Retorno compilar()
+        public override Retorno compilar(Entorno entorno)
         {
             switch (tipo)
             {

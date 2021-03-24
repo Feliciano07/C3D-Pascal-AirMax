@@ -1,4 +1,5 @@
 ﻿using C3D_Pascal_AirMax.Manejador;
+using C3D_Pascal_AirMax.Enviroment;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +27,7 @@ namespace C3D_Pascal_AirMax.Abstract
         }
 
 
-        public abstract Retorno compilar();
+        public abstract Retorno compilar(Entorno entorno);
 
 
     }
