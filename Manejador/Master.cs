@@ -44,9 +44,16 @@ namespace C3D_Pascal_AirMax.Manejador
             this.lista_errores.AddLast(error);
         }
 
+        public int AumentarStack()
+        {
+            int aux = this.puntero_stack;
+            this.puntero_stack++;
+            return aux;
+        }
+
         public void ejecutar()
         {
-            Entorno entorno = new Entorno();
+            Entorno entorno = new Entorno("Global");
 
             foreach(Nodo node in this.instrucciones)
             {
@@ -59,6 +66,7 @@ namespace C3D_Pascal_AirMax.Manejador
                     Console.WriteLine(e.ToString());
                 }
             }
+            entorno.TablaGeneral();
         }
 
         public string getSalida()
@@ -107,10 +115,19 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             this.codigo.AddLast(this.heap + "[" + posicion + "] = "+ valor+";");
         }
+        public void addSetStack(string posicion, string valor)
+        {
+            this.codigo.AddLast(this.stack +  "[" + posicion + "] = " + valor + ";");
+        }
 
         public void addGetHeap(string target, string posicion)
         {
-            this.codigo.AddLast(target + " = " + this.heap_p + "[" + posicion + "];");
+            this.codigo.AddLast(target + " = " + this.heap + "[" + posicion + "];");
+        }
+
+        public void addGetStack(string target, string posicion)
+        {
+            this.codigo.AddLast(target + " = " + this.stack + "[" + posicion + "];");
         }
 
         public void addif(string left, string right, string operador, string label)
@@ -128,6 +145,19 @@ namespace C3D_Pascal_AirMax.Manejador
             this.codigo.AddLast(label + ":");
         }
 
+        public void Retorno_funcion()
+        {
+            this.codigo.AddLast("return;");
+        }
+        public void addFinFuncion()
+        {
+            this.codigo.AddLast("}");
+        }
+
+        public void addFuncion(string nombre)
+        {
+            this.codigo.AddLast("void " + nombre + "(){");
+        }
 
     }
 }

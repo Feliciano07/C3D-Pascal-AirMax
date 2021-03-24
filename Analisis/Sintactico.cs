@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Manejador;
+using C3D_Pascal_AirMax.Nativas;
 using Irony.Parsing;
 
 namespace C3D_Pascal_AirMax.Analisis
@@ -24,6 +25,9 @@ namespace C3D_Pascal_AirMax.Analisis
             }
 
             GenerarAST(raiz);
+
+            CargarNativas();
+
             encabezado(raiz.ChildNodes[0]);
             Master.getInstancia.ejecutar();
 
@@ -69,6 +73,11 @@ namespace C3D_Pascal_AirMax.Analisis
 
             }
             return null;
+        }
+
+        public void CargarNativas()
+        {
+            Master.getInstancia.addInstruccion(new Nativa_Concatenar(0,0));
         }
 
         public void GenerarAST(ParseTreeNode raiz)
