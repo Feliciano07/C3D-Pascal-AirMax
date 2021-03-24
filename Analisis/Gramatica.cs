@@ -70,7 +70,7 @@ namespace C3D_Pascal_AirMax.Analisis
             var Treal = ToTerm("real");
             var Tboolean = ToTerm("boolean");
 
-            //TODO: falta los tipos de datos void, objects y array
+            
 
             var Ttype = ToTerm("type");
             var Tarray = ToTerm("array");
@@ -228,7 +228,7 @@ namespace C3D_Pascal_AirMax.Analisis
 
             instrucciones.Rule = MakePlusRule(instrucciones, instruccion);
 
-            // todo esto es lo que estaria arriba antes del main, exepto exp
+            // esto es lo que estaria arriba antes del main, exepto exp
             instruccion.Rule = exp
                               | variable
                               | constante
@@ -240,7 +240,7 @@ namespace C3D_Pascal_AirMax.Analisis
             inicio_programa.Rule = Tbegin + opciones_main + Tend + Tpunto;
 
 
-            //TODO: ya la regue, revisar conflicto de shift reduce
+            
 
             opciones_main.Rule = MakePlusRule(opciones_main, sentencias_main)
                                  | MakePlusRule(opciones_main, main); //*
@@ -347,7 +347,7 @@ namespace C3D_Pascal_AirMax.Analisis
             lista_main.Rule = MakePlusRule(lista_main, main);
 
 
-            //Todo posible que venga dentro mas begin end
+            //posible que venga dentro mas begin end
 
             main.Rule = asignacion + Tpuntocoma
                          | writeln + Tpuntocoma //*
@@ -428,7 +428,7 @@ namespace C3D_Pascal_AirMax.Analisis
             //           if_then_else.Rule = Telse + Tif + exp + Tthen + opcion_if;
 
 
-            //TODO: falta agregar break y continue, ya que genera conflicto reduce reduce
+            
 
             opcion_if.Rule = asignacion //*
                              | writeln //*

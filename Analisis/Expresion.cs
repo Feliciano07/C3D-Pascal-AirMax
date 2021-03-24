@@ -82,7 +82,7 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "cadena":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            break;
+                            return new StringC(linea, columna, Objeto.TipoObjeto.STRING, valor);
                         }
                     case "decimal":
                         {
