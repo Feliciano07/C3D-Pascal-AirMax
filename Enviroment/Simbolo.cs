@@ -9,29 +9,42 @@ namespace C3D_Pascal_AirMax.Enviroment
     {
 
         public enum Rol:int{
-            VAR = 1,
-            FUNCT = 2,
-            CONST =3
+            VARIABLE = 1,
+            FUNCTION = 2,
+            CONSTANTE =3,
+            VARIABLE_LOCAL = 4
         }
         public enum Pointer:int
         {
             STACK = 1,
             HEAP = 2
         }
-        private string nombre;
+
         private Objeto.TipoObjeto tipo;
+        private string nombre;
+        private int posicion;
         private Rol rol;
         private Pointer pointer;
         private HashSet<string> ambito;
-        private int apuntador;
 
-        public Simbolo(string nombre, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer, int apuntador)
+        //para guardar las funciones
+        public Simbolo(string nombre, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer)
         {
             this.nombre = nombre;
             this.tipo = tipo;
             this.rol = rol;
             this.pointer = pointer;
-            this.apuntador = apuntador;
+            this.ambito = new HashSet<string>();
+        }
+
+        // para guardar variables locales
+        public Simbolo(string nombre, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer, int posicion)
+        {
+            this.nombre = nombre;
+            this.tipo = tipo;
+            this.rol = rol;
+            this.pointer = pointer;
+            this.posicion = posicion;
             this.ambito = new HashSet<string>();
         }
 
@@ -66,10 +79,9 @@ namespace C3D_Pascal_AirMax.Enviroment
             return this.rol;
         }
 
-        public int getApuntador()
+        public int getPosicion()
         {
-            return this.apuntador;
+            return this.posicion;
         }
-
     }
 }

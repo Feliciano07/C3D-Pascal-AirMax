@@ -16,12 +16,14 @@ namespace C3D_Pascal_AirMax.Manejador
         private int label = 0;
         private LinkedList<string> codigo = new LinkedList<string>();
         private LinkedList<string> storageTemp = new LinkedList<string>();
+        private LinkedList<string> temporalesInt = new LinkedList<string>();
         private LinkedList<string> storageLabel = new LinkedList<string>();
 
         public string heap = "Heap";
         public string stack = "Stack";
         public string heap_p = "HP";
         public string stack_p = "SP";
+        public string prt = "ptr";
 
 
         private int puntero_heap = 0;
@@ -68,10 +70,35 @@ namespace C3D_Pascal_AirMax.Manejador
             }
             entorno.TablaGeneral();
         }
+        public string getEncabezado()
+        {
+            string salida = "#include <stdio.h>\n";
+            salida += "float Heap[100000];\n";
+            salida += "float Stack[100000];\n";
+            salida += "float SP\n";
+            salida += "float HP\n";
+            salida += "float ";
+            int contador = 0;
+            foreach(string st in storageTemp)
+            {
+                if(contador == 0)
+                {
+                    salida += st;
+                }
+                else
+                {
+                    salida += "," + st;
+                }
+                contador++;
+            }
+            salida += ";\n";
+            return salida;
+        }
 
         public string getSalida()
         {
             string salida = "";
+            salida += getEncabezado();
             foreach(string str in this.codigo)
             {
                 salida += str + "\n";
@@ -88,6 +115,14 @@ namespace C3D_Pascal_AirMax.Manejador
             this.storageTemp.AddLast(tem);
             return tem;
         }
+        public string newTemporalEntero()
+        {
+            string tem = "T" + this.temporal;
+            this.temporal++;
+            this.temporalesInt.AddLast(tem);
+            return tem;
+        }
+
         public string newLabel()
         {
             string lab = "L" + this.label;
@@ -109,6 +144,15 @@ namespace C3D_Pascal_AirMax.Manejador
         public void nextHeap()
         {
             this.codigo.AddLast("HP = HP + 1;");
+        }
+
+        public void plusStack(string aumento)
+        {
+            this.codigo.AddLast(this.stack_p + " = " + this.stack_p + " + " + aumento+";");
+        }
+        public void substracStack(string disminucion)
+        {
+            this.codigo.AddLast(this.stack_p + " = " + this.stack_p + " - " + disminucion+";");
         }
 
         public void addSetHeap(string posicion, string valor)
@@ -157,6 +201,11 @@ namespace C3D_Pascal_AirMax.Manejador
         public void addFuncion(string nombre)
         {
             this.codigo.AddLast("void " + nombre + "(){");
+        }
+
+        public void callFuncion(string nombre)
+        {
+            this.codigo.AddLast(nombre + "();");
         }
 
     }

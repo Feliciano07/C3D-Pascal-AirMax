@@ -39,7 +39,7 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
                     Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "+");
                     return new Retorno(tem, true, tipo_dominante);
                 case Objeto.TipoObjeto.STRING:
-                    break;
+                    return Llamada_nativa_concatenar(res_left,res_right,entorno.getSize());
                 default:
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                         "No se pueden sumas los tipos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
@@ -48,6 +48,26 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             }
 
             return null;
+        }
+
+        public Retorno Llamada_nativa_concatenar(Retorno res_left, Retorno res_right, int size)
+        {
+            string tem = Master.getInstancia.newTemporal();
+            Master.getInstancia.addBinaria(tem, Master.getInstancia.stack_p, size.ToString() , "+");
+            string tem1 = Master.getInstancia.newTemporal();
+            Master.getInstancia.addBinaria(tem1, tem, "1", "+");
+            Master.getInstancia.addSetStack(tem1, res_left.getValor());
+            tem1 = Master.getInstancia.newTemporal();
+            Master.getInstancia.addBinaria(tem1, tem, "1", "+");
+            Master.getInstancia.addSetStack(tem1, res_right.getValor());
+            //cambio entorno
+            Master.getInstancia.plusStack(size.ToString());
+            Master.getInstancia.callFuncion("native_concat_str");
+            Master.getInstancia.addBinaria(tem1, Master.getInstancia.stack_p, "0", "+");
+            string tem2 = Master.getInstancia.newTemporal();// posicion inicio de nueva cadena
+            Master.getInstancia.addGetStack(tem2, tem1);
+            Master.getInstancia.substracStack(size.ToString());
+            return new Retorno(tem2, true, Objeto.TipoObjeto.STRING);
         }
 
     }

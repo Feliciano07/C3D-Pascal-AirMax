@@ -9,11 +9,13 @@ namespace C3D_Pascal_AirMax.Enviroment
     {
         private Dictionary<string, Simbolo> tabla;
         private string nombre_entorno;
+        private int size;
 
         public Entorno( string nombre)
         {
             this.tabla = new Dictionary<string, Simbolo>();
             this.nombre_entorno = nombre;
+            this.size = 0;
         }
 
         public string getNombreEntorno()
@@ -27,6 +29,11 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.tabla.Add(llave, sb);
         }
 
+        public int getSize()
+        {
+            return this.size;
+        }
+
         public string Retornar_Simbolos()
         {
             string salida = "";
@@ -37,7 +44,7 @@ namespace C3D_Pascal_AirMax.Enviroment
                 salida += "<td>" + kvp.Value.getTipo().ToString() + "</td>\n";
                 salida += "<td>" + kvp.Value.getEntorno() + "</td>\n";
                 salida += "<td>" + kvp.Value.getRol().ToString()+ "</td>\n";
-                salida += "<td>" + kvp.Value.getApuntador() + "</td>\n";
+                salida += "<td>" + kvp.Value.getPosicion() + "</td>\n";
                 salida += "</tr>";
             }
             return salida;
