@@ -10,6 +10,8 @@ namespace C3D_Pascal_AirMax.Manejador
         private string valor;
         public bool isTemp;
         private Objeto.TipoObjeto tipo;
+        public string trueLabel;
+        public string falseLabel;
 
         // constante
         public Retorno(string valor, bool temp, Objeto.TipoObjeto tipo)
@@ -17,6 +19,7 @@ namespace C3D_Pascal_AirMax.Manejador
             this.valor = valor;
             this.isTemp = temp;
             this.tipo = tipo;
+            this.trueLabel = this.falseLabel = "";
         }
 
         public string getValor()

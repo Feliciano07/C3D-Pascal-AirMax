@@ -4,6 +4,7 @@ using C3D_Pascal_AirMax.Expresion.Aritmeticas;
 using C3D_Pascal_AirMax.TipoDatos;
 using C3D_Pascal_AirMax.Expresion.Constantes;
 using Irony.Parsing;
+using C3D_Pascal_AirMax.Expresion.Relacionales;
 
 namespace C3D_Pascal_AirMax.Analisis
 {
@@ -52,8 +53,8 @@ namespace C3D_Pascal_AirMax.Analisis
 
                         break;
                     case "=":
-
-                        break;
+                        return new Igual(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
+                        
                     case "<>":
 
                         break;
@@ -90,12 +91,14 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "true":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            break;
+                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.BOOLEAN, true);
+                            
                         }
                     case "false":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            break;
+                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.BOOLEAN, false);
+                            
                         }
 
                 }
