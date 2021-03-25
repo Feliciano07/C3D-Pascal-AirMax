@@ -32,8 +32,7 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "/":
                         return new Division(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "mod":
-
-                        break;
+                        return new Modulo(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "or":
 
                         break;
@@ -59,8 +58,7 @@ namespace C3D_Pascal_AirMax.Analisis
 
                         break;
                     case "div":
-
-                        break;
+                        return new Div(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
 
                 }
 
