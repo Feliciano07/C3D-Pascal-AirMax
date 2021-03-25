@@ -16,7 +16,7 @@ namespace C3D_Pascal_AirMax.Manejador
         private int label = 0;
         private LinkedList<string> codigo = new LinkedList<string>();
         private LinkedList<string> storageTemp = new LinkedList<string>();
-        private LinkedList<string> temporalesInt = new LinkedList<string>();
+        private LinkedList<string> storageTempInt = new LinkedList<string>();
         private LinkedList<string> storageLabel = new LinkedList<string>();
 
         public string heap = "Heap";
@@ -75,11 +75,26 @@ namespace C3D_Pascal_AirMax.Manejador
             string salida = "#include <stdio.h>\n";
             salida += "float Heap[100000];\n";
             salida += "float Stack[100000];\n";
-            salida += "float SP\n";
-            salida += "float HP\n";
+            salida += "int SP;\n";
+            salida += "int HP;\n";
             salida += "float ";
             int contador = 0;
             foreach(string st in storageTemp)
+            {
+                if(contador == 0)
+                {
+                    salida += st;
+                }
+                else
+                {
+                    salida += "," + st;
+                }
+                contador++;
+            }
+            salida += ";\n";
+            salida += "int ";
+            contador = 0;
+            foreach (string st in storageTempInt)
             {
                 if(contador == 0)
                 {
@@ -119,7 +134,7 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             string tem = "T" + this.temporal;
             this.temporal++;
-            this.temporalesInt.AddLast(tem);
+            this.storageTempInt.AddLast(tem);
             return tem;
         }
 
@@ -176,7 +191,7 @@ namespace C3D_Pascal_AirMax.Manejador
 
         public void addif(string left, string right, string operador, string label)
         {
-            this.codigo.AddLast("if " + left + operador + right + " goto " + label+";");
+            this.codigo.AddLast("if (" + left + operador + right + ") goto " + label+";");
         }
 
         public void addGoto(string label)

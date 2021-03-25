@@ -26,8 +26,8 @@ namespace C3D_Pascal_AirMax.Nativas
         public void Concatenar_String()
         {
 
-            string posicion_parametro = Master.getInstancia.newTemporal();
-            string posicion_cadena = Master.getInstancia.newTemporal();
+            string posicion_parametro = Master.getInstancia.newTemporalEntero();
+            string posicion_cadena = Master.getInstancia.newTemporalEntero();
             string tem = Master.getInstancia.newTemporal();
             // posicion 1
             Master.getInstancia.addFuncion("native_concat_str");
@@ -80,7 +80,7 @@ namespace C3D_Pascal_AirMax.Nativas
             Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
             Master.getInstancia.nextHeap();
 
-            string tem_retorno = Master.getInstancia.newTemporal();
+            string tem_retorno = Master.getInstancia.newTemporalEntero();
             Master.getInstancia.addBinaria(tem_retorno, Master.getInstancia.stack_p, "0", "+");
             Master.getInstancia.addSetStack(tem_retorno, tem);
             Master.getInstancia.Retorno_funcion();

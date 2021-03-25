@@ -46,18 +46,16 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
                     Master.getInstancia.addError(error);
                     throw new Exception("No se pueden sumas los tipos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
             }
-
-            return null;
         }
 
         public Retorno Llamada_nativa_concatenar(Retorno res_left, Retorno res_right, int size)
         {
             string tem = Master.getInstancia.newTemporal();
             Master.getInstancia.addBinaria(tem, Master.getInstancia.stack_p, size.ToString() , "+");
-            string tem1 = Master.getInstancia.newTemporal();
+            string tem1 = Master.getInstancia.newTemporalEntero();
             Master.getInstancia.addBinaria(tem1, tem, "1", "+");
             Master.getInstancia.addSetStack(tem1, res_left.getValor());
-            tem1 = Master.getInstancia.newTemporal();
+            tem1 = Master.getInstancia.newTemporalEntero();
             Master.getInstancia.addBinaria(tem1, tem, "1", "+");
             Master.getInstancia.addSetStack(tem1, res_right.getValor());
             //cambio entorno
