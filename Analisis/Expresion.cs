@@ -5,6 +5,7 @@ using C3D_Pascal_AirMax.TipoDatos;
 using C3D_Pascal_AirMax.Expresion.Constantes;
 using Irony.Parsing;
 using C3D_Pascal_AirMax.Expresion.Relacionales;
+using C3D_Pascal_AirMax.Expresion.Logicas;
 
 namespace C3D_Pascal_AirMax.Analisis
 {
@@ -38,8 +39,7 @@ namespace C3D_Pascal_AirMax.Analisis
 
                         break;
                     case "and":
-
-                        break;
+                        return new And(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case ">":
                         return new MayorQ(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "<":
