@@ -7,23 +7,22 @@ using System.Text;
 
 namespace C3D_Pascal_AirMax.Nativas
 {
-    public class Nativa_MayorIgual : Nodo
+    public class Nativa_NoIgual : Nodo
     {
 
-        public Nativa_MayorIgual(int linea,int columna) : base(linea, columna)
+        public Nativa_NoIgual() : base(0, 0)
         {
 
         }
-
         public override Retorno compilar(Entorno entorno)
         {
-            Crear_mayorIgual();
+            Crear_Nativa();
             return null;
         }
 
-        public void Crear_mayorIgual()
+        public void Crear_Nativa()
         {
-            Master.getInstancia.addFuncion("native_mayor_igual_str");
+            Master.getInstancia.addFuncion("native_no_igual_str");
             string posicion_primera_cadena = Master.getInstancia.newTemporalEntero();
             string posicion_segunda_cadena = Master.getInstancia.newTemporalEntero();
 
@@ -38,6 +37,7 @@ namespace C3D_Pascal_AirMax.Nativas
 
             string desicion = Master.getInstancia.newTemporal();
             Master.getInstancia.addUnaria(desicion, "0");
+            //string contador2 = Master.getInstancia.newTemporalEntero();
 
             string retorno = Master.getInstancia.newLabel();
             Master.getInstancia.addLabel(retorno);
@@ -67,54 +67,42 @@ namespace C3D_Pascal_AirMax.Nativas
             string true_if3 = Master.getInstancia.newLabel();
             string false_if3 = Master.getInstancia.newLabel();
 
-            Master.getInstancia.addif(contador_cadena1, contador_cadena2, ">", true_if3);
+            Master.getInstancia.addif(contador_cadena1, contador_cadena2, "!=", true_if3);
             Master.getInstancia.addGoto(false_if3);
 
             Master.getInstancia.addLabel(true_if3);
             Master.getInstancia.addUnaria(desicion, "1");
-            string label_salida = Master.getInstancia.newLabel();
 
+            string label_salida = Master.getInstancia.newLabel();
             Master.getInstancia.addGoto(label_salida);
 
             Master.getInstancia.addLabel(false_if3);
-
-            string true_if4 = Master.getInstancia.newLabel();
-
-            Master.getInstancia.addif(contador_cadena1, contador_cadena2, "==", true_if4);
-            Master.getInstancia.addGoto(label_salida);
-
-            Master.getInstancia.addLabel(true_if4);
-
-            Master.getInstancia.addUnaria(desicion, "1");
             Master.getInstancia.addBinaria(primera_cadena_heap, primera_cadena_heap, "1", "+");
             Master.getInstancia.addBinaria(segunda_cadena_heap, segunda_cadena_heap, "1", "+");
             Master.getInstancia.addGoto(retorno);
 
             Master.getInstancia.addLabel(false_if1);
+            string true_if4 = Master.getInstancia.newLabel();
+            string false_if4 = Master.getInstancia.newLabel();
 
-            string true_if5 = Master.getInstancia.newLabel();
+            Master.getInstancia.addif(contador_cadena2, "-1", "==", true_if4);
+            Master.getInstancia.addGoto(false_if4);
 
-
-            Master.getInstancia.addif(contador_cadena2, "-1", "!=", true_if5);
+            Master.getInstancia.addLabel(true_if4);
             Master.getInstancia.addGoto(label_salida);
 
-            Master.getInstancia.addLabel(true_if5);
-            Master.getInstancia.addUnaria(desicion, "0");
-            Master.getInstancia.addGoto(label_salida);
+            Master.getInstancia.addLabel(false_if4+":\n"+false_if2);
 
-            Master.getInstancia.addLabel(false_if2);
             Master.getInstancia.addUnaria(desicion, "1");
-            Master.getInstancia.addGoto(label_salida);
-
-            string setear_return = Master.getInstancia.newTemporalEntero();
 
             Master.getInstancia.addLabel(label_salida);
+
+            string setear_return = Master.getInstancia.newTemporalEntero();
 
             Master.getInstancia.addBinaria(setear_return, Master.getInstancia.stack_p, "0", "+");
             Master.getInstancia.addSetStack(setear_return, desicion);
             Master.getInstancia.Retorno_funcion();
             Master.getInstancia.addFinFuncion();
-
 
         }
     }

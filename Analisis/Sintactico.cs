@@ -24,6 +24,7 @@ namespace C3D_Pascal_AirMax.Analisis
                 return false;
             }
 
+           
             GenerarAST(raiz);
 
             CargarNativas();
@@ -79,8 +80,9 @@ namespace C3D_Pascal_AirMax.Analisis
         {
             //Master.getInstancia.addInstruccion(new Nativa_Concatenar(0,0));
             //Master.getInstancia.addInstruccion(new Nativa_Igual(0, 0));
-            //Master.getInstancia.addInstruccion(new Nativa_MayorIgual(0, 0));
+            Master.getInstancia.addInstruccion(new Nativa_MayorIgual(0, 0));
             //Master.getInstancia.addInstruccion(new Nativa_Mayor());
+            //Master.getInstancia.addInstruccion(new Nativa_NoIgual());
         }
 
         public void GenerarAST(ParseTreeNode raiz)

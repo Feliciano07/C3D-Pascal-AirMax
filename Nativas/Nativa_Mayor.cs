@@ -22,7 +22,7 @@ namespace C3D_Pascal_AirMax.Nativas
 
         public void Crear_Nativa()
         {
-            Master.getInstancia.addFuncion("native_mayorQ_str");
+            Master.getInstancia.addFuncion("native_mayor_que_str");
             string posicion_primera_cadena = Master.getInstancia.newTemporalEntero();
             string posicion_segunda_cadena = Master.getInstancia.newTemporalEntero();
 
@@ -35,8 +35,8 @@ namespace C3D_Pascal_AirMax.Nativas
             Master.getInstancia.addGetStack(primera_cadena_heap, posicion_primera_cadena);
             Master.getInstancia.addGetStack(segunda_cadena_heap, posicion_segunda_cadena);
 
-            //string contador1 = Master.getInstancia.newTemporalEntero();
-            //string contador2 = Master.getInstancia.newTemporalEntero();
+            string desicion = Master.getInstancia.newTemporal();
+            Master.getInstancia.addUnaria(desicion, "0");
 
             string retorno = Master.getInstancia.newLabel();
             Master.getInstancia.addLabel(retorno);
@@ -72,24 +72,43 @@ namespace C3D_Pascal_AirMax.Nativas
             Master.getInstancia.addLabel(true_if3);
             string label_salida = Master.getInstancia.newLabel();
 
-            string desicion = Master.getInstancia.newTemporal();
+            
 
             Master.getInstancia.addUnaria(desicion, "1");
             Master.getInstancia.addGoto(label_salida);
 
 
             Master.getInstancia.addLabel(false_if3);
+
+            //string true_if = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addif(contador_cadena1, contador_cadena2, "<", label_salida);
+
+
             Master.getInstancia.addBinaria(primera_cadena_heap, primera_cadena_heap, "1", "+");
             Master.getInstancia.addBinaria(segunda_cadena_heap, segunda_cadena_heap, "1", "+");
             Master.getInstancia.addGoto(retorno);
 
+            Master.getInstancia.addLabel(false_if1);
 
-            Master.getInstancia.addLabel(false_if1 + ":\n" + false_if2);
+            string true_if4 = Master.getInstancia.newLabel();
+            string false_if4 = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addif(contador_cadena2, "-1", "!=", true_if4);
+            Master.getInstancia.addGoto(false_if4);
+
+            Master.getInstancia.addLabel(true_if4);
             Master.getInstancia.addUnaria(desicion, "0");
             Master.getInstancia.addGoto(label_salida);
 
-            Master.getInstancia.addLabel(label_salida);
+            Master.getInstancia.addLabel(false_if4);
+            Master.getInstancia.addGoto(label_salida);
 
+            Master.getInstancia.addLabel(false_if2);
+            Master.getInstancia.addUnaria(desicion, "1");
+            Master.getInstancia.addGoto(label_salida);
+
+            Master.getInstancia.addLabel(label_salida);
             string setear_return = Master.getInstancia.newTemporalEntero();
 
             Master.getInstancia.addBinaria(setear_return, Master.getInstancia.stack_p, "0", "+");

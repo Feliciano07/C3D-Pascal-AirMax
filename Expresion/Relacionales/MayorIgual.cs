@@ -104,7 +104,7 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
             Master.getInstancia.addSetStack(tem1, res_right.getValor());
             //cambio entorno
             Master.getInstancia.plusStack(size.ToString());
-            Master.getInstancia.callFuncion("native_mayorIgual_str");
+            Master.getInstancia.callFuncion("native_mayor_igual_str");
             Master.getInstancia.addBinaria(tem1, Master.getInstancia.stack_p, "0", "+");
             string tem2 = Master.getInstancia.newTemporal();// posicion  que tiene si se cumple la condicion o no
             Master.getInstancia.addGetStack(tem2, tem1);
