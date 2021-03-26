@@ -56,7 +56,7 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             Master.getInstancia.addBinaria(tem1, tem, "1", "+");
             Master.getInstancia.addSetStack(tem1, res_left.getValor());
             tem1 = Master.getInstancia.newTemporalEntero();
-            Master.getInstancia.addBinaria(tem1, tem, "1", "+");
+            Master.getInstancia.addBinaria(tem1, tem, "2", "+");
             Master.getInstancia.addSetStack(tem1, res_right.getValor());
             //cambio entorno
             Master.getInstancia.plusStack(size.ToString());

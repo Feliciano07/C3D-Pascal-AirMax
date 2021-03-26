@@ -18,7 +18,7 @@ namespace C3D_Pascal_AirMax.Nativas
 
         public override Retorno compilar(Entorno entorno)
         {
-            Crear_native_concat_str(entorno);
+            //Crear_native_concat_str(entorno);
             Concatenar_String();
             return null;
         }

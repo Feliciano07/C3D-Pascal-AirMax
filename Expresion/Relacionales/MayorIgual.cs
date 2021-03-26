@@ -2,76 +2,74 @@
 using C3D_Pascal_AirMax.Enviroment;
 using C3D_Pascal_AirMax.Manejador;
 using C3D_Pascal_AirMax.TipoDatos;
-using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace C3D_Pascal_AirMax.Expresion.Relacionales
 {
-    public class Igual : Nodo
+    public class MayorIgual : Nodo
     {
         private Nodo left;
         private Nodo right;
 
-        public Igual(int linea, int columna, Nodo left, Nodo right) : base(linea, columna)
+        public MayorIgual(int linea, int columna, Nodo left, Nodo right) : base(linea, columna)
         {
             this.left = left;
             this.right = right;
         }
+
         public override Retorno compilar(Entorno entorno)
         {
-            Retorno res_left = left.compilar(entorno);
+            Retorno res_left = this.left.compilar(entorno);
             Retorno res_right = null;
-            //Objeto.TipoObjeto tipo_dominante = TablaTipo.tabla[res_left.getTipo().GetHashCode(), res_right.getTipo().GetHashCode()];
 
             switch (res_left.getTipo())
             {
                 case Objeto.TipoObjeto.INTEGER:
                 case Objeto.TipoObjeto.REAL:
-                    res_right = right.compilar(entorno);
+                    res_right = this.right.compilar(entorno);
                     switch (res_right.getTipo())
                     {
                         case Objeto.TipoObjeto.INTEGER:
                         case Objeto.TipoObjeto.REAL:
                             this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
                             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
-                            Master.getInstancia.addif(res_left.getValor(), res_right.getValor(), "==", this.trueLabel);
+                            Master.getInstancia.addif(res_left.getValor(), res_right.getValor(), ">=", this.trueLabel);
                             Master.getInstancia.addGoto(this.falseLabel);
                             Retorno retorno = new Retorno("", false, Objeto.TipoObjeto.BOOLEAN);
                             retorno.trueLabel = this.trueLabel;
                             retorno.falseLabel = this.falseLabel;
                             return retorno;
                         default:
-                            Error error1 = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                            "No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
-                            Master.getInstancia.addError(error1);
-                            throw new Exception("No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
-                    } 
+                            Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                            "No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                            Master.getInstancia.addError(error);
+                            throw new Exception("No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                    }
                 case Objeto.TipoObjeto.STRING:
                     res_right = this.right.compilar(entorno);
                     if(res_right.getTipo() == Objeto.TipoObjeto.STRING)
                     {
                         return Llamada_Nativa_Comparar(res_left, res_right, entorno.getSize());
                     }
-                    Error error2 = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                    "No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
-                    Master.getInstancia.addError(error2);
-                    throw new Exception("No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
-
+                    Error error1 = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                    "No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                    Master.getInstancia.addError(error1);
+                    throw new Exception("No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                
                 case Objeto.TipoObjeto.BOOLEAN:
-                    string trueL = Master.getInstancia.newLabel();
-                    string falseL = Master.getInstancia.newLabel();
+                    string trueLabel = Master.getInstancia.newLabel();
+                    string falseLabel = Master.getInstancia.newLabel();
 
                     Master.getInstancia.addLabel(res_left.trueLabel);
-                    this.right.trueLabel = trueL;
-                    this.right.falseLabel = falseL;
+                    this.right.trueLabel = trueLabel;
+                    this.right.falseLabel = trueLabel;
                     res_right = this.right.compilar(entorno);
 
                     Master.getInstancia.addLabel(res_left.falseLabel);
-
-                    this.right.trueLabel = falseL;
-                    this.right.falseLabel = trueL;
+                    this.right.trueLabel = falseLabel;
+                    this.right.falseLabel = trueLabel;
                     res_right = this.right.compilar(entorno);
 
                     if(res_right.getTipo() == Objeto.TipoObjeto.BOOLEAN)
@@ -81,17 +79,17 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
                         retorno1.falseLabel = falseLabel;
                         return retorno1;
                     }
+                    Error error2 = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                    "No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                    Master.getInstancia.addError(error2);
+                    throw new Exception("No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                default:
                     Error error3 = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                    "No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                    "No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString());
                     Master.getInstancia.addError(error3);
-                    throw new Exception("No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
-                default: 
-                    Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                   "No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString());
-                    Master.getInstancia.addError(error);
-                    throw new Exception("No se puede aplicar operador igual a tipos de datos " + res_left.getTipo().ToString());
+                    throw new Exception("No se puede aplicar mayor igual que a tipos de datos " + res_left.getTipo().ToString());
             }
-           
+
         }
 
         public Retorno Llamada_Nativa_Comparar(Retorno res_left, Retorno res_right, int size)
@@ -106,7 +104,7 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
             Master.getInstancia.addSetStack(tem1, res_right.getValor());
             //cambio entorno
             Master.getInstancia.plusStack(size.ToString());
-            Master.getInstancia.callFuncion("native_comparar_str");
+            Master.getInstancia.callFuncion("native_mayorIgual_str");
             Master.getInstancia.addBinaria(tem1, Master.getInstancia.stack_p, "0", "+");
             string tem2 = Master.getInstancia.newTemporal();// posicion  que tiene si se cumple la condicion o no
             Master.getInstancia.addGetStack(tem2, tem1);

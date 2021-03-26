@@ -41,23 +41,18 @@ namespace C3D_Pascal_AirMax.Analisis
 
                         break;
                     case ">":
-
-                        break;
+                        return new MayorQ(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "<":
-
-                        break;
+                        return new MenorQ(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case ">=":
-
-                        break;
+                        return new MayorIgual(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "<=":
-
-                        break;
+                        return new MenorIgual(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "=":
                         return new Igual(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                         
                     case "<>":
-
-                        break;
+                        return new NoIgual(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "div":
                         return new Div(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
 
