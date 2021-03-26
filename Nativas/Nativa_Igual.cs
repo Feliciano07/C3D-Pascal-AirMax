@@ -29,7 +29,7 @@ namespace C3D_Pascal_AirMax.Nativas
             string posicion_segunda_cadena = Master.getInstancia.newTemporalEntero();
 
             Master.getInstancia.addBinaria(posicion_primera_cadena, Master.getInstancia.stack_p, "1", "+");
-            Master.getInstancia.addBinaria(posicion_segunda_cadena, Master.getInstancia.stack_p, "1", "+");
+            Master.getInstancia.addBinaria(posicion_segunda_cadena, Master.getInstancia.stack_p, "2", "+");
 
             string primera_cadena_heap = Master.getInstancia.newTemporalEntero();
             string segunda_cadena_heap = Master.getInstancia.newTemporalEntero();
@@ -95,7 +95,7 @@ namespace C3D_Pascal_AirMax.Nativas
 
             Master.getInstancia.addGoto(label_salida);
 
-            Master.getInstancia.addLabel(false_if2 + "," + false_if3 + "," + false_if4);
+            Master.getInstancia.addLabel(false_if2 + ":\n" + false_if3 + ":\n" + false_if4);
             Master.getInstancia.addUnaria(desicion, "0");
 
 
