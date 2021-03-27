@@ -45,6 +45,16 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
                             Master.getInstancia.addError(error);
                             throw new Exception("No se puede aplicar mayor  que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
                     }
+                case Objeto.TipoObjeto.STRING:
+                    res_right = this.right.compilar(entorno);
+                    if (res_right.getTipo() == Objeto.TipoObjeto.STRING)
+                    {
+                        return Llamada_Nativa_Comparar(res_left, res_right, entorno.getSize());
+                    }
+                    Error error1 = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                    "No se puede aplicar menor  que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
+                    Master.getInstancia.addError(error1);
+                    throw new Exception("No se puede aplicar menor  que a tipos de datos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());
                 case Objeto.TipoObjeto.BOOLEAN:
                     string trueLabel = Master.getInstancia.newLabel();
                     string falseLabel = Master.getInstancia.newLabel();
@@ -75,6 +85,33 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
                     Master.getInstancia.addError(error3);
                     throw new Exception("No se puede aplicar mayor  que a tipos de datos " + res_left.getTipo().ToString());
             }
+
+        }
+        public Retorno Llamada_Nativa_Comparar(Retorno res_left, Retorno res_right, int size)
+        {
+            string tem = Master.getInstancia.newTemporal();
+            Master.getInstancia.addBinaria(tem, Master.getInstancia.stack_p, size.ToString(), "+");
+            string tem1 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(tem1, tem, "1", "+");
+            Master.getInstancia.addSetStack(tem1, res_left.getValor());
+            tem1 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(tem1, tem, "2", "+");
+            Master.getInstancia.addSetStack(tem1, res_right.getValor());
+            //cambio entorno
+            Master.getInstancia.plusStack(size.ToString());
+            Master.getInstancia.callFuncion("native_menor_que_str");
+            Master.getInstancia.addBinaria(tem1, Master.getInstancia.stack_p, "0", "+");
+            string tem2 = Master.getInstancia.newTemporal();// posicion  que tiene si se cumple la condicion o no
+            Master.getInstancia.addGetStack(tem2, tem1);
+            Master.getInstancia.substracStack(size.ToString());
+            this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+            this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+            Master.getInstancia.addif(tem2, "1", "==", this.trueLabel);
+            Master.getInstancia.addGoto(this.falseLabel);
+            Retorno retorno = new Retorno("", false, Objeto.TipoObjeto.BOOLEAN);
+            retorno.trueLabel = this.trueLabel;
+            retorno.falseLabel = this.falseLabel;
+            return retorno;
 
         }
     }
