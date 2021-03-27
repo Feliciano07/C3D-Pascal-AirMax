@@ -36,8 +36,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "mod":
                         return new Modulo(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "or":
-
-                        break;
+                        return new Or(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
+                        
                     case "and":
                         return new And(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case ">":
@@ -59,6 +59,18 @@ namespace C3D_Pascal_AirMax.Analisis
                 }
 
 
+            }else if(entrada.ChildNodes.Count == 2)
+            {
+                String toke = entrada.ChildNodes[0].Term.Name;
+                int linea = entrada.ChildNodes[0].Span.Location.Line;
+                int columna = entrada.ChildNodes[0].Span.Location.Column;
+                switch (toke)
+                {
+                    case "not":
+                        return new Not(linea, columna, evaluar(entrada.ChildNodes[1]));
+                    case "-":
+                        return new Negativo(linea, columna, evaluar(entrada.ChildNodes[1]));
+                }
             }
             else if(entrada.ChildNodes.Count == 1)
             {

@@ -133,6 +133,7 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             string salida = "";
             salida += getEncabezado();
+
             foreach(string str in this.codigo)
             {
                 salida += str + "\n";

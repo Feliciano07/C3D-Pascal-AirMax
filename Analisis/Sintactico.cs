@@ -122,12 +122,12 @@ namespace C3D_Pascal_AirMax.Analisis
             // esto meterlo en una estructura aparte
 
             Master.getInstancia.nativas.AddLast(new Nativa_Concatenar(0,0));
-            //Master.getInstancia.nativas(new Nativa_Igual(0, 0));
-            //Master.getInstancia.addInstruccion(new Nativa_MayorIgual(0, 0));
-            //Master.getInstancia.addInstruccion(new Nativa_Mayor());
-            //Master.getInstancia.addInstruccion(new Nativa_NoIgual());
-            //Master.getInstancia.addInstruccion(new Nativa_Menor());
-            //Master.getInstancia.addInstruccion(new Nativa_MenorIgual());
+            Master.getInstancia.nativas.AddLast(new Nativa_Igual(0, 0));
+            Master.getInstancia.nativas.AddLast(new Nativa_MayorIgual(0, 0));
+            Master.getInstancia.nativas.AddLast(new Nativa_Mayor());
+            Master.getInstancia.nativas.AddLast(new Nativa_NoIgual());
+            Master.getInstancia.nativas.AddLast(new Nativa_Menor());
+            Master.getInstancia.nativas.AddLast(new Nativa_MenorIgual());
             Master.getInstancia.nativas.AddLast(new Nativa_Imprimir());
         }
 

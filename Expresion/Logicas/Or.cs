@@ -35,6 +35,7 @@ namespace C3D_Pascal_AirMax.Expresion.Logicas
                 Retorno retorno = new Retorno("", false, TipoDatos.Objeto.TipoObjeto.BOOLEAN);
                 retorno.trueLabel = this.trueLabel;
                 retorno.falseLabel = this.right.falseLabel;
+                return retorno;
             }
             Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                   "No se puede operar OR en tipos" + res_left.getTipo().ToString() + "con" + res_right.getTipo().ToString());
