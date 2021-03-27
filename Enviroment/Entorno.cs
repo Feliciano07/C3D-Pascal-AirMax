@@ -1,4 +1,5 @@
-﻿using System;
+﻿using C3D_Pascal_AirMax.Abstract;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -8,6 +9,7 @@ namespace C3D_Pascal_AirMax.Enviroment
     public class Entorno
     {
         private Dictionary<string, Simbolo> tabla;
+        private Dictionary<string, SimboloFuncion> funciones;
         private string nombre_entorno;
         private int size;
 
@@ -28,6 +30,8 @@ namespace C3D_Pascal_AirMax.Enviroment
             string llave = sb.getNombre() + sb.getEntorno();
             this.tabla.Add(llave, sb);
         }
+
+
 
         public int getSize()
         {

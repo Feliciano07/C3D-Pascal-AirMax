@@ -9,8 +9,7 @@ namespace C3D_Pascal_AirMax.Enviroment
     {
 
         public enum Rol:int{
-            VARIABLE = 1,
-            FUNCTION = 2,
+            VARIABLE_GLOBAL = 1,
             CONSTANTE =3,
             VARIABLE_LOCAL = 4
         }
@@ -26,16 +25,6 @@ namespace C3D_Pascal_AirMax.Enviroment
         private Rol rol;
         private Pointer pointer;
         private HashSet<string> ambito;
-
-        //para guardar las funciones
-        public Simbolo(string nombre, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer)
-        {
-            this.nombre = nombre;
-            this.tipo = tipo;
-            this.rol = rol;
-            this.pointer = pointer;
-            this.ambito = new HashSet<string>();
-        }
 
         // para guardar variables locales
         public Simbolo(string nombre, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer, int posicion)

@@ -10,6 +10,7 @@ namespace C3D_Pascal_AirMax.Manejador
     {
         private static readonly Master instancia = new Master();
         private LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
+        public LinkedList<Nodo> nativas = new LinkedList<Nodo>();
         private LinkedList<Error> lista_errores = new LinkedList<Error>();
 
         private int temporal = 0;
@@ -53,6 +54,14 @@ namespace C3D_Pascal_AirMax.Manejador
             return aux;
         }
 
+        public void ejecutar_nativas()
+        {
+            foreach(Nodo node in this.nativas)
+            {
+                node.compilar(null);
+            }
+        }
+
         public void ejecutar()
         {
             Entorno entorno = new Entorno("Global");
@@ -77,38 +86,48 @@ namespace C3D_Pascal_AirMax.Manejador
             salida += "float Stack[100000];\n";
             salida += "int SP;\n";
             salida += "int HP;\n";
-            salida += "float ";
+            
             int contador = 0;
-            foreach(string st in storageTemp)
+            if(storageTemp.Count > 0)
             {
-                if(contador == 0)
+                salida += "float ";
+                foreach (string st in storageTemp)
                 {
-                    salida += st;
+                    if (contador == 0)
+                    {
+                        salida += st;
+                    }
+                    else
+                    {
+                        salida += "," + st;
+                    }
+                    contador++;
                 }
-                else
-                {
-                    salida += "," + st;
-                }
-                contador++;
+                
+                salida += ";\n";
+
             }
-            salida += ";\n";
-            salida += "int ";
-            contador = 0;
-            foreach (string st in storageTempInt)
+            if(storageTempInt.Count > 0)
             {
-                if(contador == 0)
+                salida += "int ";
+                contador = 0;
+                foreach (string st in storageTempInt)
                 {
-                    salida += st;
+                    if (contador == 0)
+                    {
+                        salida += st;
+                    }
+                    else
+                    {
+                        salida += "," + st;
+                    }
+                    contador++;
                 }
-                else
-                {
-                    salida += "," + st;
-                }
-                contador++;
+                salida += ";\n";
             }
-            salida += ";\n";
             return salida;
         }
+
 
         public string getSalida()
         {
@@ -223,5 +242,25 @@ namespace C3D_Pascal_AirMax.Manejador
             this.codigo.AddLast(nombre + "();");
         }
 
+        public void addPrint(string formato, string valor, string conversion)
+        {
+            this.codigo.AddLast("printf(" + "\"%" + formato + "\"" + "," +"("+conversion+")"+ valor+ ");");
+        }
+
+        public void addPrintTrue()
+        {
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'T'+");");
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'R' + ");");
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'U' + ");");
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'E' + ");");
+        }
+        public void addPrintFalse()
+        {
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'F' + ");");
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'A' + ");");
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'L' + ");");
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'S' + ");");
+            this.codigo.AddLast("printf(\"%c\",(char)" + (int)'E' + ");");
+        }
     }
 }

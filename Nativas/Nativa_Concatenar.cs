@@ -90,20 +90,7 @@ namespace C3D_Pascal_AirMax.Nativas
 
         public void Crear_native_concat_str(Entorno entorno)
         {
-            // guardo la funcion
-            Simbolo nuevo = new Simbolo("native_concat_str", TipoDatos.Objeto.TipoObjeto.STRING, Simbolo.Rol.FUNCTION, Simbolo.Pointer.STACK);
-            nuevo.addAmbito(entorno.getNombreEntorno());
-            entorno.addSimbolo(nuevo);
-
-            Simbolo str1 = new Simbolo("native_concat_str_1", TipoDatos.Objeto.TipoObjeto.STRING, Simbolo.Rol.VARIABLE_LOCAL, Simbolo.Pointer.STACK,1);
-            str1.addAmbito(entorno.getNombreEntorno());
-            str1.addAmbito(nuevo.getNombre());
-            entorno.addSimbolo(str1);
-
-            Simbolo str2 = new Simbolo("native_concat_str_2", TipoDatos.Objeto.TipoObjeto.STRING, Simbolo.Rol.VARIABLE_LOCAL, Simbolo.Pointer.STACK,2);
-            str2.addAmbito(entorno.getNombreEntorno());
-            str2.addAmbito(nuevo.getNombre());
-            entorno.addSimbolo(str2);
+            
         }
 
     }
