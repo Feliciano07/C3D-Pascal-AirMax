@@ -44,8 +44,31 @@ namespace C3D_Pascal_AirMax.Instruccion.Control
                     }
                 }
             }
+            if(this.instrucciones_else != null)
+            {
+                Correr_Else(entorno);
+            }
+
             Master.getInstancia.addLabel(label_salida);
             return null;
+        }
+
+        public void Correr_Else(Entorno entorno)
+        {
+            foreach (Nodo instruccion in this.instrucciones_else)
+            {
+                if (instruccion != null)
+                {
+                    try
+                    {
+                        Retorno salida = instruccion.compilar(entorno);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+            }
         }
     }
 }

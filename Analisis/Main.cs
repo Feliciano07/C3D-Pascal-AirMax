@@ -174,7 +174,7 @@ namespace C3D_Pascal_AirMax.Analisis
                 LinkedList<Nodo> temporal = new LinkedList<Nodo>();
                 temporal.AddLast(Main_Ifthen(entrada.ChildNodes[5].ChildNodes[0]));
 
-                //TODO: retornar case of
+                return new CaseOf(linea, columna, exp, casos, temporal);
 
             }else if(entrada.ChildNodes.Count == 10)
             {
@@ -182,7 +182,7 @@ namespace C3D_Pascal_AirMax.Analisis
                 LinkedList<Case> casos = lista_casos(entrada.ChildNodes[3]);
                 LinkedList<Nodo> tem = ListaMain_Ifthen(entrada.ChildNodes[6]);
 
-                //TODO: retornar case of
+                return new CaseOf(linea, columna, exp, casos, tem);
             }
             return null;
         }
