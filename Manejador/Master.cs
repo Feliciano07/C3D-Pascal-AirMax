@@ -263,5 +263,10 @@ namespace C3D_Pascal_AirMax.Manejador
             this.codigo.AddLast("printf(\"%c\",(char)" + (int)'S' + ");");
             this.codigo.AddLast("printf(\"%c\",(char)" + (int)'E' + ");");
         }
+
+        public void addComentario(string comentario)
+        {
+            this.codigo.AddLast("/***" + comentario + "*/");
+        }
     }
 }

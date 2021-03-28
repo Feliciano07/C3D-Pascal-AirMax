@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Irony.Parsing;
 using C3D_Pascal_AirMax.Instruccion.Funciones;
+using C3D_Pascal_AirMax.Instruccion.Control;
 
 namespace C3D_Pascal_AirMax.Analisis
 {
@@ -43,6 +44,67 @@ namespace C3D_Pascal_AirMax.Analisis
                 return new Write(linea, columna, tem, tipo);
             }
  
+        }
+
+        public static Nodo Instruccion_IfThen(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+
+            if(entrada.ChildNodes.Count == 4)
+            {
+                Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
+                LinkedList<Nodo> temporal = new LinkedList<Nodo>();
+                temporal.AddLast(Main_Ifthen(entrada.ChildNodes[3].ChildNodes[0]));
+
+                return new Ifthen(linea, columna, exp, temporal);
+
+            }
+            else if(entrada.ChildNodes.Count == 7)
+            {
+                Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
+                LinkedList<Nodo> tem = ListaMain_Ifthen(entrada.ChildNodes[4]);
+                return new Ifthen(linea, columna, exp, tem);
+
+            }else if(entrada.ChildNodes.Count == 6)
+            {
+                // pos no hace nada
+            }
+            return null;
+        }
+        /*
+         *  INSTRUCCIONES QUE VAN DENTRO DEL IFTHE, SOLO ACEPTA
+         */
+
+        public static Nodo Main_Ifthen(ParseTreeNode actual)
+        {
+            string token = actual.Term.Name;
+
+            switch (token)
+            {
+                case "writeln":
+                    return Main.Inst_Write(actual, true);
+                case "write":
+                    return Main.Inst_Write(actual, false);
+                case "ifthen":
+                    return Main.Instruccion_IfThen(actual);
+                default:
+                    break;
+            }
+            return null;
+        }
+        /*
+         * MANEJA QUE IFTHEN ACEPTE VARIAS INSTRUCCIONES 
+         */
+        public static LinkedList<Nodo> ListaMain_Ifthen(ParseTreeNode actual)
+        {
+            LinkedList<Nodo> salida = new LinkedList<Nodo>();
+
+            foreach(ParseTreeNode node in actual.ChildNodes)
+            {
+                salida.AddLast(Main_Ifthen(node.ChildNodes[0]));
+            }
+            return salida;
         }
     }
 }

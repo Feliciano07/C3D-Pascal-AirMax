@@ -55,6 +55,8 @@ namespace C3D_Pascal_AirMax.Analisis
                         return new NoIgual(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
                     case "div":
                         return new Div(linea, columna, evaluar(entrada.ChildNodes[0]), evaluar(entrada.ChildNodes[2]));
+                    default:
+                        return evaluar(entrada.ChildNodes[1]);
 
                 }
 
