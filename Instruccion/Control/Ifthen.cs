@@ -41,6 +41,8 @@ namespace C3D_Pascal_AirMax.Instruccion.Control
                     }
                 }
                 Master.getInstancia.addLabel(aux.falseLabel);
+
+                return null;
             }
             Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                 "La condicion no es booleana en el ifthen: " + aux.getTipo().ToString());

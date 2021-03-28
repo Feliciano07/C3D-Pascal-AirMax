@@ -111,6 +111,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Inst_Write(actual,true);
                 case "ifthen":
                     return Main.Instruccion_IfThen(actual);
+                case "ifelse":
+                    return Main.Instruccion_Ifelse(actual);
                 default:
                     break;
             }

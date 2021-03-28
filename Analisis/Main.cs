@@ -88,6 +88,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Inst_Write(actual, false);
                 case "ifthen":
                     return Main.Instruccion_IfThen(actual);
+                case "ifelse":
+                    return Main.Instruccion_Ifelse(actual);
                 default:
                     break;
             }
@@ -105,6 +107,54 @@ namespace C3D_Pascal_AirMax.Analisis
                 salida.AddLast(Main_Ifthen(node.ChildNodes[0]));
             }
             return salida;
+        }
+
+        public static Nodo Instruccion_Ifelse(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+
+            if(entrada.ChildNodes.Count == 6)
+            {
+                Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
+                if(entrada.ChildNodes[3].ChildNodes.Count == 1)
+                {
+                    LinkedList<Nodo> tem_if = new LinkedList<Nodo>(); // instrucciones del if
+                    tem_if.AddLast(Main_Ifthen(entrada.ChildNodes[3].ChildNodes[0]));
+                    LinkedList<Nodo> tem_else = new LinkedList<Nodo>();
+                    tem_else.AddLast(Main_Ifthen(entrada.ChildNodes[5].ChildNodes[0]));
+
+                    return new IFelse(linea, columna, exp, tem_if, tem_else);
+                }else if(entrada.ChildNodes[3].ChildNodes.Count == 3)
+                {
+                    LinkedList<Nodo> tem_if = ListaMain_Ifthen(entrada.ChildNodes[3].ChildNodes[1]);
+                    LinkedList<Nodo> tem_else = new LinkedList<Nodo>();
+                    tem_else.AddLast(Main_Ifthen(entrada.ChildNodes[5].ChildNodes[0]));
+
+                    return new IFelse(linea, columna, exp, tem_if, tem_else);
+
+                }
+
+            }else if(entrada.ChildNodes.Count == 9)
+            {
+                Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
+                if(entrada.ChildNodes[3].ChildNodes.Count == 1)
+                {
+                    LinkedList<Nodo> tem_if = new LinkedList<Nodo>();
+                    tem_if.AddLast(Main_Ifthen(entrada.ChildNodes[3].ChildNodes[0]));
+                    LinkedList<Nodo> tem_else = ListaMain_Ifthen(entrada.ChildNodes[6]);
+
+                    return new IFelse(linea, columna, exp, tem_if, tem_else);
+
+                }
+                else if(entrada.ChildNodes[3].ChildNodes.Count == 3)
+                {
+                    LinkedList<Nodo> tem_if = ListaMain_Ifthen(entrada.ChildNodes[3].ChildNodes[1]);
+                    LinkedList<Nodo> tem_else = ListaMain_Ifthen(entrada.ChildNodes[6]);
+                    return new IFelse(linea, columna, exp, tem_if, tem_else);
+                }
+            }
+            return null;
         }
     }
 }
