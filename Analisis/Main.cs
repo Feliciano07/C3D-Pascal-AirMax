@@ -156,5 +156,68 @@ namespace C3D_Pascal_AirMax.Analisis
             }
             return null;
         }
+
+        public static Nodo Instruccion_case_of(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+            if(entrada.ChildNodes.Count == 5)
+            {
+                Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
+                LinkedList<Case> casos = lista_casos(entrada.ChildNodes[3]);
+                return new CaseOf(linea, columna, exp, casos);
+                 
+            }else if(entrada.ChildNodes.Count == 7)
+            {
+                Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
+                LinkedList<Case> casos = lista_casos(entrada.ChildNodes[3]);
+                LinkedList<Nodo> temporal = new LinkedList<Nodo>();
+                temporal.AddLast(Main_Ifthen(entrada.ChildNodes[5].ChildNodes[0]));
+
+                //TODO: retornar case of
+
+            }else if(entrada.ChildNodes.Count == 10)
+            {
+                Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
+                LinkedList<Case> casos = lista_casos(entrada.ChildNodes[3]);
+                LinkedList<Nodo> tem = ListaMain_Ifthen(entrada.ChildNodes[6]);
+
+                //TODO: retornar case of
+            }
+            return null;
+        }
+
+        public static LinkedList<Case> lista_casos(ParseTreeNode entrada)
+        {
+            LinkedList<Case> lista = new LinkedList<Case>();
+            foreach(ParseTreeNode actual in entrada.ChildNodes)
+            {
+                lista.AddLast(Casos(actual));
+            }
+            return lista;
+        }
+
+        public static Case Casos(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+
+            if(entrada.ChildNodes.Count == 3)
+            {
+                LinkedList<Nodo> tem;
+                tem = lista_expresion(entrada.ChildNodes[0]);
+                LinkedList<Nodo> temporal = new LinkedList<Nodo>();
+                temporal.AddLast(Main_Ifthen(entrada.ChildNodes[2].ChildNodes[0]));
+                return new Case(linea, columna, tem, temporal);
+            }else if(entrada.ChildNodes.Count == 6)
+            {
+                LinkedList<Nodo> tem_exp;
+                tem_exp = lista_expresion(entrada.ChildNodes[0]);
+                LinkedList<Nodo> tem = ListaMain_Ifthen(entrada.ChildNodes[3]);
+                return new Case(linea, columna, tem_exp, tem);
+            }
+
+            return null;
+        }
     }
 }
