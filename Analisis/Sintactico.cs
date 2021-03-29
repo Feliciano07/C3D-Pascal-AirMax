@@ -115,6 +115,10 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Instruccion_Ifelse(actual);
                 case "caseof":
                     return Main.Instruccion_case_of(actual.ChildNodes[0]);
+                case "whiledo":
+                    return Main.Instruccion_While(actual);
+                case "repeat":
+                    return Main.Repeat(actual);
                 default:
                     break;
             }
