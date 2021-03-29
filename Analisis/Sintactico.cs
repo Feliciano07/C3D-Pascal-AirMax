@@ -61,22 +61,24 @@ namespace C3D_Pascal_AirMax.Analisis
             foreach (ParseTreeNode node in actual.ChildNodes)
             {
 
-                Master.getInstancia.addInstruccion(declaracion(node.ChildNodes[0]));
+                declaracion(node.ChildNodes[0]);
 
             }
         }
 
-        public Nodo declaracion(ParseTreeNode actual)
+        public void declaracion(ParseTreeNode actual)
         {
             String toke = actual.Term.Name;
 
             switch (toke)
             {
                 case "exp":
-                    return Expresion.evaluar(actual);
-
+                    //return Expresion.evaluar(actual);
+                    break;
+                case "variable":
+                    Variable.Lista_variables(actual.ChildNodes[1]);
+                    break;
             }
-            return null;
         }
 
         public void Instrucciones(ParseTreeNode entrada)

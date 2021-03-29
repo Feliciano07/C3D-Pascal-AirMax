@@ -3,6 +3,7 @@ using C3D_Pascal_AirMax.Enviroment;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using C3D_Pascal_AirMax.TipoDatos;
 
 namespace C3D_Pascal_AirMax.Abstract
 {
@@ -32,6 +33,20 @@ namespace C3D_Pascal_AirMax.Abstract
 
 
         public abstract Retorno compilar(Entorno entorno);
+
+
+        public bool Verificar_Tipo(Objeto.TipoObjeto tipo1, Objeto.TipoObjeto tipo2 )
+        {
+            if (tipo1 == tipo2)
+            {
+                return true;
+            }
+            else if (tipo1 == Objeto.TipoObjeto.INTEGER && tipo2 == Objeto.TipoObjeto.REAL)
+            {
+                return true;
+            }
+            return false;
+        }
 
 
     }

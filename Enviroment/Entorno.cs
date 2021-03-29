@@ -8,14 +8,14 @@ namespace C3D_Pascal_AirMax.Enviroment
 {
     public class Entorno
     {
-        private Dictionary<string, Simbolo> tabla;
+        private Dictionary<string, Simbolo> variables;
         private Dictionary<string, SimboloFuncion> funciones;
         private string nombre_entorno;
         private int size;
 
         public Entorno( string nombre)
         {
-            this.tabla = new Dictionary<string, Simbolo>();
+            this.variables = new Dictionary<string, Simbolo>();
             this.nombre_entorno = nombre;
             this.size = 0;
         }
@@ -27,8 +27,8 @@ namespace C3D_Pascal_AirMax.Enviroment
 
         public void addSimbolo(Simbolo sb)
         {
-            string llave = sb.getNombre() + sb.getEntorno();
-            this.tabla.Add(llave, sb);
+            string llave = sb.getNombre().ToLower();
+            this.variables.Add(llave, sb);
         }
 
 
@@ -41,12 +41,12 @@ namespace C3D_Pascal_AirMax.Enviroment
         public string Retornar_Simbolos()
         {
             string salida = "";
-            foreach(KeyValuePair<string,Simbolo> kvp in this.tabla)
+            foreach(KeyValuePair<string,Simbolo> kvp in this.variables)
             {
                 salida += "<tr>";
                 salida += "<td>" + kvp.Value.getNombre() + "</td>\n";
                 salida += "<td>" + kvp.Value.getTipo().ToString() + "</td>\n";
-                salida += "<td>" + kvp.Value.getEntorno() + "</td>\n";
+                salida += "<td>" + "" + "</td>\n";
                 salida += "<td>" + kvp.Value.getRol().ToString()+ "</td>\n";
                 salida += "<td>" + kvp.Value.getPosicion() + "</td>\n";
                 salida += "</tr>";

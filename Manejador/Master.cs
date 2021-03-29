@@ -10,6 +10,7 @@ namespace C3D_Pascal_AirMax.Manejador
     {
         private static readonly Master instancia = new Master();
         private LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
+        private LinkedList<Nodo> compilacion = new LinkedList<Nodo>();
         public LinkedList<Nodo> nativas = new LinkedList<Nodo>();
         private LinkedList<Error> lista_errores = new LinkedList<Error>();
 
@@ -42,6 +43,12 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             this.instrucciones.AddLast(nodo);
         }
+
+        public void addCompilar(Nodo nodo)
+        {
+            this.compilacion.AddLast(nodo);
+        }
+
         public void addError(Error error)
         {
             this.lista_errores.AddLast(error);

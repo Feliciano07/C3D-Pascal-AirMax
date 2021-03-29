@@ -24,7 +24,6 @@ namespace C3D_Pascal_AirMax.Enviroment
         private int posicion;
         private Rol rol;
         private Pointer pointer;
-        private HashSet<string> ambito;
 
         // para guardar variables locales
         public Simbolo(string nombre, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer, int posicion)
@@ -34,29 +33,14 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.rol = rol;
             this.pointer = pointer;
             this.posicion = posicion;
-            this.ambito = new HashSet<string>();
         }
 
-        public void addAmbito(string ambito)
-        {
-            this.ambito.Add(ambito);
-        }
 
         public string getNombre()
         {
             return this.nombre;
         }
 
-        public string getEntorno()
-        {
-            string salida = "[";
-            foreach(string str in this.ambito)
-            {
-                salida += str + ";";
-            }
-            salida += "]";
-            return salida;
-        }
 
         public Objeto.TipoObjeto getTipo()
         {
@@ -71,6 +55,10 @@ namespace C3D_Pascal_AirMax.Enviroment
         public int getPosicion()
         {
             return this.posicion;
+        }
+        public void setPosicion(int posicion)
+        {
+            this.posicion = posicion;
         }
     }
 }
