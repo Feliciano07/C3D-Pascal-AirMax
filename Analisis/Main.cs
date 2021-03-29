@@ -90,6 +90,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Instruccion_IfThen(actual);
                 case "ifelse":
                     return Main.Instruccion_Ifelse(actual);
+                case "caseof":
+                    return Main.Instruccion_case_of(actual.ChildNodes[0]);
                 default:
                     break;
             }
