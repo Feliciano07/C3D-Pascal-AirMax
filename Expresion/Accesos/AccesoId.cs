@@ -35,6 +35,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                 if (sym.getGlobal())
                 {
                     Master.getInstancia.addGetStack(tem, sym.getPosicion());
+
                     if(sym.getTipo() != TipoDatos.Objeto.TipoObjeto.BOOLEAN)
                     {
                         return new Retorno(tem, true, sym.getTipo());
