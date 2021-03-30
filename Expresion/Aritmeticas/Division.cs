@@ -32,7 +32,7 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             {
                 case Objeto.TipoObjeto.INTEGER:
                 case Objeto.TipoObjeto.REAL:
-                    // TODO: aqui deberia de ir que no se divida entre 0
+                    
                     Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "/");
                     return new Retorno(tem, true, Objeto.TipoObjeto.REAL);
                 default:

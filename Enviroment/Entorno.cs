@@ -42,6 +42,19 @@ namespace C3D_Pascal_AirMax.Enviroment
             return simbolo;
         }
 
+        // Falta ver como manejar los entornos enlazados
+        public Simbolo getSimbolo(string id)
+        {
+            id = id.ToLower();
+            if(this.variables.ContainsKey(id)== true)
+            {
+                Simbolo sym;
+                this.variables.TryGetValue(id, out sym);
+                return sym;
+            }
+            return null;
+        }
+
 
 
         public int getSize()

@@ -35,7 +35,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             }
 
             //TODO: falta validar si es object o array y ver si coinciden con el tipo dado
-            //TODO: solo se crean variables globales
+            //TODO: solo se crean variables globales, falta ver como crear variables locales
 
             foreach(string str in ids)
             {

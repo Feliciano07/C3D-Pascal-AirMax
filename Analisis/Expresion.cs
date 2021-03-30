@@ -6,6 +6,7 @@ using C3D_Pascal_AirMax.Expresion.Constantes;
 using Irony.Parsing;
 using C3D_Pascal_AirMax.Expresion.Relacionales;
 using C3D_Pascal_AirMax.Expresion.Logicas;
+using C3D_Pascal_AirMax.Expresion.Accesos;
 
 namespace C3D_Pascal_AirMax.Analisis
 {
@@ -108,6 +109,11 @@ namespace C3D_Pascal_AirMax.Analisis
                             string valor = entrada.ChildNodes[0].Token.Text;
                             return new PrimitivoC(linea, columna, Objeto.TipoObjeto.BOOLEAN, false);
                             
+                        }
+                    case "Id":
+                        {
+                            string valor = entrada.ChildNodes[0].Token.Text;
+                            return new AccesoId(linea, columna, valor, null);
                         }
 
                 }

@@ -25,6 +25,18 @@ namespace C3D_Pascal_AirMax.Analisis
             return null;
         }
 
+        /*
+         * para empezar a ver lo de las constantes
+         */
+
+        public static Nodo Lista_Constante(ParseTreeNode entrada)
+        {
+            foreach(ParseTreeNode node in entrada.ChildNodes)
+            {
+                Master.getInstancia.addCompilar(Evaluar_Constante(node));
+            }
+            return null;
+        }
 
         public static Nodo Evaluar_Variable(ParseTreeNode entrada)
         {
@@ -71,6 +83,27 @@ namespace C3D_Pascal_AirMax.Analisis
             }
             return null;
         }
+
+        public static Nodo Evaluar_Constante(ParseTreeNode entrada)
+        {
+            if(entrada.ChildNodes.Count == 4)
+            {
+                int linea = entrada.ChildNodes[0].Span.Location.Line;
+                int columna = entrada.ChildNodes[0].Span.Location.Column;
+                string nombre = entrada.ChildNodes[0].Token.Text;
+                return new DeclaracionConstante(linea, columna, nombre, Expresion.evaluar(entrada.ChildNodes[2]), Objeto.TipoObjeto.CONST);
+            }else if(entrada.ChildNodes.Count == 6)
+            {
+                int linea = entrada.ChildNodes[0].Span.Location.Line;
+                int columna = entrada.ChildNodes[0].Span.Location.Column;
+                string nombre = entrada.ChildNodes[0].Token.Text;
+                Objeto.TipoObjeto tipo = getTipo(entrada.ChildNodes[2]);
+                return new DeclaracionConstante(linea, columna, nombre, Expresion.evaluar(entrada.ChildNodes[4]), tipo);
+            }
+            return null;
+        }
+
+
         /*
          * DEVUELVE EL TIPO DE DATO QUE GUARDAR ESA VARIABLES
          */

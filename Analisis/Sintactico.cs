@@ -24,16 +24,19 @@ namespace C3D_Pascal_AirMax.Analisis
                 return false;
             }
 
-           
+           // genera el ast, para ver como se esta construyendo
             GenerarAST(raiz);
 
+            // carga las funciones nativas utilizadas para operaciones basica
             CargarNativas();
 
             encabezado(raiz.ChildNodes[0]);
 
             // ejecutar
-            //Master.getInstancia.ejecutar_nativas();
+            Master.getInstancia.ejecutar_nativas();
             Master.getInstancia.ejecutar();
+
+            Master.getInstancia.ReccorerErrores();
 
             return true;
 
@@ -77,6 +80,9 @@ namespace C3D_Pascal_AirMax.Analisis
                     break;
                 case "variable":
                     Variable.Lista_variables(actual.ChildNodes[1]);
+                    break;
+                case "constante":
+                    Variable.Lista_Constante(actual.ChildNodes[1]);
                     break;
             }
         }

@@ -20,7 +20,7 @@ namespace C3D_Pascal_AirMax.Enviroment
 
         private Objeto.TipoObjeto tipo;
         private string id;
-        private int posicion;
+        public int posicion;
         private Rol rol;
         private Pointer pointer;
         private string entorno;
