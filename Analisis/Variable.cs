@@ -133,7 +133,7 @@ namespace C3D_Pascal_AirMax.Analisis
                 case Objeto.TipoObjeto.BOOLEAN:
                     return false;
                 case Objeto.TipoObjeto.STRING:
-                    return "\'\'";
+                    return "\' \'";
 
             }
             return null;

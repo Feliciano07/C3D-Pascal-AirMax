@@ -60,7 +60,9 @@ namespace C3D_Pascal_AirMax.Manejador
             this.puntero_stack++;
             return aux;
         }
-
+        /*
+         * EJECUTA PARA QUE SE CREEN LAS FUNCIONES NATIVA
+         */
         public void ejecutar_nativas()
         {
             foreach(Nodo node in this.nativas)
@@ -68,11 +70,31 @@ namespace C3D_Pascal_AirMax.Manejador
                 node.compilar(null);
             }
         }
-
+        /*
+         * Ejecuta el flujo basico del programa
+         */
         public void ejecutar()
         {
             Entorno entorno = new Entorno("Global");
 
+            /*
+             * Ejecuta el flujo para que se pueda llenar la tabla de simbolos
+             */
+            foreach(Nodo node in this.compilacion)
+            {
+                try
+                {
+                    node.compilar(entorno);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            /*
+             * Ejecuta todo lo que este dentro del main
+             */
             foreach(Nodo node in this.instrucciones)
             {
                 try

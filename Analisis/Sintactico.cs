@@ -32,7 +32,7 @@ namespace C3D_Pascal_AirMax.Analisis
             encabezado(raiz.ChildNodes[0]);
 
             // ejecutar
-            Master.getInstancia.ejecutar_nativas();
+            //Master.getInstancia.ejecutar_nativas();
             Master.getInstancia.ejecutar();
 
             return true;

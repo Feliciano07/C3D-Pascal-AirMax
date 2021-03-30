@@ -30,16 +30,51 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                     "Tipos de datos diferentes: " + valor.getTipo().ToString() + "," + this.tipo.ToString());
+                Master.getInstancia.addError(error);
                 throw new Exception("Tipos de datos diferentes: " + valor.getTipo().ToString() + "," + this.tipo.ToString());
             }
 
-            //TODO: falta validar si es object o array y ver si coinciden
-
+            //TODO: falta validar si es object o array y ver si coinciden con el tipo dado
+            //TODO: solo se crean variables globales
 
             foreach(string str in ids)
             {
+                Simbolo newVar = entorno.addSimbolo(str, this.tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                if(newVar == null)
+                {
+                    Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                        "La variable: " + str + " ya existe en el ambito");
+                    Master.getInstancia.addError(error);
+                    throw new Exception("La variable: " + str + " ya existe en el ambito");
+                }
 
+                if (newVar.getGlobal())
+                {
+                    Master.getInstancia.addComentario("variable: " + str);
+                    if(this.tipo == Objeto.TipoObjeto.BOOLEAN)
+                    {
+                        string label_salida = Master.getInstancia.newLabel();
+                        Master.getInstancia.addLabel(valor.trueLabel);
+                        Master.getInstancia.addSetStack(newVar.getPosicion(), "1");
+                        Master.getInstancia.addGoto(label_salida);
+                        Master.getInstancia.addLabel(valor.falseLabel);
+                        Master.getInstancia.addSetStack(newVar.getPosicion(), "0");
+                        Master.getInstancia.addLabel(label_salida);
+                    }
+                    else
+                    {
+                        Master.getInstancia.addSetStack(newVar.getPosicion(), valor.getValor());
+                    }
+                }
+                else
+                {
+                    if(this.tipo == Objeto.TipoObjeto.BOOLEAN)
+                    {
+
+                    }
+                }
             }
+            return null;
         }
     }
 }

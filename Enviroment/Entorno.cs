@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using C3D_Pascal_AirMax.TipoDatos;
 
 namespace C3D_Pascal_AirMax.Enviroment
 {
@@ -12,12 +13,14 @@ namespace C3D_Pascal_AirMax.Enviroment
         private Dictionary<string, SimboloFuncion> funciones;
         private string nombre_entorno;
         private int size;
+        private Entorno anterior;
 
         public Entorno( string nombre)
         {
             this.variables = new Dictionary<string, Simbolo>();
             this.nombre_entorno = nombre;
-            this.size = 0;
+            this.size = 1;
+            this.anterior = null;
         }
 
         public string getNombreEntorno()
@@ -25,10 +28,18 @@ namespace C3D_Pascal_AirMax.Enviroment
             return this.nombre_entorno;
         }
 
-        public void addSimbolo(Simbolo sb)
+        // Agrega una variable a la tabla de simbolos
+        public Simbolo addSimbolo(string id,Objeto.TipoObjeto tipo, Simbolo.Rol rol, Simbolo.Pointer pointer)
         {
-            string llave = sb.getNombre().ToLower();
-            this.variables.Add(llave, sb);
+            id = id.ToLower();
+            if(this.variables.ContainsKey(id) == true)
+            {
+                return null;
+            }
+            Simbolo simbolo = new Simbolo(id, tipo, rol, pointer, this.size++, this.nombre_entorno,
+                this.anterior == null ? true:false);
+            this.variables.Add(id, simbolo);
+            return simbolo;
         }
 
 
@@ -44,9 +55,9 @@ namespace C3D_Pascal_AirMax.Enviroment
             foreach(KeyValuePair<string,Simbolo> kvp in this.variables)
             {
                 salida += "<tr>";
-                salida += "<td>" + kvp.Value.getNombre() + "</td>\n";
+                salida += "<td>" + kvp.Value.getId() + "</td>\n";
                 salida += "<td>" + kvp.Value.getTipo().ToString() + "</td>\n";
-                salida += "<td>" + "" + "</td>\n";
+                salida += "<td>" + kvp.Value.getEntorno() + "</td>\n";
                 salida += "<td>" + kvp.Value.getRol().ToString()+ "</td>\n";
                 salida += "<td>" + kvp.Value.getPosicion() + "</td>\n";
                 salida += "</tr>";
