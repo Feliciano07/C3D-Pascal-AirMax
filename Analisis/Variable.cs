@@ -53,6 +53,21 @@ namespace C3D_Pascal_AirMax.Analisis
                         }
                 }
 
+            }else if(entrada.ChildNodes.Count == 6)
+            {
+                string type = entrada.ChildNodes[0].Term.Name;
+                int linea = entrada.ChildNodes[0].Span.Location.Line;
+                int columna = entrada.ChildNodes[0].Span.Location.Column;
+                switch (type)
+                {
+                    case "Id":
+                        {
+                            string[] nombre = new string[] { entrada.ChildNodes[0].Token.Text };
+                            Objeto.TipoObjeto tipo = getTipo(entrada.ChildNodes[2]);
+                            string nombre_type = Nombre_Tipo(entrada.ChildNodes[2]);
+                            return new Declaracion(linea, columna, nombre, Expresion.evaluar(entrada.ChildNodes[4]), tipo, nombre_type);
+                        }
+                }
             }
             return null;
         }
