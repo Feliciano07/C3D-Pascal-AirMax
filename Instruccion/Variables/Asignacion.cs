@@ -24,7 +24,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             Retorno tem = this.variable.compilar(entorno);
             Retorno value = this.valor.compilar(entorno);
 
-            if(!base.Verificar_Tipo(tem.getTipo(), value.getTipo()))
+            if(!base.Verificar_Tipo(value.getTipo(), tem.getTipo()))
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                     "Tipos de datos diferentes");
