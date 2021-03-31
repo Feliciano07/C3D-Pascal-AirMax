@@ -1,4 +1,5 @@
-﻿using C3D_Pascal_AirMax.TipoDatos;
+﻿using C3D_Pascal_AirMax.Enviroment;
+using C3D_Pascal_AirMax.TipoDatos;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ namespace C3D_Pascal_AirMax.Manejador
         private Objeto.TipoObjeto tipo;
         public string trueLabel;
         public string falseLabel;
-
+        public Simbolo sym;
         // constante
         public Retorno(string valor, bool temp, Objeto.TipoObjeto tipo)
         {
@@ -20,6 +21,14 @@ namespace C3D_Pascal_AirMax.Manejador
             this.isTemp = temp;
             this.tipo = tipo;
             this.trueLabel = this.falseLabel = "";
+        }
+        public Retorno(string valor, bool temp, Objeto.TipoObjeto tipo, Simbolo simbolo)
+        {
+            this.valor = valor;
+            this.isTemp = temp;
+            this.tipo = tipo;
+            this.trueLabel = this.falseLabel = "";
+            this.sym = simbolo;
         }
 
         public string getValor()

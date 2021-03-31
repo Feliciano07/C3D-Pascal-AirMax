@@ -2,6 +2,7 @@
 using C3D_Pascal_AirMax.Enviroment;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace C3D_Pascal_AirMax.Manejador
@@ -10,6 +11,7 @@ namespace C3D_Pascal_AirMax.Manejador
     {
         private static readonly Master instancia = new Master();
         private LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
+        private LinkedList<Nodo> compilacion = new LinkedList<Nodo>();
         public LinkedList<Nodo> nativas = new LinkedList<Nodo>();
         private LinkedList<Error> lista_errores = new LinkedList<Error>();
 
@@ -42,6 +44,12 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             this.instrucciones.AddLast(nodo);
         }
+
+        public void addCompilar(Nodo nodo)
+        {
+            this.compilacion.AddLast(nodo);
+        }
+
         public void addError(Error error)
         {
             this.lista_errores.AddLast(error);
@@ -53,7 +61,9 @@ namespace C3D_Pascal_AirMax.Manejador
             this.puntero_stack++;
             return aux;
         }
-
+        /*
+         * EJECUTA PARA QUE SE CREEN LAS FUNCIONES NATIVA
+         */
         public void ejecutar_nativas()
         {
             foreach(Nodo node in this.nativas)
@@ -61,11 +71,31 @@ namespace C3D_Pascal_AirMax.Manejador
                 node.compilar(null);
             }
         }
-
+        /*
+         * Ejecuta el flujo basico del programa
+         */
         public void ejecutar()
         {
             Entorno entorno = new Entorno("Global");
 
+            /*
+             * Ejecuta el flujo para que se pueda llenar la tabla de simbolos
+             */
+            foreach(Nodo node in this.compilacion)
+            {
+                try
+                {
+                    node.compilar(entorno);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
+            /*
+             * Ejecuta todo lo que este dentro del main
+             */
             foreach(Nodo node in this.instrucciones)
             {
                 try
@@ -268,5 +298,45 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             this.codigo.AddLast("/***" + comentario + "*/");
         }
+
+
+        public void ReccorerErrores()
+        {
+            string ruta = @"C:\compiladores2";
+            StreamWriter fichero = new StreamWriter(ruta + "\\" + "reporte_errores" + ".html");
+            fichero.WriteLine("<html>");
+            fichero.WriteLine("<head><title>Errores</title></head>");
+            fichero.WriteLine("<body>");
+            fichero.WriteLine("<h2>" + "Errores" + "</h2>");
+            fichero.WriteLine("<br></br>");
+            fichero.WriteLine("<center>" +
+            "<table border=3 width=60% height=7%>");
+            fichero.WriteLine("<tr>");
+            fichero.WriteLine("<th>Tipo</th>");
+            fichero.WriteLine("<th>Descripcion</th>");
+            fichero.WriteLine("<th>Linea</th>");
+            fichero.WriteLine("<th>Columna</th>");
+            fichero.WriteLine("</tr>");
+            fichero.WriteLine(Errores_encontrados());
+            fichero.Write("</table>");
+            fichero.WriteLine("</center>" + "</body>" + "</html>");
+            fichero.Close();
+
+        }
+        public string Errores_encontrados()
+        {
+            string salida = "";
+            foreach (Error error in this.lista_errores)
+            {
+                salida += "<tr>";
+                salida += "<td>" + error.tipoError + "</td>\n";
+                salida += "<td>" + error.descripcion + "</td>\n";
+                salida += "<td>" + error.linea + "</td>\n";
+                salida += "<td>" + error.columna + "</td>\n";
+                salida += "</tr>";
+            }
+            return salida;
+        }
+
     }
 }

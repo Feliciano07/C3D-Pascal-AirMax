@@ -24,9 +24,10 @@ namespace C3D_Pascal_AirMax.Analisis
                 return false;
             }
 
-           
+           // genera el ast, para ver como se esta construyendo
             GenerarAST(raiz);
 
+            // carga las funciones nativas utilizadas para operaciones basica
             CargarNativas();
 
             encabezado(raiz.ChildNodes[0]);
@@ -34,6 +35,8 @@ namespace C3D_Pascal_AirMax.Analisis
             // ejecutar
             Master.getInstancia.ejecutar_nativas();
             Master.getInstancia.ejecutar();
+
+            Master.getInstancia.ReccorerErrores();
 
             return true;
 
@@ -61,22 +64,27 @@ namespace C3D_Pascal_AirMax.Analisis
             foreach (ParseTreeNode node in actual.ChildNodes)
             {
 
-                Master.getInstancia.addInstruccion(declaracion(node.ChildNodes[0]));
+                declaracion(node.ChildNodes[0]);
 
             }
         }
 
-        public Nodo declaracion(ParseTreeNode actual)
+        public void declaracion(ParseTreeNode actual)
         {
             String toke = actual.Term.Name;
 
             switch (toke)
             {
                 case "exp":
-                    return Expresion.evaluar(actual);
-
+                    //return Expresion.evaluar(actual);
+                    break;
+                case "variable":
+                    Variable.Lista_variables(actual.ChildNodes[1]);
+                    break;
+                case "constante":
+                    Variable.Lista_Constante(actual.ChildNodes[1]);
+                    break;
             }
-            return null;
         }
 
         public void Instrucciones(ParseTreeNode entrada)
@@ -119,6 +127,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Instruccion_While(actual);
                 case "repeat":
                     return Main.Repeat(actual);
+                case "asignacion":
+                    return Asignaciones.Tipo_asignacion(actual);
                 default:
                     break;
             }

@@ -15,7 +15,9 @@ namespace C3D_Pascal_AirMax.TipoDatos
             VOID = 4,
             ARRAY = 5,
             OBJECTS = 6,
-            NULO = 10
+            NULO = 10,
+            TYPES = 11,
+            CONST = 12
         }
 
         private TipoObjeto tipo;

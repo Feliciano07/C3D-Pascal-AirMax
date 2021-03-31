@@ -3,21 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using C3D_Pascal_AirMax.TipoDatos;
 
 namespace C3D_Pascal_AirMax.Enviroment
 {
     public class Entorno
     {
-        private Dictionary<string, Simbolo> tabla;
+        private Dictionary<string, Simbolo> variables;
         private Dictionary<string, SimboloFuncion> funciones;
         private string nombre_entorno;
         private int size;
+        private Entorno anterior;
 
         public Entorno( string nombre)
         {
-            this.tabla = new Dictionary<string, Simbolo>();
+            this.variables = new Dictionary<string, Simbolo>();
             this.nombre_entorno = nombre;
-            this.size = 0;
+            this.size = 1;
+            this.anterior = null;
         }
 
         public string getNombreEntorno()
@@ -25,10 +28,31 @@ namespace C3D_Pascal_AirMax.Enviroment
             return this.nombre_entorno;
         }
 
-        public void addSimbolo(Simbolo sb)
+        // Agrega una variable a la tabla de simbolos
+        public Simbolo addSimbolo(string id,Objeto.TipoObjeto tipo, Simbolo.Rol rol, Simbolo.Pointer pointer)
         {
-            string llave = sb.getNombre() + sb.getEntorno();
-            this.tabla.Add(llave, sb);
+            id = id.ToLower();
+            if(this.variables.ContainsKey(id) == true)
+            {
+                return null;
+            }
+            Simbolo simbolo = new Simbolo(id, tipo, rol, pointer, this.size++, this.nombre_entorno,
+                this.anterior == null ? true:false);
+            this.variables.Add(id, simbolo);
+            return simbolo;
+        }
+
+        // Falta ver como manejar los entornos enlazados
+        public Simbolo getSimbolo(string id)
+        {
+            id = id.ToLower();
+            if(this.variables.ContainsKey(id)== true)
+            {
+                Simbolo sym;
+                this.variables.TryGetValue(id, out sym);
+                return sym;
+            }
+            return null;
         }
 
 
@@ -41,10 +65,10 @@ namespace C3D_Pascal_AirMax.Enviroment
         public string Retornar_Simbolos()
         {
             string salida = "";
-            foreach(KeyValuePair<string,Simbolo> kvp in this.tabla)
+            foreach(KeyValuePair<string,Simbolo> kvp in this.variables)
             {
                 salida += "<tr>";
-                salida += "<td>" + kvp.Value.getNombre() + "</td>\n";
+                salida += "<td>" + kvp.Value.getId() + "</td>\n";
                 salida += "<td>" + kvp.Value.getTipo().ToString() + "</td>\n";
                 salida += "<td>" + kvp.Value.getEntorno() + "</td>\n";
                 salida += "<td>" + kvp.Value.getRol().ToString()+ "</td>\n";

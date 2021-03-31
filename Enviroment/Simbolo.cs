@@ -9,9 +9,8 @@ namespace C3D_Pascal_AirMax.Enviroment
     {
 
         public enum Rol:int{
-            VARIABLE_GLOBAL = 1,
-            CONSTANTE =3,
-            VARIABLE_LOCAL = 4
+            VARIABLE= 1,
+            CONSTANTE =2,
         }
         public enum Pointer:int
         {
@@ -20,43 +19,31 @@ namespace C3D_Pascal_AirMax.Enviroment
         }
 
         private Objeto.TipoObjeto tipo;
-        private string nombre;
-        private int posicion;
+        private string id;
+        public int posicion;
         private Rol rol;
         private Pointer pointer;
-        private HashSet<string> ambito;
+        private string entorno;
+        private bool isGlobal;
 
         // para guardar variables locales
-        public Simbolo(string nombre, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer, int posicion)
+        public Simbolo(string id, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer, int posicion, string entorno, bool global)
         {
-            this.nombre = nombre;
+            this.id = id;
             this.tipo = tipo;
             this.rol = rol;
             this.pointer = pointer;
             this.posicion = posicion;
-            this.ambito = new HashSet<string>();
+            this.entorno = entorno;
+            this.isGlobal = global;
         }
 
-        public void addAmbito(string ambito)
+
+        public string getId()
         {
-            this.ambito.Add(ambito);
+            return this.id;
         }
 
-        public string getNombre()
-        {
-            return this.nombre;
-        }
-
-        public string getEntorno()
-        {
-            string salida = "[";
-            foreach(string str in this.ambito)
-            {
-                salida += str + ";";
-            }
-            salida += "]";
-            return salida;
-        }
 
         public Objeto.TipoObjeto getTipo()
         {
@@ -68,9 +55,23 @@ namespace C3D_Pascal_AirMax.Enviroment
             return this.rol;
         }
 
-        public int getPosicion()
+        public string getPosicion()
         {
-            return this.posicion;
+            return this.posicion.ToString();
+        }
+        public void setPosicion(int posicion)
+        {
+            this.posicion = posicion;
+        }
+
+        public bool getGlobal()
+        {
+            return this.isGlobal;
+        }
+
+        public string getEntorno()
+        {
+            return this.entorno;
         }
     }
 }
