@@ -375,5 +375,40 @@ namespace C3D_Pascal_AirMax.Analisis
             return null;
         }
 
+        public static Nodo For(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+
+            //TODO: debo mandar a capturar la asignacion
+            Nodo asig = Asignaciones.Tipo_asignacion(entrada.ChildNodes[1]);
+
+            string token = entrada.ChildNodes[2].Term.Name.ToLower();
+            bool comportamiento = false;
+            switch (token)
+            {
+                case "to":
+                    comportamiento = false;
+                    break;
+                case "downto":
+                    comportamiento = true;
+                    break;
+            }
+            Nodo expresion = Expresion.evaluar(entrada.ChildNodes[3]);
+
+            if(entrada.ChildNodes.Count == 6)
+            {
+                LinkedList<Nodo> temporal = new LinkedList<Nodo>();
+                temporal.AddLast(Main_Ifthen(entrada.ChildNodes[5].ChildNodes[0]));
+                return new For(linea, columna, asig, expresion, temporal, comportamiento);
+            }else if(entrada.ChildNodes.Count == 9)
+            {
+                LinkedList<Nodo> temporal;
+                temporal = ListaMain_Ifthen(entrada.ChildNodes[6]);
+                return new For(linea, columna, asig, expresion, temporal, comportamiento);
+            }
+            return null;
+        }
+
     }
 }

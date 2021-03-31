@@ -127,6 +127,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Instruccion_While(actual);
                 case "repeat":
                     return Main.Repeat(actual);
+                case "no_for":
+                    return Main.For(actual);
                 case "asignacion":
                     return Asignaciones.Tipo_asignacion(actual);
                 default:

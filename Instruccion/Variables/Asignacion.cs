@@ -45,10 +45,12 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Master.getInstancia.addLabel(value.falseLabel);
                     Master.getInstancia.addSetStack(simbolo.getPosicion(), "0");
                     Master.getInstancia.addLabel(aux);
+                    return new Retorno(simbolo.getPosicion(), false, simbolo.getTipo(), simbolo);
                 }
                 else
                 {
                     Master.getInstancia.addSetStack(simbolo.getPosicion(), value.getValor());
+                    return new Retorno(simbolo.getPosicion(), false, simbolo.getTipo(), simbolo);
                 }
             }
             else
