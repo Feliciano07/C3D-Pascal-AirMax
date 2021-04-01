@@ -19,7 +19,7 @@ namespace C3D_Pascal_AirMax.Enviroment
         {
             this.variables = new Dictionary<string, Simbolo>();
             this.nombre_entorno = nombre;
-            this.size = 1;
+            this.size = 0;
             this.anterior = null;
         }
 

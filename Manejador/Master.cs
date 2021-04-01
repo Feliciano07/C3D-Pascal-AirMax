@@ -96,6 +96,7 @@ namespace C3D_Pascal_AirMax.Manejador
             /*
              * Ejecuta todo lo que este dentro del main
              */
+            this.codigo.AddLast("void main(){");
             foreach(Nodo node in this.instrucciones)
             {
                 try
@@ -107,6 +108,7 @@ namespace C3D_Pascal_AirMax.Manejador
                     Console.WriteLine(e.ToString());
                 }
             }
+            this.codigo.AddLast("return ; }");
             entorno.TablaGeneral();
         }
         public string getEncabezado()
