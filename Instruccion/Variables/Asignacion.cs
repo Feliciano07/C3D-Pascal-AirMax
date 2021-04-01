@@ -54,6 +54,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 }
                 else
                 {
+                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                     Master.getInstancia.addSetStack(posicion_stack, value.getValor());
                     return new Retorno(simbolo.getPosicion(), false, simbolo.getTipo(), simbolo);
                 }
