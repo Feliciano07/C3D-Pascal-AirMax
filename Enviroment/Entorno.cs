@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using C3D_Pascal_AirMax.TipoDatos;
+using C3D_Pascal_AirMax.Utilidades;
 
 namespace C3D_Pascal_AirMax.Enviroment
 {
     public class Entorno
     {
         private Dictionary<string, Simbolo> variables;
-        private Dictionary<string, SimboloFuncion> funciones;
+        private Dictionary<string, SimboloObjeto> objetos;
         private string nombre_entorno;
         private int size;
         private Entorno anterior;
@@ -18,6 +19,7 @@ namespace C3D_Pascal_AirMax.Enviroment
         public Entorno( string nombre)
         {
             this.variables = new Dictionary<string, Simbolo>();
+            this.objetos = new Dictionary<string, SimboloObjeto>();
             this.nombre_entorno = nombre;
             this.size = 0;
             this.anterior = null;
@@ -55,6 +57,16 @@ namespace C3D_Pascal_AirMax.Enviroment
             return null;
         }
 
+        public bool addObjeto(string id, int size, LinkedList<Atributo> atributos)
+        {
+            id = id.ToLower();
+            if (this.objetos.ContainsKey(id))
+            {
+                return true;
+            }
+            this.objetos.Add(id, new SimboloObjeto(id, size, atributos));
+            return false;
+        }
 
 
         public int getSize()

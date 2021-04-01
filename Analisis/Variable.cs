@@ -37,7 +37,7 @@ namespace C3D_Pascal_AirMax.Analisis
             }
             return null;
         }
-
+        //TODO: cambiar la forma de manejar las variables
         public static Nodo Evaluar_Variable(ParseTreeNode entrada)
         {
             if(entrada.ChildNodes.Count == 4)// declaracion de variables sin iniciar
@@ -186,5 +186,6 @@ namespace C3D_Pascal_AirMax.Analisis
             }
             return null;
         }
+        
     }
 }

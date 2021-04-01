@@ -21,14 +21,21 @@ namespace C3D_Pascal_AirMax.TipoDatos
         }
 
         private TipoObjeto tipo;
+        private string objetoId;
 
-        public Objeto(TipoObjeto tipo)
+        public Objeto(TipoObjeto tipo, string objetoId)
         {
             this.tipo = tipo;
+            this.objetoId = objetoId;
         }
         public TipoObjeto getTipo()
         {
             return this.tipo;
+        }
+
+        public string getObjetoId()
+        {
+            return this.objetoId;
         }
 
 

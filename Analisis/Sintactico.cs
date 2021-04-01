@@ -83,6 +83,9 @@ namespace C3D_Pascal_AirMax.Analisis
                 case "constante":
                     Variable.Lista_Constante(actual.ChildNodes[1]);
                     break;
+                case "objectos":
+                    TypeObjeto.Definicion_Objeto(actual);
+                    break;
             }
         }
 
