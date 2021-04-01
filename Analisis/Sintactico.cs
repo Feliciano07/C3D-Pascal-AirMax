@@ -69,15 +69,14 @@ namespace C3D_Pascal_AirMax.Analisis
             }
         }
 
+        // esto deberia de guardarse antes
         public void declaracion(ParseTreeNode actual)
         {
             String toke = actual.Term.Name;
 
             switch (toke)
             {
-                case "exp":
-                    //return Expresion.evaluar(actual);
-                    break;
+                
                 case "variable":
                     Variable.Lista_variables(actual.ChildNodes[1]);
                     break;
@@ -127,6 +126,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Instruccion_While(actual);
                 case "repeat":
                     return Main.Repeat(actual);
+                case "no_for":
+                    return Main.For(actual);
                 case "asignacion":
                     return Asignaciones.Tipo_asignacion(actual);
                 default:

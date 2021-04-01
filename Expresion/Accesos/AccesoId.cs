@@ -32,9 +32,11 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                     throw new Exception("No existe la variable: " + this.id);
                 }
                 string tem = Master.getInstancia.newTemporal();
+                string posicion_stack = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
                 if (sym.getGlobal())
                 {
-                    Master.getInstancia.addGetStack(tem, sym.getPosicion());
+                    Master.getInstancia.addGetStack(tem, posicion_stack);
 
                     if(sym.getTipo() != TipoDatos.Objeto.TipoObjeto.BOOLEAN)
                     {

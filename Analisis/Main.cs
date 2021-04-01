@@ -90,13 +90,26 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Instruccion_IfThen(actual);
                 case "ifelse":
                     return Main.Instruccion_Ifelse(actual);
-                case "caseof":
-                    return Main.Instruccion_case_of(actual.ChildNodes[0]);
-                case "sentencia_while":
-                    return Main.Instruccion_While_If(actual);
                 case "opcion_else":
                     return Main.Opcion_else(actual);
+                case "caseof":
+                    return Main.Instruccion_case_of(actual.ChildNodes[0]);
+                case "sentencia_case":
+                    return Main.Instruccion_case_of(actual);
+                case "sentencia_while":
+                    return Main.Instruccion_While_If(actual);
                 case "sentencia_repeat":
+                    return Main.Repeat(actual);
+                case "sentencia_for":
+                    return Main.For_if(actual);
+                case "asignacion":
+                    return Asignaciones.Tipo_asignacion(actual);
+                //TODO: falta mas intrucciones
+                case "no_for":
+                    return Main.For(actual);
+                case "whiledo":
+                    return Main.Instruccion_While(actual);
+                case "repeat":
                     return Main.Repeat(actual);
                 default:
                     break;
@@ -172,9 +185,9 @@ namespace C3D_Pascal_AirMax.Analisis
         {
             int linea = entrada.Span.Location.Column;
             int columna = entrada.Span.Location.Column;
+
             Nodo exp = Expresion.evaluar(entrada.ChildNodes[1]);
             LinkedList<Nodo> tem_if = new LinkedList<Nodo>();
-            // if 
             // if
             if (entrada.ChildNodes[3].ChildNodes.Count == 1)
             {
@@ -371,6 +384,90 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Instruccion_While(actual);
                 case "repeat":
                     return Main.Repeat(actual);
+                case "no_for":
+                    return Main.For(actual);
+                case "asignacion":
+                    return Asignaciones.Tipo_asignacion(actual);
+                //TODO: aqui van mas instrucciones
+                case "opcion_else":
+                    return Main.Opcion_else(actual);
+                case "sentencia_case":
+                    return Main.Instruccion_case_of(actual);
+                case "sentencia_while":
+                    return Main.Instruccion_While_If(actual);
+                case "sentencia_repeat":
+                    return Main.Repeat(actual);
+                case "sentencia_for":
+                    return Main.For_if(actual);
+            }
+            return null;
+        }
+
+        public static Nodo For(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+            Nodo asig = Asignaciones.Tipo_asignacion(entrada.ChildNodes[1]);
+
+            string token = entrada.ChildNodes[2].Term.Name.ToLower();
+            bool comportamiento = false;
+            switch (token)
+            {
+                case "to":
+                    comportamiento = false;
+                    break;
+                case "downto":
+                    comportamiento = true;
+                    break;
+            }
+            Nodo expresion = Expresion.evaluar(entrada.ChildNodes[3]);
+
+            if(entrada.ChildNodes.Count == 6)
+            {
+                LinkedList<Nodo> temporal = new LinkedList<Nodo>();
+                temporal.AddLast(Main_Ifthen(entrada.ChildNodes[5].ChildNodes[0]));
+                return new For(linea, columna, asig, expresion, temporal, comportamiento);
+            }else if(entrada.ChildNodes.Count == 9)
+            {
+                LinkedList<Nodo> temporal;
+                temporal = ListaMain_Ifthen(entrada.ChildNodes[6]);
+                return new For(linea, columna, asig, expresion, temporal, comportamiento);
+            }
+            return null;
+        }
+
+        public static Nodo For_if(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+
+            //captura la asignacion
+            Nodo asignacion = Asignaciones.Tipo_asignacion(entrada.ChildNodes[1]);
+
+            string token = entrada.ChildNodes[2].Term.Name.ToLower();
+            bool comportamiento = false;
+
+            switch (token)
+            {
+                case "to":
+                    comportamiento = false;
+                    break;
+                case "downto":
+                    comportamiento = true;
+                    break;
+            }
+
+            Nodo expresion = Expresion.evaluar(entrada.ChildNodes[3]);
+
+            if(entrada.ChildNodes[5].ChildNodes.Count == 1)
+            {
+                LinkedList<Nodo> tem = new LinkedList<Nodo>();
+                tem.AddLast(Main_Ifthen(entrada.ChildNodes[5].ChildNodes[0]));
+                return new For(linea, columna, asignacion, expresion, tem, comportamiento);
+            }else if(entrada.ChildNodes[5].ChildNodes.Count == 3)
+            {
+                LinkedList<Nodo> tem = ListaMain_Ifthen(entrada.ChildNodes[5].ChildNodes[1]);
+                return new For(linea, columna, asignacion, expresion, tem, comportamiento);
             }
             return null;
         }

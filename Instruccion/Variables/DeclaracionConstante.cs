@@ -54,19 +54,21 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             if (newVar.getGlobal())
             {
                 Master.getInstancia.addComentario("Constante: " + this.nombre);
+                string posicion_stack = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
                 if (this.tipo == Objeto.TipoObjeto.BOOLEAN)
                 {
                     string label_salida = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(valor.trueLabel);
-                    Master.getInstancia.addSetStack(newVar.getPosicion(), "1");
+                    Master.getInstancia.addSetStack(posicion_stack, "1");
                     Master.getInstancia.addGoto(label_salida);
                     Master.getInstancia.addLabel(valor.falseLabel);
-                    Master.getInstancia.addSetStack(newVar.getPosicion(), "0");
+                    Master.getInstancia.addSetStack(posicion_stack, "0");
                     Master.getInstancia.addLabel(label_salida);
                 }
                 else
                 {
-                    Master.getInstancia.addSetStack(newVar.getPosicion(), valor.getValor());
+                    Master.getInstancia.addSetStack(posicion_stack, valor.getValor());
                 }
             }
             else

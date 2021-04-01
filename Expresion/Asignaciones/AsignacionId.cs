@@ -30,6 +30,8 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                     Master.getInstancia.addError(error);
                     throw new Exception("No existe la variable: " + this.id);
                 }
+
+
                 if (sym.getGlobal())
                 {
                     return new Retorno(sym.getPosicion(), false, sym.getTipo(),sym);
