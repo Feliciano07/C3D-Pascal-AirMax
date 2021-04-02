@@ -20,5 +20,10 @@ namespace C3D_Pascal_AirMax.Utilidades
         {
             return this.id;
         }
+
+        public Objeto getObjeto()
+        {
+            return this.tipo;
+        }
     }
 }

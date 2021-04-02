@@ -18,5 +18,15 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.atributos = atributos;
         }
 
+        public int getSize()
+        {
+            return this.size;
+        }
+
+        public LinkedList<Atributo> GetAtributos()
+        {
+            return this.atributos;
+        }
+
     }
 }

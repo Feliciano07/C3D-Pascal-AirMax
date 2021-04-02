@@ -1,4 +1,5 @@
-﻿using System;
+﻿using C3D_Pascal_AirMax.Enviroment;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -22,6 +23,7 @@ namespace C3D_Pascal_AirMax.TipoDatos
 
         private TipoObjeto tipo;
         private string objetoId;
+        public SimboloObjeto symObj;
 
         public Objeto(TipoObjeto tipo, string objetoId)
         {
@@ -35,7 +37,7 @@ namespace C3D_Pascal_AirMax.TipoDatos
 
         public string getObjetoId()
         {
-            return this.objetoId;
+            return this.objetoId.ToLower();
         }
 
 

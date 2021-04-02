@@ -37,7 +37,7 @@ namespace C3D_Pascal_AirMax.Analisis
             }
             return null;
         }
-        //TODO: cambiar la forma de manejar las variables
+        
         public static Nodo Evaluar_Variable(ParseTreeNode entrada)
         {
             if(entrada.ChildNodes.Count == 4)// declaracion de variables sin iniciar
@@ -51,17 +51,16 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "Id":
                         {
                             string[] nombre = new string[] { entrada.ChildNodes[0].Token.Text };
-                            Objeto.TipoObjeto tipo = getTipo(entrada.ChildNodes[2]);
-                            string nombre_type = Nombre_Tipo(entrada.ChildNodes[2]);
-                            return new Declaracion(linea, columna, nombre, getObjeto(tipo), tipo, nombre_type);
+                            Objeto objeto = new Objeto(getTipo(entrada.ChildNodes[2]), Nombre_Tipo(entrada.ChildNodes[2]));
+                           
+                            return new Declaracion(linea, columna, nombre, getObjeto(objeto.getTipo()), objeto);
                             
                         }
                     case "lista_id":
                         {
                             string[] nombre = getId(entrada.ChildNodes[0]);
-                            Objeto.TipoObjeto tipo = getTipo(entrada.ChildNodes[2]);
-                            string nombre_type = Nombre_Tipo(entrada.ChildNodes[2]);
-                            return new Declaracion(linea, columna, nombre, getObjeto(tipo), tipo, nombre_type);
+                            Objeto objeto = new Objeto(getTipo(entrada.ChildNodes[2]), Nombre_Tipo(entrada.ChildNodes[2]));
+                            return new Declaracion(linea, columna, nombre, getObjeto(objeto.getTipo()), objeto);
                         }
                 }
 
@@ -75,9 +74,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "Id":
                         {
                             string[] nombre = new string[] { entrada.ChildNodes[0].Token.Text };
-                            Objeto.TipoObjeto tipo = getTipo(entrada.ChildNodes[2]);
-                            string nombre_type = Nombre_Tipo(entrada.ChildNodes[2]);
-                            return new Declaracion(linea, columna, nombre, Expresion.evaluar(entrada.ChildNodes[4]), tipo, nombre_type);
+                            Objeto objeto = new Objeto(getTipo(entrada.ChildNodes[2]), Nombre_Tipo(entrada.ChildNodes[2]));
+                            return new Declaracion(linea, columna, nombre, Expresion.evaluar(entrada.ChildNodes[4]), objeto);
                         }
                 }
             }

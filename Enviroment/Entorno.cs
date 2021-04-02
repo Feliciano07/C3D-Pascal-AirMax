@@ -68,6 +68,19 @@ namespace C3D_Pascal_AirMax.Enviroment
             return false;
         }
 
+        public SimboloObjeto searchObjeto(string id)
+        {
+            id = id.ToLower();
+            if (this.objetos.ContainsKey(id))
+            {
+                SimboloObjeto objeto;
+                this.objetos.TryGetValue(id, out objeto);
+                return objeto;
+            }
+            return null;
+        }
+
+
 
         public int getSize()
         {
