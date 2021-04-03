@@ -42,7 +42,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
             //TODO: solo se crean constante globales, falta ver como crear constantes locales
 
-            Simbolo newVar = entorno.addSimbolo(this.nombre, this.tipo, Simbolo.Rol.CONSTANTE, Simbolo.Pointer.STACK);
+            Simbolo newVar = entorno.addSimbolo(this.nombre, new Objeto(this.tipo), Simbolo.Rol.CONSTANTE, Simbolo.Pointer.STACK);
             if (newVar == null)
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,

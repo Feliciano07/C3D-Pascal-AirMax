@@ -7,11 +7,11 @@ namespace C3D_Pascal_AirMax.Utilidades
 {
     public class Atributo
     {
-        private string id;
-        private Objeto tipo;
+        public string id;
+        public Objeto tipo;
         public Atributo(string id, Objeto tipo)
         {
-            this.id = id;
+            this.id = id.ToLower();
             this.tipo = tipo;
             
         }

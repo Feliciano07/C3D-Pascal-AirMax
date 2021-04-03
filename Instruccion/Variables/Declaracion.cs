@@ -49,7 +49,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
             foreach (string str in ids)
             {
-                Simbolo newVar = entorno.addSimbolo(str, this.tipo.getTipo(), Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                Simbolo newVar = entorno.addSimbolo(str, this.tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
                 if (newVar == null)
                 {
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
@@ -86,6 +86,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             SimboloObjeto sym_obj = entorno.searchObjeto(this.tipo.getObjetoId());
             if(sym_obj == null)
             {
+                
                 throw new Exception("El objeto: " + this.tipo.getObjetoId() + " No existe");
             }
 
@@ -94,7 +95,8 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             {
                 string inicio_objeto = Master.getInstancia.newTemporal();
                 Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
-                Simbolo newVar = entorno.addSimbolo(nombre, Objeto.TipoObjeto.OBJECTS, Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP);
+                Objeto tipo = new Objeto(Objeto.TipoObjeto.OBJECTS, sym_obj, sym_obj.id);
+                Simbolo newVar = entorno.addSimbolo(nombre, tipo , Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP);
 
                 if (newVar == null)
                 {
@@ -111,8 +113,9 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                         case Objeto.TipoObjeto.INTEGER:
                         case Objeto.TipoObjeto.REAL:
                         case Objeto.TipoObjeto.BOOLEAN:
-                            Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "0");
+                            Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "2");
                             break;
+                        // se manda -1 debido a que va a guardar una direccion 
                         case Objeto.TipoObjeto.STRING:
                             Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
                             break;
@@ -120,8 +123,12 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     }
                     Master.getInstancia.nextHeap();
                 }
-
+                string posicion_stack = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
+                Master.getInstancia.addSetStack(posicion_stack, inicio_objeto);
             }
+            
+
             Master.getInstancia.addComentario("Fin del objeto****");
 
         }

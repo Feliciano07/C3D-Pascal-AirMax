@@ -31,7 +31,7 @@ namespace C3D_Pascal_AirMax.Enviroment
         }
 
         // Agrega una variable a la tabla de simbolos
-        public Simbolo addSimbolo(string id,Objeto.TipoObjeto tipo, Simbolo.Rol rol, Simbolo.Pointer pointer)
+        public Simbolo addSimbolo(string id, Objeto tipo, Simbolo.Rol rol, Simbolo.Pointer pointer)
         {
             id = id.ToLower();
             if(this.variables.ContainsKey(id) == true)

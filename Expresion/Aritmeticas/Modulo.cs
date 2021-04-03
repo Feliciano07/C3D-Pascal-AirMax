@@ -33,7 +33,7 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             {
                 case Objeto.TipoObjeto.INTEGER:
                     Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "%");
-                    return new Retorno(tem, true, tipo_dominante);
+                    return new Retorno(tem, true, new Objeto(tipo_dominante));
                 default:
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                    "No se puede obtener el modulo de tipos de datos" + res_left.getTipo().ToString() + "con" + res_right.getTipo().ToString());

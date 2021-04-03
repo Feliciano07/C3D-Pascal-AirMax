@@ -32,10 +32,10 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             {
                 case Objeto.TipoObjeto.INTEGER:
                     Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "*");
-                    return new Retorno(tem, true, Objeto.TipoObjeto.INTEGER);
+                    return new Retorno(tem, true, new Objeto(Objeto.TipoObjeto.INTEGER));
                 case Objeto.TipoObjeto.REAL:
                     Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "*");
-                    return new Retorno(tem, true, Objeto.TipoObjeto.REAL);
+                    return new Retorno(tem, true, new Objeto(Objeto.TipoObjeto.REAL));
                 default:
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                    "No se pueden multiplicar los tipos " + res_left.getTipo().ToString() + " con " + res_right.getTipo().ToString());

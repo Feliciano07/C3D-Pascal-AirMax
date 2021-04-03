@@ -10,25 +10,25 @@ namespace C3D_Pascal_AirMax.Expresion.Constantes
 {
     public class PrimitivoC : Nodo
     {
-        private Objeto.TipoObjeto tipo;
+        private Objeto objeto;
         private object valor;
 
-        public PrimitivoC(int linea, int columna, Objeto.TipoObjeto tipo, object valor):base(linea,columna)
+        public PrimitivoC(int linea, int columna, Objeto objeto, object valor):base(linea,columna)
         {
-            this.tipo = tipo;
+            this.objeto = objeto;
             this.valor = valor;
         }
 
         public override Retorno compilar(Entorno entorno)
         {
-            switch (tipo)
+            switch (objeto.getTipo())
             {
                 case Objeto.TipoObjeto.INTEGER:
-                    return new Retorno(this.valor.ToString(), false, Objeto.TipoObjeto.INTEGER);
+                    return new Retorno(this.valor.ToString(), false, objeto);
                 case Objeto.TipoObjeto.REAL:
-                    return new Retorno(this.valor.ToString(), false, Objeto.TipoObjeto.REAL);
+                    return new Retorno(this.valor.ToString(), false, objeto);
                 case Objeto.TipoObjeto.BOOLEAN:
-                    Retorno retorno = new Retorno("", false, Objeto.TipoObjeto.BOOLEAN);
+                    Retorno retorno = new Retorno("", false, objeto);
                     this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
                     this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
                     bool booleano = bool.Parse(this.valor.ToString());

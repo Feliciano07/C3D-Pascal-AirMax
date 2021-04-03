@@ -34,10 +34,10 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             {
                 case Objeto.TipoObjeto.INTEGER:
                     Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "+");
-                    return new Retorno(tem, true, tipo_dominante);
+                    return new Retorno(tem, true, new Objeto(tipo_dominante));
                 case Objeto.TipoObjeto.REAL:
                     Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "+");
-                    return new Retorno(tem, true, tipo_dominante);
+                    return new Retorno(tem, true, new Objeto(tipo_dominante));
                 case Objeto.TipoObjeto.STRING:
                     return Llamada_nativa_concatenar(res_left,res_right,entorno.getSize());
                 default:
@@ -65,7 +65,7 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             string tem2 = Master.getInstancia.newTemporal();// posicion inicio de nueva cadena
             Master.getInstancia.addGetStack(tem2, tem1);
             Master.getInstancia.substracStack(size.ToString());
-            return new Retorno(tem2, true, Objeto.TipoObjeto.STRING);
+            return new Retorno(tem2, true, new Objeto(Objeto.TipoObjeto.STRING));
         }
 
     }

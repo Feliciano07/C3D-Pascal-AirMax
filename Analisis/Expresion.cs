@@ -86,28 +86,28 @@ namespace C3D_Pascal_AirMax.Analisis
                     case "entero":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.INTEGER, valor);
+                            return new PrimitivoC(linea, columna, new Objeto(Objeto.TipoObjeto.INTEGER), valor);
                         }
                     case "cadena":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new StringC(linea, columna, Objeto.TipoObjeto.STRING, valor);
+                            return new StringC(linea, columna, new Objeto(Objeto.TipoObjeto.STRING), valor);
                         }
                     case "decimal":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.REAL, valor);
+                            return new PrimitivoC(linea, columna, new Objeto(Objeto.TipoObjeto.REAL), valor);
                         }
                     case "true":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.BOOLEAN, true);
+                            return new PrimitivoC(linea, columna, new Objeto(Objeto.TipoObjeto.BOOLEAN), true);
                             
                         }
                     case "false":
                         {
                             string valor = entrada.ChildNodes[0].Token.Text;
-                            return new PrimitivoC(linea, columna, Objeto.TipoObjeto.BOOLEAN, false);
+                            return new PrimitivoC(linea, columna, new Objeto(Objeto.TipoObjeto.BOOLEAN), false);
                             
                         }
                     case "Id":
@@ -115,10 +115,90 @@ namespace C3D_Pascal_AirMax.Analisis
                             string valor = entrada.ChildNodes[0].Token.Text;
                             return new AccesoId(linea, columna, valor, null);
                         }
+                    case "acceso_objeto":
+                        {
+                            return Primer_Nivel(entrada.ChildNodes[0]);
+                        }
 
                 }
 
             }
+            return null;
+        }
+
+        public static Nodo Primer_Nivel(ParseTreeNode entrada)
+        {
+            int linea = entrada.ChildNodes[0].Span.Location.Line;
+            int columna = entrada.ChildNodes[0].Span.Location.Column;
+            if (entrada.ChildNodes.Count == 3)
+            {
+
+                string nombre = entrada.ChildNodes[0].Token.Text;
+
+                AccesoId primero = new AccesoId(linea, columna, nombre, null);
+
+                AccesoId retorno = Niveles_abajo(entrada.ChildNodes[2], primero);
+
+                return retorno;
+            }
+            else
+            {
+                //TODO: acceder a un arreglo por sus dimensiones
+            }
+            return null;
+        }
+
+        public static AccesoId Niveles_abajo(ParseTreeNode entrada, AccesoId primero)
+        {
+            AccesoId auxiliar = null;
+
+            for (int i = 0; i < entrada.ChildNodes.Count; i++)
+            {
+                //TODO: Validar si es solo id o un arreglo
+
+
+                if (i == 0)
+                {
+                    AccesoId acceso = new AccesoId();
+                    acceso = Llamada_id(entrada.ChildNodes[i]);
+                    acceso.setAnterior(primero);
+                    auxiliar = acceso;
+                }
+                else
+                {
+                    AccesoId acceso = new AccesoId();
+                    acceso = Llamada_id(entrada.ChildNodes[i]);
+                    acceso.setAnterior(auxiliar);
+                    auxiliar = acceso;
+                }
+            }
+            return auxiliar;
+        }
+
+
+        public static AccesoId Llamada_id(ParseTreeNode entrada)
+        {
+            string toke = entrada.Term.Name;
+            
+            switch (toke)
+            {
+                case "Id":
+                    {
+                        int linea = entrada.Span.Location.Line;
+                        int columna = entrada.Span.Location.Column;
+
+                        string id_variable = entrada.Token.Text;
+
+                        return new AccesoId(linea, columna, id_variable, null);
+                    }
+                case "acceso_array":
+                    {
+                        //TODO: acceso array
+                        break;
+                    }
+
+            }
+
             return null;
         }
     }

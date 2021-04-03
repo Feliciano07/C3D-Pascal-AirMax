@@ -18,7 +18,7 @@ namespace C3D_Pascal_AirMax.Enviroment
             HEAP = 2
         }
 
-        private Objeto.TipoObjeto tipo;
+        private Objeto objeto;
         private string id;
         public int posicion;
         private Rol rol;
@@ -27,10 +27,10 @@ namespace C3D_Pascal_AirMax.Enviroment
         private bool isGlobal;
 
         // para guardar variables locales
-        public Simbolo(string id, Objeto.TipoObjeto tipo, Rol rol, Pointer pointer, int posicion, string entorno, bool global)
+        public Simbolo(string id, Objeto tipo, Rol rol, Pointer pointer, int posicion, string entorno, bool global)
         {
             this.id = id;
-            this.tipo = tipo;
+            this.objeto = tipo;
             this.rol = rol;
             this.pointer = pointer;
             this.posicion = posicion;
@@ -47,8 +47,14 @@ namespace C3D_Pascal_AirMax.Enviroment
 
         public Objeto.TipoObjeto getTipo()
         {
-            return this.tipo;
+            return this.objeto.getTipo();
         }
+
+        public Objeto getObjeto()
+        {
+            return this.objeto;
+        }
+
 
         public Simbolo.Rol getRol()
         {

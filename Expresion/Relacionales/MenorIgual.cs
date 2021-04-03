@@ -35,7 +35,7 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
                             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
                             Master.getInstancia.addif(res_left.getValor(), res_right.getValor(), "<=", this.trueLabel);
                             Master.getInstancia.addGoto(this.falseLabel);
-                            Retorno retorno = new Retorno("", false, Objeto.TipoObjeto.BOOLEAN);
+                            Retorno retorno = new Retorno("", false, new Objeto(Objeto.TipoObjeto.BOOLEAN));
                             retorno.trueLabel = this.trueLabel;
                             retorno.falseLabel = this.falseLabel;
                             return retorno;
@@ -71,7 +71,7 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
                     res_right = this.right.compilar(entorno);
                     if (res_right.getTipo() == Objeto.TipoObjeto.BOOLEAN)
                     {
-                        Retorno retorno1 = new Retorno("", false, res_left.getTipo());
+                        Retorno retorno1 = new Retorno("", false, new Objeto(res_left.getTipo()));
                         retorno1.trueLabel = trueLabel;
                         retorno1.falseLabel = falseLabel;
                         return retorno1;
@@ -108,7 +108,7 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
             Master.getInstancia.addif(tem2, "1", "==", this.trueLabel);
             Master.getInstancia.addGoto(this.falseLabel);
-            Retorno retorno = new Retorno("", false, Objeto.TipoObjeto.BOOLEAN);
+            Retorno retorno = new Retorno("", false, new Objeto(Objeto.TipoObjeto.BOOLEAN));
             retorno.trueLabel = this.trueLabel;
             retorno.falseLabel = this.falseLabel;
             return retorno;

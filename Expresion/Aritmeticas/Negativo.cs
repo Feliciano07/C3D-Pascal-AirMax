@@ -1,6 +1,7 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
 using C3D_Pascal_AirMax.Manejador;
+using C3D_Pascal_AirMax.TipoDatos;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
                 case TipoDatos.Objeto.TipoObjeto.INTEGER:
                 case TipoDatos.Objeto.TipoObjeto.REAL:
                     Master.getInstancia.addUnaria(tem, "-" + res_right.getValor());
-                    return new Retorno(tem, true, res_right.getTipo());
+                    return new Retorno(tem, true, new Objeto(res_right.getTipo()));
                 default:
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                     "No se pueden asignar valor negativo a tipo de datos: " + res_right.getTipo().ToString());

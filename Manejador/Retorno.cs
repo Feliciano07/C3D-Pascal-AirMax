@@ -10,23 +10,23 @@ namespace C3D_Pascal_AirMax.Manejador
     {
         private string valor;
         public bool isTemp;
-        private Objeto.TipoObjeto tipo;
+        private Objeto objeto;
         public string trueLabel;
         public string falseLabel;
         public Simbolo sym;
         // constante
-        public Retorno(string valor, bool temp, Objeto.TipoObjeto tipo)
+        public Retorno(string valor, bool temp, Objeto objeto)
         {
             this.valor = valor;
             this.isTemp = temp;
-            this.tipo = tipo;
+            this.objeto = objeto;
             this.trueLabel = this.falseLabel = "";
         }
-        public Retorno(string valor, bool temp, Objeto.TipoObjeto tipo, Simbolo simbolo)
+        public Retorno(string valor, bool temp, Objeto objeto, Simbolo simbolo)
         {
             this.valor = valor;
             this.isTemp = temp;
-            this.tipo = tipo;
+            this.objeto = objeto;
             this.trueLabel = this.falseLabel = "";
             this.sym = simbolo;
         }
@@ -36,9 +36,14 @@ namespace C3D_Pascal_AirMax.Manejador
             return this.valor;
         }
 
+        public Objeto getObjeto()
+        {
+            return this.objeto;
+        }
+
         public Objeto.TipoObjeto getTipo()
         {
-            return this.tipo;
+            return this.objeto.getTipo();
         }
 
     }

@@ -153,13 +153,13 @@ namespace C3D_Pascal_AirMax.Analisis
             switch (tipo)
             {
                 case Objeto.TipoObjeto.INTEGER:
-                    return new PrimitivoC(0, 0, Objeto.TipoObjeto.INTEGER, Valores_defecto(tipo));
+                    return new PrimitivoC(0, 0, new Objeto(Objeto.TipoObjeto.INTEGER), Valores_defecto(tipo));
                 case Objeto.TipoObjeto.REAL:
-                    return new PrimitivoC(0, 0, Objeto.TipoObjeto.REAL, Valores_defecto(tipo));
+                    return new PrimitivoC(0, 0, new Objeto(Objeto.TipoObjeto.REAL), Valores_defecto(tipo));
                 case Objeto.TipoObjeto.STRING:
-                    return new StringC(0, 0, Objeto.TipoObjeto.STRING, Valores_defecto(tipo));
+                    return new StringC(0, 0, new Objeto(Objeto.TipoObjeto.STRING), Valores_defecto(tipo));
                 case Objeto.TipoObjeto.BOOLEAN:
-                    return new PrimitivoC(0, 0, Objeto.TipoObjeto.BOOLEAN, Valores_defecto(tipo));
+                    return new PrimitivoC(0, 0, new Objeto(Objeto.TipoObjeto.BOOLEAN), Valores_defecto(tipo));
 
             }
             return null;

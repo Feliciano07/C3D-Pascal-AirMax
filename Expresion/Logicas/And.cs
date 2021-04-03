@@ -34,7 +34,7 @@ namespace C3D_Pascal_AirMax.Expresion.Logicas
 
             if(res_left.getTipo() == Objeto.TipoObjeto.BOOLEAN && res_right.getTipo() == Objeto.TipoObjeto.BOOLEAN)
             {
-                Retorno retorno = new Retorno("", true, Objeto.TipoObjeto.BOOLEAN);
+                Retorno retorno = new Retorno("", true, new Objeto(Objeto.TipoObjeto.BOOLEAN));
                 retorno.trueLabel = this.trueLabel;
                 retorno.falseLabel = this.right.falseLabel;
                 return retorno;

@@ -1,6 +1,7 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
 using C3D_Pascal_AirMax.Manejador;
+using C3D_Pascal_AirMax.TipoDatos;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,7 +28,7 @@ namespace C3D_Pascal_AirMax.Expresion.Logicas
 
             if(res_right.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
             {
-                Retorno retorno = new Retorno("", true, TipoDatos.Objeto.TipoObjeto.BOOLEAN);
+                Retorno retorno = new Retorno("", true, new Objeto(TipoDatos.Objeto.TipoObjeto.BOOLEAN));
                 retorno.trueLabel = this.trueLabel;
                 retorno.falseLabel = this.falseLabel;
                 return retorno;

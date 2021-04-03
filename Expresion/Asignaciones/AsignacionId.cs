@@ -34,7 +34,7 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
 
                 if (sym.getGlobal())
                 {
-                    return new Retorno(sym.getPosicion(), false, sym.getTipo(),sym);
+                    return new Retorno(sym.getPosicion(), false, sym.getObjeto(),sym);
                 }
                 else
                 {

@@ -7,7 +7,7 @@ namespace C3D_Pascal_AirMax.Enviroment
 {
     public class SimboloObjeto
     {
-        private string id;
+        public string id;
         private int size;
         private LinkedList<Atributo> atributos;
 
@@ -26,6 +26,20 @@ namespace C3D_Pascal_AirMax.Enviroment
         public LinkedList<Atributo> GetAtributos()
         {
             return this.atributos;
+        }
+
+        public Atributo_Index getAtributo(string id)
+        {
+            int contador = 0;
+            foreach(Atributo atr in this.atributos)
+            {
+                if(String.Compare(atr.getId(), id.ToLower()) == 0)
+                {
+                    return new Atributo_Index(contador, atr);
+                }
+                contador++;
+            }
+            return null;
         }
 
     }

@@ -10,12 +10,12 @@ namespace C3D_Pascal_AirMax.Expresion.Constantes
 {
     public class StringC : Operacion
     {
-        private Objeto.TipoObjeto tipo;
+        private Objeto tipos;
         private object valor;
 
-        public StringC(int linea, int columna, Objeto.TipoObjeto tipo, object valor):base(linea, columna)
+        public StringC(int linea, int columna, Objeto tipo, object valor):base(linea, columna)
         {
-            this.tipo = tipo;
+            this.tipos = tipo;
             this.valor = valor;
         }
 
@@ -34,7 +34,7 @@ namespace C3D_Pascal_AirMax.Expresion.Constantes
             // nuestro fin de cadenas sera el -1
             Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
             Master.getInstancia.nextHeap();
-            return new Retorno(tem, true, Objeto.TipoObjeto.STRING);
+            return new Retorno(tem, true, tipos);
         }
     }
 }
