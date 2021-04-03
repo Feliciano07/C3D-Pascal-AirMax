@@ -22,7 +22,7 @@ namespace C3D_Pascal_AirMax.Enviroment
         private string id;
         public int posicion;
         private Rol rol;
-        private Pointer pointer;
+        public Pointer pointer;
         private string entorno;
         private bool isGlobal;
 
