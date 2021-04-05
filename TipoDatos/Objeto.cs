@@ -49,6 +49,12 @@ namespace C3D_Pascal_AirMax.TipoDatos
             return this.tipo;
         }
 
+        public void seTipo(Objeto.TipoObjeto tipo)
+        {
+            this.tipo = tipo;
+        }
+
+
         public string getObjetoId()
         {
             return this.objetoId.ToLower();

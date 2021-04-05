@@ -111,7 +111,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
              * (types) valor = guarda una posicion en el heap del atributo
              */
             Master.getInstancia.addGetHeap(valor, pos_heap);
-            if (atributo.atributo.tipo.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+            if (atributo.atributo.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
                 return new Retorno(valor, true, atributo.atributo.getObjeto());
             }

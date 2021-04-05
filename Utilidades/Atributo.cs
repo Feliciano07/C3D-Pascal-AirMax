@@ -8,11 +8,11 @@ namespace C3D_Pascal_AirMax.Utilidades
     public class Atributo
     {
         public string id;
-        public Objeto tipo;
+        public Objeto objeto;
         public Atributo(string id, Objeto tipo)
         {
             this.id = id.ToLower();
-            this.tipo = tipo;
+            this.objeto = tipo;
             
         }
 
@@ -23,7 +23,7 @@ namespace C3D_Pascal_AirMax.Utilidades
 
         public Objeto getObjeto()
         {
-            return this.tipo;
+            return this.objeto;
         }
     }
 }

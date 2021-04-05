@@ -144,10 +144,60 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 string posicion_stack = Master.getInstancia.newTemporalEntero();
                 Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
                 Master.getInstancia.addSetStack(posicion_stack, inicio_objeto);
+
+                Reservar_Espacio_Objeto(sym_obj, inicio_objeto);
+
             }
             
             Master.getInstancia.addComentario("Fin de la variable objeto");
             return true;
+        }
+
+
+        public void Reservar_Espacio_Objeto(SimboloObjeto simboloObjeto, string posicionInicial)
+        {
+            int contador = 0;
+
+            foreach (Atributo atr in simboloObjeto.GetAtributos())
+            {
+                switch (atr.objeto.getTipo())
+                {
+
+                    case Objeto.TipoObjeto.OBJECTS:
+                        {
+                            SimboloObjeto auxiliar = atr.getObjeto().symObj;
+                            string inicio_objeto = Master.getInstancia.newTemporal();
+                            Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
+
+                            foreach (Atributo interno in auxiliar.GetAtributos())
+                            {
+                                switch (interno.getObjeto().getTipo())
+                                {
+                                    //se guarda el valor por defecto
+                                    case Objeto.TipoObjeto.INTEGER:
+                                    case Objeto.TipoObjeto.REAL:
+                                    case Objeto.TipoObjeto.BOOLEAN:
+                                        Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "0");
+                                        break;
+                                    // se manda -1 debido a que va a guardar una direccion del heap 
+                                    case Objeto.TipoObjeto.STRING:
+                                    case Objeto.TipoObjeto.OBJECTS:
+                                    case Objeto.TipoObjeto.ARRAY:
+                                        Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
+                                        break;
+
+                                }
+                                Master.getInstancia.nextHeap();
+                            }
+                            string posicion_heap = Master.getInstancia.newTemporalEntero();
+                            Master.getInstancia.addBinaria(posicion_heap, posicionInicial, contador.ToString(), "+");
+                            Master.getInstancia.addSetHeap(posicion_heap, inicio_objeto);
+                            Reservar_Espacio_Objeto(auxiliar, inicio_objeto);
+                        }
+                        break;
+                }
+                contador++;
+            }
         }
 
     }

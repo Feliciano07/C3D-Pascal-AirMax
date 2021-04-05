@@ -88,8 +88,9 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             }
             else
             {
-               
-                Master.getInstancia.addGetStack(posicion, res_retorno.getValor());
+                string contador = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addBinaria(contador, Master.getInstancia.stack_p, res_retorno.getValor(), "+");
+                Master.getInstancia.addGetStack(posicion, contador);
             }
 
             Master.getInstancia.addBinaria(valor, posicion, atributo.index.ToString(), "+");
@@ -97,8 +98,8 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             /*
              * retorno el valor y un simbolo que posee la posicion relativa al objeto encontrado
              */
-            return new Retorno(valor, true, atributo.atributo.tipo, new Simbolo(this.id, atributo.atributo.tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP,
-                atributo.index, "", false));
+            return new Retorno(valor, true, atributo.atributo.getObjeto(), new Simbolo(this.id, atributo.atributo.getObjeto(),
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP,atributo.index, "", false));
         }
 
     }

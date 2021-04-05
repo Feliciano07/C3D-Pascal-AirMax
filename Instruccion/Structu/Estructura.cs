@@ -1,6 +1,7 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
 using C3D_Pascal_AirMax.Manejador;
+using C3D_Pascal_AirMax.TipoDatos;
 using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,24 @@ namespace C3D_Pascal_AirMax.Instruccion.Structu
                     Master.getInstancia.addError(error);
                     throw new Exception("Ya existe un atributo en el objeto: " + this.id + " con el id de: " + atr.getId());
                 }
+                if(atr.getObjeto().getTipo() == Objeto.TipoObjeto.TYPES)
+                {
+                    //busca primero en estructura de simbolo de objetos
+                    Buscar_Objeto(atr, entorno);
+                }
             }
         }
+
+        public void Buscar_Objeto(Atributo atributo, Entorno entorno)
+        {
+            SimboloObjeto simboloObjeto = entorno.searchObjeto(atributo.getObjeto().getObjetoId());
+            if(simboloObjeto == null)
+            {
+                throw new Exception("El type object: " + atributo.getObjeto().getObjetoId() + " no esta definido");
+            }
+            atributo.getObjeto().seTipo(Objeto.TipoObjeto.OBJECTS);
+            atributo.getObjeto().symObj = simboloObjeto;
+        }
+
     }
 }
