@@ -20,11 +20,10 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
         public override Retorno compilar(Entorno entorno)
         {
-            //TODO: validar que no se pueda asignar valor a una constate
-            Retorno tem = this.variable.compilar(entorno);
+            Retorno asig = this.variable.compilar(entorno);
             Retorno value = this.valor.compilar(entorno);
 
-            if(!base.Verificar_Tipo(value.getTipo(), tem.getTipo()))
+            if(!base.Verificar_Tipo(value.getTipo(), asig.getTipo()))
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                     "Tipos de datos diferentes");
@@ -32,14 +31,14 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 throw new Exception("Tipos de datos diferentes");
             }
 
-            Simbolo simbolo = tem.sym;
+            Simbolo simbolo = asig.sym;
 
             if (simbolo.getGlobal())
             {
                 string posicion_stack = Master.getInstancia.newTemporalEntero();
                 
 
-                if (tem.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
+                if (asig.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
                 {
                     string aux = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(value.trueLabel);
@@ -51,7 +50,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Master.getInstancia.addSetStack(posicion_stack, "0");
                     Master.getInstancia.addLabel(aux);
                     return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
-                }else if(tem.getTipo() == TipoDatos.Objeto.TipoObjeto.OBJECTS)
+                }else if(asig.getTipo() == TipoDatos.Objeto.TipoObjeto.OBJECTS)
                 {
                     //TODO: hacer una copia de los atributos
                 }
@@ -65,34 +64,37 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             {
                 
 
-                if(tem.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
+                if(asig.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
                 {
                     string aux = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(value.trueLabel);
-                   
-                    Master.getInstancia.addSetHeap(tem.getValor(), "1");
+                   /*
+                    * asig.getValor() = retorna la posicion del heap donde esta guardado un atributo
+                    */
+                    Master.getInstancia.addSetHeap(asig.getValor(), "1");
                     Master.getInstancia.addGoto(aux);
                     Master.getInstancia.addLabel(value.falseLabel);
                     
-                    Master.getInstancia.addSetHeap(tem.getValor(), "0");
+                    Master.getInstancia.addSetHeap(asig.getValor(), "0");
                     Master.getInstancia.addLabel(aux);
-                    return new Retorno(tem.getValor(), false, simbolo.getObjeto(), simbolo);
-                }else if(tem.getTipo() == TipoDatos.Objeto.TipoObjeto.OBJECTS)
+                    return new Retorno(asig.getValor(), false, simbolo.getObjeto(), simbolo);
+                }else if(asig.getTipo() == TipoDatos.Objeto.TipoObjeto.OBJECTS)
                 {
                     //TODO: hacer una copia de los atributos
                 }
                 else
                 {
                     
-                    Master.getInstancia.addSetHeap(tem.getValor(), value.getValor());
-                    return new Retorno(tem.getValor(), false, simbolo.getObjeto(), simbolo);
+                    Master.getInstancia.addSetHeap(asig.getValor(), value.getValor());
+                    return new Retorno(asig.getValor(), false, simbolo.getObjeto(), simbolo);
                 }
             }
-            else
-            {
-                // TODO: asignacion a variables no globales
-            }
 
+            return null;
+        }
+
+        public Retorno Compiar_Objeto()
+        {
             return null;
         }
     }

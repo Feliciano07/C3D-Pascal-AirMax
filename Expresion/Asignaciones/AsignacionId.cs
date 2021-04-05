@@ -46,47 +46,60 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                 {
                     return new Retorno(sym.getPosicion(), false, sym.getObjeto(),sym);
                 }
-                else
-                {
-                    //TODO: variables que no son locales
-                }
             }
             else
             {
                 Retorno res_retorno = this.anterior.compilar(entorno);
-                SimboloObjeto simboloObjeto = res_retorno.getObjeto().symObj;
+                
                 if(res_retorno.getTipo() == TipoDatos.Objeto.TipoObjeto.OBJECTS)
                 {
-                    Atributo_Index atributo = simboloObjeto.getAtributo(this.id);
-                    if(atributo == null)
-                    {
-                        Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                            "El objeto: " + simboloObjeto.id + " no tiene el atributo: " + this.id);
-                        Master.getInstancia.addError(error);
-                        throw new Exception("El objeto: " + simboloObjeto.id + " no tiene el atributo: " + this.id);
-                    }
-                    string pos_heap = Master.getInstancia.newTemporalEntero();
-                    string valor = Master.getInstancia.newTemporalEntero();
-
-                    //TODO: validar si debo acceder al heap o stack
-                    if(res_retorno.sym.pointer == Simbolo.Pointer.HEAP)
-                    {
-                        Master.getInstancia.addGetHeap(pos_heap, res_retorno.getValor());
-                    }
-                    else
-                    {
-                        //inicio del objeto
-                        Master.getInstancia.addGetStack(pos_heap, res_retorno.getValor());
-                    }
-                    
-                    //posicion del atributo
-                    Master.getInstancia.addBinaria(valor, pos_heap, atributo.index.ToString(), "+");
-
-                    return new Retorno(valor, true, atributo.atributo.tipo, new Simbolo(this.id, atributo.atributo.tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP,
-                        atributo.index, "", false));
+                    return Obtener_Atributo_Objeto(res_retorno);
                 }
             }
             return null;
         }
+
+
+        public Retorno Obtener_Atributo_Objeto(Retorno res_retorno)
+        {
+            SimboloObjeto simboloObjeto = res_retorno.getObjeto().symObj;
+            Atributo_Index atributo = simboloObjeto.getAtributo(this.id);
+            if (atributo == null)
+            {
+                Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                    "El objeto: " + simboloObjeto.id + " no tiene el atributo: " + this.id);
+                Master.getInstancia.addError(error);
+                throw new Exception("El objeto: " + simboloObjeto.id + " no tiene el atributo: " + this.id);
+            }
+            string posicion = Master.getInstancia.newTemporalEntero();
+            /*
+             * verifico si el atributo esta en heap o stack
+             * posicion = guarda la posicion donde inicial el objeto
+             */
+            string valor = Master.getInstancia.newTemporalEntero();
+            /*
+             * (primitivo) valor = guarda el valor como tal del atributo
+             * (types) valor = guarda una posicion en el heap del atributo
+             */
+            if (res_retorno.sym.pointer == Simbolo.Pointer.HEAP)
+            {
+                
+                Master.getInstancia.addGetHeap(posicion, res_retorno.getValor());
+            }
+            else
+            {
+               
+                Master.getInstancia.addGetStack(posicion, res_retorno.getValor());
+            }
+
+            Master.getInstancia.addBinaria(valor, posicion, atributo.index.ToString(), "+");
+
+            /*
+             * retorno el valor y un simbolo que posee la posicion relativa al objeto encontrado
+             */
+            return new Retorno(valor, true, atributo.atributo.tipo, new Simbolo(this.id, atributo.atributo.tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP,
+                atributo.index, "", false));
+        }
+
     }
 }

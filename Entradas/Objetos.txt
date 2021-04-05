@@ -1,0 +1,45 @@
+﻿program Hello;
+
+type 
+cuadro = object 
+
+var atr1:integer;
+var atr2: real;
+var atr3: string;
+var atr4: boolean;
+end;
+
+var obj1: cuadro;
+obj2: cuadro;
+
+begin
+  writeln('objeto 1 valores defecto');
+  writeln(obj1.atr1);
+  writeln(obj1.atr2);
+  writeln(obj1.atr3);
+  writeln(obj1.atr4);
+  writeln('objeto 1 valor asignados');
+  
+  obj1.atr1:= 45;
+  obj1.atr2 := 13.05;
+  obj1.atr3:= 'Hola soy objet1';
+  obj1.atr4:= true;
+  
+  writeln(obj1.atr1);
+  writeln(obj1.atr2);
+  writeln(obj1.atr3);
+  writeln(obj1.atr4);
+  
+  obj2.atr1 := obj1.atr1;
+  obj2.atr2 := obj1.atr2;
+  obj2.atr3 := obj1.atr3;
+  obj2.atr4 := obj1.atr4;
+  
+  writeln('Vamos a imprimir los valores del segundo objeto');
+  writeln(obj2.atr1);
+  writeln(obj2.atr2);
+  writeln(obj2.atr3);
+  writeln(obj2.atr4);
+  
+end.
+

@@ -8,6 +8,11 @@ using System.Text;
 
 namespace C3D_Pascal_AirMax.Instruccion.Structu
 {
+
+    /*
+     * Permite poder definir un type <nombre> = object
+     */
+
     public class Estructura : Nodo
     {
         private string id;

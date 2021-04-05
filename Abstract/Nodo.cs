@@ -37,6 +37,7 @@ namespace C3D_Pascal_AirMax.Abstract
 
         public bool Verificar_Tipo(Objeto.TipoObjeto tipo1, Objeto.TipoObjeto tipo2 )
         {
+            //TODO: verificar que si es object que corresponda
             if (tipo1 == tipo2)
             {
                 return true;

@@ -25,12 +25,19 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
         //TODO: falta manejar variables locales
         public override Retorno compilar(Entorno entorno)
         {
+            /*
+             * se encarga de poder crear una variable que no se haya definido como tipo types
+             */
             if(this.tipo.getTipo() != Objeto.TipoObjeto.TYPES)
             {
                 Crear_Variable_Primitiva(entorno);
             }
+
             else
             {
+                /*
+                 * Esta parte se encarga de ir a buscar si existe un type object y que se guarde la variable como ese tipo
+                 */
                 Crear_Variable_Objeto(entorno);
             }
             return null;
@@ -81,22 +88,29 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
         }
 
 
-        public void Crear_Variable_Objeto(Entorno entorno)
+        public bool Crear_Variable_Objeto(Entorno entorno)
         {
             SimboloObjeto sym_obj = entorno.searchObjeto(this.tipo.getObjetoId());
             if(sym_obj == null)
             {
-                
+                // TODO: retornar un false
                 throw new Exception("El objeto: " + this.tipo.getObjetoId() + " No existe");
             }
 
-            Master.getInstancia.addComentario("Inicio del objeto: " + this.tipo.getObjetoId());
+            Master.getInstancia.addComentario("Inicia declarando una variable de type: " + this.tipo.getObjetoId());
             foreach(string nombre in this.ids)
             {
+                // guarda la posicion inicial del objeto en el heap
                 string inicio_objeto = Master.getInstancia.newTemporal();
                 Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
+                /*
+                 * Guarda un tipo objeto OBJECT
+                 * guarda la definicion del simbolo objeto, para poder manipular sus atributos
+                 * guarda el nombre de la estructura (cuadro, carro, circulo, etc)
+                 */
                 Objeto tipo = new Objeto(Objeto.TipoObjeto.OBJECTS, sym_obj, sym_obj.id);
-                Simbolo newVar = entorno.addSimbolo(nombre, tipo , Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP);
+
+                Simbolo newVar = entorno.addSimbolo(nombre, tipo , Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
 
                 if (newVar == null)
                 {
@@ -110,27 +124,30 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 {
                     switch (atr.getObjeto().getTipo())
                     {
+                        //se guarda el valor por defecto
                         case Objeto.TipoObjeto.INTEGER:
                         case Objeto.TipoObjeto.REAL:
                         case Objeto.TipoObjeto.BOOLEAN:
-                            Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "2");
+                            Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "0");
                             break;
-                        // se manda -1 debido a que va a guardar una direccion 
+                        // se manda -1 debido a que va a guardar una direccion del heap 
                         case Objeto.TipoObjeto.STRING:
+                        case Objeto.TipoObjeto.OBJECTS:
+                        case Objeto.TipoObjeto.ARRAY:
                             Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
                             break;
 
                     }
                     Master.getInstancia.nextHeap();
                 }
+                // aca se obtiene en que posicion del stack se va a guardar la variable
                 string posicion_stack = Master.getInstancia.newTemporalEntero();
                 Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
                 Master.getInstancia.addSetStack(posicion_stack, inicio_objeto);
             }
             
-
-            Master.getInstancia.addComentario("Fin del objeto****");
-
+            Master.getInstancia.addComentario("Fin de la variable objeto");
+            return true;
         }
 
     }
