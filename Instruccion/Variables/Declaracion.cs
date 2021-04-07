@@ -38,7 +38,13 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 /*
                  * Esta parte se encarga de ir a buscar si existe un type object y que se guarde la variable como ese tipo
                  */
-                Crear_Variable_Objeto(entorno);
+                if (Crear_Variable_Objeto(entorno))
+                {
+                    return null;
+                }
+                
+                
+
             }
             return null;
         }
@@ -93,8 +99,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             SimboloObjeto sym_obj = entorno.searchObjeto(this.tipo.getObjetoId());
             if(sym_obj == null)
             {
-                // TODO: retornar un false
-                throw new Exception("El objeto: " + this.tipo.getObjetoId() + " No existe");
+                return false;
             }
 
             Master.getInstancia.addComentario("Inicia declarando una variable de type: " + this.tipo.getObjetoId());
@@ -198,6 +203,56 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 }
                 contador++;
             }
+        }
+
+
+        public bool Crear_Variable_Array(Entorno entorno)
+        {
+            SimboloArreglo simboloArreglo = entorno.searchArreglo(this.tipo.getObjetoId());
+
+            if(simboloArreglo == null)
+            {
+                return false;
+            }
+            Master.getInstancia.addComentario("Inicia la declaracion de variable tipo arreglo");
+
+            foreach(string nombre in this.ids)
+            {
+                // guarda la posicion inicial del objeto en el heap
+                string inicio_objeto = Master.getInstancia.newTemporal();
+                Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
+
+                Objeto tipo = new Objeto(Objeto.TipoObjeto.ARRAY, simboloArreglo.id);
+                Simbolo newVar = entorno.addSimbolo(nombre, tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                if(newVar == null)
+                {
+                    Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                        "La variable: " + nombre + " ya existe en el ambito");
+                    Master.getInstancia.addError(error);
+                    throw new Exception("La variable: " + nombre + " ya existe en el ambito");
+                }
+
+                switch (simboloArreglo.objeto.getTipo())
+                {
+                    case Objeto.TipoObjeto.INTEGER:
+                    case Objeto.TipoObjeto.REAL:
+                    case Objeto.TipoObjeto.BOOLEAN:
+                
+                        break;
+                    case Objeto.TipoObjeto.STRING:
+                        break;
+                    case Objeto.TipoObjeto.OBJECTS:
+                        break;
+                    case Objeto.TipoObjeto.ARRAY:
+                        break;
+                }
+            }
+            return true;
+        }
+
+        public void Llenar_Arreglo_Primitivos(SimboloArreglo simboloArreglo)
+        {
+
         }
 
     }

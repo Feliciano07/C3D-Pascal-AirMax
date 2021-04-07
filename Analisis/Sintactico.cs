@@ -86,6 +86,9 @@ namespace C3D_Pascal_AirMax.Analisis
                 case "objectos":
                     TypeObjeto.Definicion_Objeto(actual);
                     break;
+                case "arrays":
+                    TypeArray.Declaracion_Arreglo(actual.ChildNodes[1]);
+                    break;
             }
         }
 

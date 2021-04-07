@@ -12,6 +12,7 @@ namespace C3D_Pascal_AirMax.Enviroment
     {
         private Dictionary<string, Simbolo> variables;
         private Dictionary<string, SimboloObjeto> objetos;
+        private Dictionary<string, SimboloArreglo> arreglos;
         private string nombre_entorno;
         private int size;
         private Entorno anterior;
@@ -20,6 +21,7 @@ namespace C3D_Pascal_AirMax.Enviroment
         {
             this.variables = new Dictionary<string, Simbolo>();
             this.objetos = new Dictionary<string, SimboloObjeto>();
+            this.arreglos = new Dictionary<string, SimboloArreglo>();
             this.nombre_entorno = nombre;
             this.size = 0;
             this.anterior = null;
@@ -76,6 +78,29 @@ namespace C3D_Pascal_AirMax.Enviroment
                 SimboloObjeto objeto;
                 this.objetos.TryGetValue(id, out objeto);
                 return objeto;
+            }
+            return null;
+        }
+
+        public bool addArreglo(string id, LinkedList<Dimension> dimensiones, Objeto objeto)
+        {
+            id = id.ToLower();
+            if (this.arreglos.ContainsKey(id))
+            {
+                return true;
+            }
+            this.arreglos.Add(id, new SimboloArreglo(id, dimensiones, objeto));
+            return false;
+        }
+
+        public SimboloArreglo searchArreglo(string id)
+        {
+            id = id.ToLower();
+            if (this.arreglos.ContainsKey(id))
+            {
+                SimboloArreglo arreglo;
+                this.arreglos.TryGetValue(id, out arreglo);
+                return arreglo;
             }
             return null;
         }
