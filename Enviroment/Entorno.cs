@@ -102,6 +102,35 @@ namespace C3D_Pascal_AirMax.Enviroment
             }
             return salida;
         }
+        public string Simbolo_Objetos()
+        {
+            string salida = "";
+            foreach(KeyValuePair<string, SimboloObjeto> kvp in this.objetos)
+            {
+                salida += "<tr>";
+                salida += "<td>" + kvp.Value.id + "</td>\n";
+                salida += "<td>" + Objeto.TipoObjeto.OBJECTS.ToString() + "</td>\n";
+                salida += "<td>" + "Global"+ "</td>\n";
+                salida += "<td>" + "Type object" + "</td>\n";
+                salida += "<td>" + "-" + "</td>\n";
+                salida += "</tr>";
+                int contador = 0;
+                foreach (Atributo atributo in kvp.Value.GetAtributos())
+                {
+                    
+                    salida += "<tr>";
+                    salida += "<td>" + atributo.id + "</td>\n";
+                    salida += "<td>" + atributo.getObjeto().getTipo() + "</td>\n";
+                    salida += "<td>" + kvp.Key + "</td>\n";
+                    salida += "<td>" + "Atributo de "+kvp.Key + "</td>\n";
+                    salida += "<td>" + contador + "</td>\n";
+                    salida += "</tr>";
+                    contador++;
+                }
+            }
+
+            return salida;
+        }
 
 
         public void TablaGeneral()
@@ -123,6 +152,7 @@ namespace C3D_Pascal_AirMax.Enviroment
             fichero.WriteLine("<th>Apuntador</th>");
             fichero.WriteLine("</tr>");
             fichero.Write(this.Retornar_Simbolos());
+            fichero.Write(this.Simbolo_Objetos());
             fichero.Write("</table>");
             fichero.WriteLine("</center>" + "</body>" + "</html>");
             fichero.Close();
