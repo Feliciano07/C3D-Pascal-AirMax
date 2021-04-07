@@ -46,7 +46,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
         public void Crear_Variable_Primitiva(Entorno entorno)
         {
             Retorno valor = this.expresion.compilar(entorno);
-            if (!base.Verificar_Tipo(valor.getTipo(), this.tipo.getTipo()))
+            if (!base.Verificar_Tipo(valor.getObjeto(), this.tipo))
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                     "Tipos de datos diferentes: " + valor.getTipo().ToString() + "," + this.tipo.ToString());

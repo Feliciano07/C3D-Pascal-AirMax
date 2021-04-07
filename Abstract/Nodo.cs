@@ -35,14 +35,29 @@ namespace C3D_Pascal_AirMax.Abstract
         public abstract Retorno compilar(Entorno entorno);
 
 
-        public bool Verificar_Tipo(Objeto.TipoObjeto tipo1, Objeto.TipoObjeto tipo2 )
+        public bool Verificar_Tipo(Objeto tipo1, Objeto tipo2 )
         {
             //TODO: verificar que si es object que corresponda
-            if (tipo1 == tipo2)
+            if (tipo1.getTipo() == tipo2.getTipo())
+            {
+
+                if(tipo1.getTipo() == Objeto.TipoObjeto.OBJECTS)
+                {
+                    Verificar_Id_Objeto(tipo1, tipo2);
+                }
+
+                return true;
+            }
+            else if (tipo1.getTipo() == Objeto.TipoObjeto.INTEGER && tipo2.getTipo() == Objeto.TipoObjeto.REAL)
             {
                 return true;
             }
-            else if (tipo1 == Objeto.TipoObjeto.INTEGER && tipo2 == Objeto.TipoObjeto.REAL)
+            return false;
+        }
+
+        public bool Verificar_Id_Objeto(Objeto tipo1, Objeto tipo2)
+        {
+            if(string.Compare(tipo1.getObjetoId(), tipo2.getObjetoId(),true) == 0)
             {
                 return true;
             }

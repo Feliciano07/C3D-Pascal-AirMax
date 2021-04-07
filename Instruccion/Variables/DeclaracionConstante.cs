@@ -32,7 +32,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 this.tipo = valor.getTipo();
             }
 
-            if (!base.Verificar_Tipo(valor.getTipo(), this.tipo))
+            if (!base.Verificar_Tipo(valor.getObjeto(), new Objeto(this.tipo)))
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                     "Tipos de datos diferentes: " + valor.getTipo().ToString() + "," + this.tipo.ToString());
