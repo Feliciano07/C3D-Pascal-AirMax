@@ -43,3 +43,64 @@ begin
   
 end.
 
+
+
+/// entrada 2
+
+
+
+program Hello;
+
+type 
+cuadro = object
+var a:integer;
+var b:real;
+var c:string;
+var d:boolean;
+end;
+
+type
+figura = object
+var aa:cuadro;
+end;
+
+
+var ob1,ob3:figura;
+
+var ob2:cuadro;
+
+
+
+begin
+  ob1.aa.a:= 45;
+  ob1.aa.b := 12.045;
+  ob1.aa.c := 'Hola soy objeto 1';
+  ob1.aa.d := true;
+  
+  writeln('imprimiendo los valores de ob1');
+  writeln('Atributo a: ', ob1.aa.a);
+  writeln('Atributo b: ', ob1.aa.b);
+  writeln('Atributo c: ', ob1.aa.c);
+  writeln('Atributo d: ', ob1.aa.d);
+  
+  writeln('Voy a pasar el atributo aa que pertenece ob1 que es un tipo cuadro a ob2');
+  ob2:= ob1.aa;
+  ob2.c:= 'Soy objeto 2';
+  writeln('imprimiendo los valores de ob2 que es un tipo cuadro');
+  writeln('atributo a: ',ob2.a);
+  writeln('atributo b: ',ob2.b);
+  writeln('atributo c: ',ob2.c);
+  writeln('atributo d: ',ob2.d);
+  
+  
+  writeln('voy a pasar el atributo aa de ob1 a ob3');
+  ob3.aa := ob1.aa;
+  
+  ob3.aa.c := 'Hol soy objeto 3';
+  writeln('imprimiendo los valores de ob3');
+  writeln('Atributo a: ', ob3.aa.a);
+  writeln('Atributo b: ', ob3.aa.b);
+  writeln('Atributo c: ', ob3.aa.c);
+  writeln('Atributo d: ', ob3.aa.d);
+end.
+

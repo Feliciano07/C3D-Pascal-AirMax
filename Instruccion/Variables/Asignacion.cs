@@ -42,6 +42,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
                 if (asig.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
                 {
+                    // Asigna un valor a un valor booleano
                     string aux = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(value.trueLabel);
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
@@ -52,12 +53,16 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Master.getInstancia.addSetStack(posicion_stack, "0");
                     Master.getInstancia.addLabel(aux);
                     return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
-                }else if(asig.getTipo() == TipoDatos.Objeto.TipoObjeto.OBJECTS)
+                }else if(asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
+                    // asigna un objeto con otro objeto
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                     string inicial = Master.getInstancia.newTemporalEntero();
                     Master.getInstancia.addGetStack(inicial, posicion_stack);
                     Copiar_Objeto(asig.getObjeto().symObj, inicial, value.getValor());
+                }else if(asig.getTipo() == Objeto.TipoObjeto.ARRAY)
+                {
+
                 }
                 else
                 {
@@ -83,9 +88,14 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Master.getInstancia.addSetHeap(asig.getValor(), "0");
                     Master.getInstancia.addLabel(aux);
                     return new Retorno(asig.getValor(), false, simbolo.getObjeto(), simbolo);
-                }else if(asig.getTipo() == TipoDatos.Objeto.TipoObjeto.OBJECTS)
+                }else if(asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
-                    //TODO: hacer una copia de los atributos
+                    string posicion_heap = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addGetHeap(posicion_heap, asig.getValor());
+                    Copiar_Objeto(asig.getObjeto().symObj, posicion_heap, value.getValor());
+                }else if(asig.getTipo() == Objeto.TipoObjeto.ARRAY)
+                {
+
                 }
                 else
                 {
