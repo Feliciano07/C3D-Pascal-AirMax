@@ -116,6 +116,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                         Copiar_cadena(inicial_asig, inicial_valor, contador.ToString());
                         break;
                     case Objeto.TipoObjeto.OBJECTS:
+                        Copiar_Objeto(inicial_asig, inicial_valor, contador.ToString(),atributo);
                         break;
                     case Objeto.TipoObjeto.ARRAY:
                         break;
@@ -180,6 +181,21 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             Master.getInstancia.addBinaria(tem_asig, inicial_asig, contador, "+");
             Master.getInstancia.addSetHeap(tem_asig, inicio_cadena);
 
+        }
+    
+        public void Copiar_Objeto(string inicial_asig, string inicial_valor, string contador, Atributo atributo)
+        {
+            string asig1 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(asig1, inicial_asig, contador.ToString(), "+");
+            string asig2 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addGetHeap(asig2, asig1);
+
+            string valor1 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(valor1, inicial_valor, contador.ToString(), "+");
+            string valor2 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addGetHeap(valor2, valor1);
+
+            Copiar_Objeto(atributo.objeto.symObj, asig2, valor2);
         }
     }
 }
