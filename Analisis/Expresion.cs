@@ -7,6 +7,7 @@ using Irony.Parsing;
 using C3D_Pascal_AirMax.Expresion.Relacionales;
 using C3D_Pascal_AirMax.Expresion.Logicas;
 using C3D_Pascal_AirMax.Expresion.Accesos;
+using System.Collections.Generic;
 
 namespace C3D_Pascal_AirMax.Analisis
 {
@@ -119,6 +120,10 @@ namespace C3D_Pascal_AirMax.Analisis
                         {
                             return Primer_Nivel(entrada.ChildNodes[0]);
                         }
+                    case "acceso_array":
+                        {
+                            return Arreglo_Unico(entrada.ChildNodes[0]);
+                        }
 
                 }
 
@@ -201,5 +206,18 @@ namespace C3D_Pascal_AirMax.Analisis
 
             return null;
         }
+
+        public static Nodo Arreglo_Unico(ParseTreeNode entrada)
+        {
+            int linea = entrada.ChildNodes[0].Span.Location.Line;
+            int columna = entrada.ChildNodes[0].Span.Location.Column;
+
+            string nombre = entrada.ChildNodes[0].Token.Text;
+
+            LinkedList<Nodo> dimensiones = Main.lista_expresion(entrada.ChildNodes[2]);
+
+            return new AccesoArray(linea, columna, nombre, dimensiones);
+        }
+
     }
 }

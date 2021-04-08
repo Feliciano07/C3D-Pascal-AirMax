@@ -42,8 +42,10 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 {
                     return null;
                 }
-                
-                
+
+                if (Crear_Variable_Array(entorno)){
+                    return null;
+                }
 
             }
             return null;
@@ -219,10 +221,11 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             foreach(string nombre in this.ids)
             {
                 // guarda la posicion inicial del objeto en el heap
-                string inicio_objeto = Master.getInstancia.newTemporal();
-                Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
+                string inicio_arreglo = Master.getInstancia.newTemporal();
+                Master.getInstancia.addUnaria(inicio_arreglo, Master.getInstancia.heap_p);
+                
 
-                Objeto tipo = new Objeto(Objeto.TipoObjeto.ARRAY, simboloArreglo.id);
+                Objeto tipo = new Objeto(Objeto.TipoObjeto.ARRAY, simboloArreglo ,simboloArreglo.id);
                 Simbolo newVar = entorno.addSimbolo(nombre, tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
                 if(newVar == null)
                 {
@@ -237,23 +240,68 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     case Objeto.TipoObjeto.INTEGER:
                     case Objeto.TipoObjeto.REAL:
                     case Objeto.TipoObjeto.BOOLEAN:
-                
+                        Llenar_Arreglo_Primitivos(simboloArreglo);
                         break;
                     case Objeto.TipoObjeto.STRING:
+                        Llenar_Cadenas(simboloArreglo);
                         break;
                     case Objeto.TipoObjeto.OBJECTS:
                         break;
                     case Objeto.TipoObjeto.ARRAY:
                         break;
                 }
+                string posicion_stack = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
+                Master.getInstancia.addSetStack(posicion_stack, inicio_arreglo);
             }
             return true;
         }
 
         public void Llenar_Arreglo_Primitivos(SimboloArreglo simboloArreglo)
         {
+            string contador = Master.getInstancia.newTemporalEntero();
+            string tope = simboloArreglo.Espacios_Utilizar();
+            Master.getInstancia.addUnaria(contador, "0");
+
+            string retorno = Master.getInstancia.newLabel();
+            string true_if = Master.getInstancia.newLabel();
+            string false_if = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addLabel(retorno);
+            Master.getInstancia.addif(contador, tope, "<=", true_if);
+            Master.getInstancia.addGoto(false_if);
+
+            Master.getInstancia.addLabel(true_if);
+            Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "0");
+            Master.getInstancia.nextHeap();
+            Master.getInstancia.addBinaria(contador, contador, "1", "+");
+            Master.getInstancia.addGoto(retorno);
+            Master.getInstancia.addLabel(false_if);
 
         }
+
+        public void Llenar_Cadenas(SimboloArreglo simboloArreglo)
+        {
+            string contador = Master.getInstancia.newTemporalEntero();
+            string tope = simboloArreglo.Espacios_Utilizar();
+            Master.getInstancia.addUnaria(contador, "0");
+
+            string retorno = Master.getInstancia.newLabel();
+            string true_if = Master.getInstancia.newLabel();
+            string false_if = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addLabel(retorno);
+            Master.getInstancia.addif(contador, tope, "<=", true_if);
+            Master.getInstancia.addGoto(false_if);
+
+            Master.getInstancia.addLabel(true_if);
+            Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
+            Master.getInstancia.nextHeap();
+            Master.getInstancia.addBinaria(contador, contador, "1", "+");
+            Master.getInstancia.addGoto(retorno);
+            Master.getInstancia.addLabel(false_if);
+        }
+
 
     }
 }

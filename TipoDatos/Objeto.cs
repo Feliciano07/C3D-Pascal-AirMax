@@ -24,6 +24,7 @@ namespace C3D_Pascal_AirMax.TipoDatos
         private TipoObjeto tipo;
         private string objetoId;
         public SimboloObjeto symObj;
+        public SimboloArreglo symArray;
 
         public Objeto(TipoObjeto tipo)
         {
@@ -43,6 +44,12 @@ namespace C3D_Pascal_AirMax.TipoDatos
             this.objetoId = objetoId;
         }
 
+        public Objeto(TipoObjeto tipo, SimboloArreglo simboloArreglo, string objetoId)
+        {
+            this.tipo = tipo;
+            this.symArray = simboloArreglo;
+            this.objetoId = objetoId;
+        }
 
         public TipoObjeto getTipo()
         {
