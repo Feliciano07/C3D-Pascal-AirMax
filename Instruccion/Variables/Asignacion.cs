@@ -62,7 +62,10 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Copiar_Objeto(asig.getObjeto().symObj, inicial, value.getValor());
                 }else if(asig.getTipo() == Objeto.TipoObjeto.ARRAY)
                 {
-
+                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                    string inicial = Master.getInstancia.newTemporal();
+                    Master.getInstancia.addGetStack(inicial, posicion_stack);
+                    Copiar_Arreglo(asig.getObjeto().symArray, inicial, value.getValor());
                 }
                 else
                 {
@@ -108,6 +111,10 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             return null;
         }
 
+
+        /*
+         * Esto se utiliza para copiar los datos de un objeto a otro objeto 
+         */
         public void Copiar_Objeto(SimboloObjeto simboloObjeto, string inicial_asig, string inicial_valor)
         {
             int contador = 0;
@@ -126,7 +133,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                         Copiar_cadena(inicial_asig, inicial_valor, contador.ToString());
                         break;
                     case Objeto.TipoObjeto.OBJECTS:
-                        Copiar_Objeto(inicial_asig, inicial_valor, contador.ToString(),atributo);
+                        Copiar_Objeto_Interno(inicial_asig, inicial_valor, contador.ToString(),atributo);
                         break;
                     case Objeto.TipoObjeto.ARRAY:
                         break;
@@ -193,7 +200,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
         }
     
-        public void Copiar_Objeto(string inicial_asig, string inicial_valor, string contador, Atributo atributo)
+        public void Copiar_Objeto_Interno(string inicial_asig, string inicial_valor, string contador, Atributo atributo)
         {
             string asig1 = Master.getInstancia.newTemporalEntero();
             Master.getInstancia.addBinaria(asig1, inicial_asig, contador.ToString(), "+");
@@ -207,5 +214,64 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
             Copiar_Objeto(atributo.objeto.symObj, asig2, valor2);
         }
+
+        /*
+         * Esto se utilizara para copiar los datos de un arreglo a otro arreglo
+         */
+
+        public void Copiar_Arreglo(SimboloArreglo simboloArreglo, string inicial_asig, string inicial_valor)
+        {
+            switch (simboloArreglo.objeto.getTipo())
+            {
+                case Objeto.TipoObjeto.INTEGER:
+                case Objeto.TipoObjeto.REAL:
+                case Objeto.TipoObjeto.BOOLEAN:
+                    Copiar_Array_integer_real_boolean(simboloArreglo, inicial_asig, inicial_valor);
+                    break;
+                case Objeto.TipoObjeto.STRING:
+                    Copiar_Array_Cadena(simboloArreglo, inicial_asig, inicial_valor);
+                    break;
+            }
+        }
+
+        public void Copiar_Array_integer_real_boolean(SimboloArreglo simboloArreglo, string inicial_asig, string inicial_valor)
+        {
+            string contador = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addUnaria(contador, "0");
+            string total = simboloArreglo.Espacios_Utilizar();
+            string true_if = Master.getInstancia.newLabel();
+            string false_if = Master.getInstancia.newLabel();
+            string retorno = Master.getInstancia.newLabel();
+            Master.getInstancia.addLabel(retorno);
+            Master.getInstancia.addif(contador, total, "<=", true_if);
+            Master.getInstancia.addGoto(false_if);
+            Master.getInstancia.addLabel(true_if);
+            Copiar_Interger_real_bool(inicial_asig, inicial_valor, contador);
+            Master.getInstancia.addBinaria(contador, contador, "1", "+");
+            Master.getInstancia.addGoto(retorno);
+            Master.getInstancia.addLabel(false_if);
+
+        }
+ 
+
+        public void Copiar_Array_Cadena(SimboloArreglo simboloArreglo, string inicial_asig, string inicial_valor)
+        {
+            string contador = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addUnaria(contador, "0");
+            string total = simboloArreglo.Espacios_Utilizar();
+            string true_if = Master.getInstancia.newLabel();
+            string false_if = Master.getInstancia.newLabel();
+            string retorno = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addLabel(retorno);
+            Master.getInstancia.addif(contador, total, "<=", true_if);
+            Master.getInstancia.addGoto(false_if);
+            Master.getInstancia.addLabel(true_if);
+            Copiar_cadena(inicial_asig, inicial_valor, contador);
+            Master.getInstancia.addBinaria(contador, contador, "1", "+");
+            Master.getInstancia.addGoto(retorno);
+            Master.getInstancia.addLabel(false_if);
+        }
+        
     }
 }
