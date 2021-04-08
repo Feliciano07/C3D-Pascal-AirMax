@@ -56,7 +56,7 @@ namespace C3D_Pascal_AirMax.Enviroment
 
             string tem1 = Master.getInstancia.newTemporalEntero();
 
-            Master.getInstancia.addBinaria(tem1, this.aux_dim[0].inferior.ToString(), this.aux_dim[0].superior.ToString(), "-");
+            Master.getInstancia.addBinaria(tem1, this.aux_dim[0].superior.ToString(), this.aux_dim[0].inferior.ToString(), "-");
 
             return tem1;
 
@@ -68,7 +68,7 @@ namespace C3D_Pascal_AirMax.Enviroment
 
             string tem2 = Master.getInstancia.newTemporalEntero();
 
-            Master.getInstancia.addBinaria(tem2, this.aux_dim[1].inferior.ToString(), this.aux_dim[1].superior.ToString(), "-");
+            Master.getInstancia.addBinaria(tem2, this.aux_dim[1].superior.ToString(), this.aux_dim[1].inferior.ToString(), "-");
 
             string multi = Master.getInstancia.newTemporalEntero();
 
@@ -88,7 +88,7 @@ namespace C3D_Pascal_AirMax.Enviroment
             
             string tem3 = Master.getInstancia.newTemporal();
 
-            Master.getInstancia.addBinaria(tem3, this.aux_dim[2].inferior.ToString(), this.aux_dim[2].superior.ToString(), "-");
+            Master.getInstancia.addBinaria(tem3, this.aux_dim[2].superior.ToString(), this.aux_dim[2].inferior.ToString(), "-");
 
 
             string multi = Master.getInstancia.newTemporalEntero();
