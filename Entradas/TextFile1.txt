@@ -1,0 +1,39 @@
+﻿
+program Hello;
+
+type 
+arreglo1 = array[0..10] of integer;
+arreglo2 = array[0..10] of real;
+arreglo3 = array[0..10] of string;
+arreglo4 = array[0..10] of boolean;
+
+var a:arreglo1;
+    b:arreglo2;
+    c:arreglo3;
+    d:arreglo4;
+    contador:integer;
+
+begin
+
+for contador := 0  to 10 do
+   
+   begin
+      a[contador]:= 10;
+      b[contador]:=23.15;
+      c[contador]:= 'Hola soy cadena';
+      d[contador]:= true;
+   end;
+  
+  contador:=0;
+  while  contador <= 10  do
+   
+   begin
+      writeln('posicion: ', contador, ' arreglo a Dato: ', a[contador]);
+      writeln('posicion: ', contador, ' arreglo b Dato: ', b[contador]);
+      writeln('posicion: ', contador, ' arreglo c Dato: ', c[contador]);
+      writeln('posicion: ', contador, ' arreglo d Dato: ', d[contador]);
+      contador := contador + 1;
+   end;
+  
+end.
+
