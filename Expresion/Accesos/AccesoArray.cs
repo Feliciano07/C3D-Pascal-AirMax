@@ -57,7 +57,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             //extraemos el valor del heap
             string valor = Master.getInstancia.newTemporal();
             Master.getInstancia.addGetHeap(valor, posicion_absoluta);
-            if(sym.getTipo() != TipoDatos.Objeto.TipoObjeto.BOOLEAN)
+            if(simbolo_aux.objeto.getTipo() != TipoDatos.Objeto.TipoObjeto.BOOLEAN)
             {
                 return new Retorno(valor, true, simbolo_aux.objeto, sym);
             }
