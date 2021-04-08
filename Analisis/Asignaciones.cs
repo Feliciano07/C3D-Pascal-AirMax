@@ -22,8 +22,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Acceso_Objeto(entrada);
                     
                 case "acceso_array":
-                    break;
-
+                    return Acceso_arreglo(entrada);
+                    
             }
             return null;
         }
@@ -125,6 +125,27 @@ namespace C3D_Pascal_AirMax.Analisis
             }
 
             return null;
+        }
+
+
+        public static Nodo Acceso_arreglo(ParseTreeNode entrada)
+        {
+            int linea = entrada.ChildNodes[0].Span.Location.Line;
+            int columna = entrada.ChildNodes[0].Span.Location.Column;
+            Nodo expresion = Expresion.evaluar(entrada.ChildNodes[2]);
+            return new Asignacion(linea, columna, Arreglo_Unico(entrada.ChildNodes[0]), expresion);
+        }
+
+        public static Nodo Arreglo_Unico(ParseTreeNode entrada)
+        {
+            int linea = entrada.ChildNodes[0].Span.Location.Line;
+            int columna = entrada.ChildNodes[0].Span.Location.Column;
+
+            string nombre = entrada.ChildNodes[0].Token.Text;
+
+            LinkedList<Nodo> dimensiones = Main.lista_expresion(entrada.ChildNodes[2]);
+
+            return new AsignacionArray(linea, columna, nombre, dimensiones);
         }
 
     }

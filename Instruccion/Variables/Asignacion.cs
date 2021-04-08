@@ -74,7 +74,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             {
                 
 
-                if(asig.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
+                if(asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
                 {
                     string aux = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(value.trueLabel);

@@ -1,32 +1,32 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
 using C3D_Pascal_AirMax.Manejador;
+using C3D_Pascal_AirMax.TipoDatos;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace C3D_Pascal_AirMax.Expresion.Accesos
+namespace C3D_Pascal_AirMax.Expresion.Asignaciones
 {
-    public class AccesoArray : Nodo
+    public class AsignacionArray : Nodo
     {
         private string id;
         private LinkedList<Nodo> dimensiones;
         private int cantidad;
 
-        public AccesoArray(int linea, int columna, string nombre, LinkedList<Nodo> dimension):base(linea, columna)
+        public AsignacionArray(int linea, int columna, string nombre, LinkedList<Nodo> dimension) : base(linea, columna)
         {
             this.id = nombre;
             this.dimensiones = dimension;
             this.cantidad = this.dimensiones.Count;
         }
 
-
         public override Retorno compilar(Entorno entorno)
         {
-            return Arreglo_Global(entorno);   
+            return Asignacion_Global(entorno);
         }
 
-        public Retorno Arreglo_Global(Entorno entorno)
+        public Retorno Asignacion_Global(Entorno entorno)
         {
             Simbolo sym = entorno.getSimbolo(this.id);
             if (sym == null)
@@ -54,37 +54,28 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
 
             Master.getInstancia.addBinaria(posicion_absoluta, posicion_heap, posicion_arreglo, "+");
 
-            //extraemos el valor del heap
-            string valor = Master.getInstancia.newTemporal();
-            Master.getInstancia.addGetHeap(valor, posicion_absoluta);
-            if(sym.getTipo() != TipoDatos.Objeto.TipoObjeto.BOOLEAN)
-            {
-                return new Retorno(valor, true, simbolo_aux.objeto, sym);
-            }
-            Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym);
-            this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
-            this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
-            Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
-            Master.getInstancia.addGoto(this.falseLabel);
-            retorno.trueLabel = this.trueLabel;
-            retorno.falseLabel = this.falseLabel;
-            return retorno;
+
+            return new Retorno(posicion_absoluta, true, simbolo_aux.objeto,
+                new Simbolo("", simbolo_aux.objeto, Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false));
+
         }
 
         public string Ubicar_posicion(Entorno entorno, SimboloArreglo arreglo)
         {
             Nodo[] aux = new Nodo[this.dimensiones.Count];
             this.dimensiones.CopyTo(aux, 0);
-            if(this.cantidad == 1)
+            if (this.cantidad == 1)
             {
                 Retorno r1 = aux[0].compilar(entorno);
                 return arreglo.Posicion_Una_dimension(r1.getValor());
-            }else if(this.cantidad == 2)
+            }
+            else if (this.cantidad == 2)
             {
                 Retorno r1 = aux[0].compilar(entorno);
                 Retorno r2 = aux[1].compilar(entorno);
                 return arreglo.Posicion_Dos_Dimensiones(r1.getValor(), r2.getValor());
-            }else if(this.cantidad == 3)
+            }
+            else if (this.cantidad == 3)
             {
                 Retorno r1 = aux[0].compilar(entorno);
                 Retorno r2 = aux[1].compilar(entorno);

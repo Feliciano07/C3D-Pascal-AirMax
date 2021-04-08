@@ -20,9 +20,10 @@ namespace C3D_Pascal_AirMax.Enviroment
         {
             this.id = id;
             this.dimensiones = dimensions;
-            this.cantidad = dimensiones.Count + 1;
+            this.cantidad = dimensiones.Count;
             this.aux_dim = new Dimension[this.dimensiones.Count];
             this.dimensiones.CopyTo(this.aux_dim, 0);
+            this.objeto = objeto;
         }
 
         public void setObjeto(Objeto objeto)
