@@ -27,6 +27,9 @@ namespace C3D_Pascal_AirMax.Instruccion.Structu
         public override Retorno compilar(Entorno entorno)
         {
             //TODO: validar si el tipo ya existe y setear ese tipo aca
+
+            Buscar_objeto(entorno);
+
             if(entorno.addArreglo(id, dimensiones, objeto))
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
@@ -39,6 +42,17 @@ namespace C3D_Pascal_AirMax.Instruccion.Structu
             return null;
         }
 
+        public bool Buscar_objeto(Entorno entorno)
+        {
+            SimboloObjeto simboloObjeto = entorno.searchObjeto(this.objeto.getObjetoId());
+            if(simboloObjeto == null)
+            {
+                throw new Exception("El type object: " + this.objeto.getObjetoId() + " no esta definido");
+            }
+            this.objeto.seTipo(Objeto.TipoObjeto.OBJECTS);
+            this.objeto.symObj = simboloObjeto;
+            return false;
+        }
        
     }
 }

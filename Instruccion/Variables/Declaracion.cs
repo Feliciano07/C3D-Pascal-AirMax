@@ -243,16 +243,17 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                         Llenar_Arreglo_Primitivos(simboloArreglo);
                         break;
                     case Objeto.TipoObjeto.STRING:
-                        Llenar_Cadenas(simboloArreglo);
-                        break;
                     case Objeto.TipoObjeto.OBJECTS:
-                        break;
                     case Objeto.TipoObjeto.ARRAY:
+                        Llenar_Cadenas(simboloArreglo);
                         break;
                 }
                 string posicion_stack = Master.getInstancia.newTemporalEntero();
                 Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
                 Master.getInstancia.addSetStack(posicion_stack, inicio_arreglo);
+
+                Llenar_Arreglo_Objetos(simboloArreglo, inicio_arreglo);
+
             }
             return true;
         }
@@ -302,6 +303,68 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             Master.getInstancia.addLabel(false_if);
         }
 
+
+        public bool Llenar_Arreglo_Objetos(SimboloArreglo simboloArreglo, string inicio_arreglo)
+        {
+            if(simboloArreglo.objeto.getTipo() != Objeto.TipoObjeto.OBJECTS)
+            {
+                return true;
+            }
+
+            string contador = Master.getInstancia.newTemporalEntero();
+            string tope = simboloArreglo.Espacios_Utilizar();
+            Master.getInstancia.addUnaria(contador, "0");
+
+            string retorno = Master.getInstancia.newLabel();
+            string true_if = Master.getInstancia.newLabel();
+            string false_if = Master.getInstancia.newLabel();
+            string posicion = Master.getInstancia.newTemporalEntero();
+
+            Master.getInstancia.addLabel(retorno);
+            Master.getInstancia.addif(contador, tope, "<=", true_if);
+            Master.getInstancia.addGoto(false_if);
+
+            Master.getInstancia.addLabel(true_if);
+            
+            Master.getInstancia.addBinaria(posicion, inicio_arreglo, contador, "+");
+
+            SimboloObjeto simboloObjeto = simboloArreglo.objeto.symObj;
+
+            string inicio_objeto = Master.getInstancia.newTemporal();
+            Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
+
+
+            foreach (Atributo atributo in simboloObjeto.GetAtributos())
+            {
+                switch (atributo.getObjeto().getTipo())
+                {
+                    //se guarda el valor por defecto
+                    case Objeto.TipoObjeto.INTEGER:
+                    case Objeto.TipoObjeto.REAL:
+                    case Objeto.TipoObjeto.BOOLEAN:
+                        Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "0");
+                        break;
+                    // se manda -1 debido a que va a guardar una direccion del heap 
+                    case Objeto.TipoObjeto.STRING:
+                    case Objeto.TipoObjeto.OBJECTS:
+                    case Objeto.TipoObjeto.ARRAY:
+                        Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
+                        break;
+
+                }
+                Master.getInstancia.nextHeap();
+            }
+
+            Master.getInstancia.addSetHeap(posicion, inicio_objeto);
+            Reservar_Espacio_Objeto(simboloObjeto, inicio_objeto);
+
+            Master.getInstancia.addBinaria(contador, contador, "1", "+");
+            Master.getInstancia.addGoto(retorno);
+
+            Master.getInstancia.addLabel(false_if);
+
+            return true;
+        }
 
     }
 }

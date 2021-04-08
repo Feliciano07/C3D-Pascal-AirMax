@@ -23,7 +23,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
         {
 
         }
-        public void setAnterior(AccesoId anterior)
+        public void setAnterior(Nodo anterior)
         {
             this.anterior = anterior;
         }

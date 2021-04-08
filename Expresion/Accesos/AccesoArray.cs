@@ -1,6 +1,8 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
 using C3D_Pascal_AirMax.Manejador;
+using C3D_Pascal_AirMax.TipoDatos;
+using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +15,8 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
         private LinkedList<Nodo> dimensiones;
         private int cantidad;
 
+        private Nodo anterior;
+
         public AccesoArray(int linea, int columna, string nombre, LinkedList<Nodo> dimension):base(linea, columna)
         {
             this.id = nombre;
@@ -20,10 +24,33 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             this.cantidad = this.dimensiones.Count;
         }
 
+        public AccesoArray() : base(0, 0)
+        {
+
+        }
+
+        public void setAnterior(Nodo anterior)
+        {
+            this.anterior = anterior;
+        }
+
 
         public override Retorno compilar(Entorno entorno)
         {
-            return Arreglo_Global(entorno);   
+            if(this.anterior == null)
+            {
+                return Arreglo_Global(entorno);
+            }
+            else
+            {
+                Retorno res_anterior = this.anterior.compilar(entorno);
+
+                if (res_anterior.getTipo() == Objeto.TipoObjeto.OBJECTS)
+                {
+                    return Obtener_Atributo_Objeto(res_anterior);
+                }
+            }
+            return null;
         }
 
         public Retorno Arreglo_Global(Entorno entorno)
@@ -93,5 +120,53 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             }
             return "0";
         }
+
+
+        public Retorno Obtener_Atributo_Objeto(Retorno res_anterior)
+        {
+            SimboloObjeto simboloObjeto = res_anterior.getObjeto().symObj;
+            /*
+             * Retorna el atributo y la posicion respecto al objeto
+             */
+            Atributo_Index atributo = simboloObjeto.getAtributo(this.id);
+            if (atributo == null)
+            {
+                Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                    "El objeto: " + simboloObjeto.id + " no tiene el atributo: " + this.id);
+                Master.getInstancia.addError(error);
+                throw new Exception("El objeto: " + simboloObjeto.id + " no tiene el atributo: " + this.id);
+            }
+
+            string pos_heap = Master.getInstancia.newTemporalEntero();
+            /*
+             * pos_heap = nos permite almacena la posicion del atributo en el heap
+             * res_anterior.getValor() = retorna la posicion de donde inicia el objeto
+             * atributo.index = es la posicion del atributo
+             * T12 = 2 + 0;
+             */
+            Master.getInstancia.addBinaria(pos_heap, res_anterior.getValor(), atributo.index.ToString(), "+");
+
+
+            string valor = Master.getInstancia.newTemporal();
+            /*
+             * (primitivo) valor = guarda el valor como tal del atributo
+             * (types) valor = guarda una posicion en el heap del atributo
+             */
+            Master.getInstancia.addGetHeap(valor, pos_heap);
+            if (atributo.atributo.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
+            {
+                return new Retorno(valor, true, atributo.atributo.getObjeto());
+            }
+
+            Retorno retorno = new Retorno("", false, atributo.atributo.getObjeto());
+            this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+            this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+            Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
+            Master.getInstancia.addGoto(this.falseLabel);
+            retorno.trueLabel = this.trueLabel;
+            retorno.falseLabel = this.falseLabel;
+            return retorno;
+        }
+
     }
 }
