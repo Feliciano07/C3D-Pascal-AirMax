@@ -28,7 +28,10 @@ namespace C3D_Pascal_AirMax.Instruccion.Structu
         {
             //TODO: validar si el tipo ya existe y setear ese tipo aca
 
-            Buscar_objeto(entorno);
+            if(this.objeto.getTipo() == Objeto.TipoObjeto.TYPES)
+            {
+                Buscar_objeto(entorno);
+            }
 
             if(entorno.addArreglo(id, dimensiones, objeto))
             {

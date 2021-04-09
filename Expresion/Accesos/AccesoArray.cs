@@ -157,6 +157,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             {
                 return new Retorno(valor, true, atributo.atributo.getObjeto());
             }
+            //TODO: acceso array
 
             Retorno retorno = new Retorno("", false, atributo.atributo.getObjeto());
             this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;

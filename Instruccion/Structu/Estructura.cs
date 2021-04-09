@@ -56,21 +56,42 @@ namespace C3D_Pascal_AirMax.Instruccion.Structu
                 }
                 if(atr.getObjeto().getTipo() == Objeto.TipoObjeto.TYPES)
                 {
-                    //busca primero en estructura de simbolo de objetos
-                    Buscar_Objeto(atr, entorno);
+                    //busca primero una estructura de tipo objeto
+                    if(Buscar_Objeto(atr, entorno))
+                    {
+                        continue;
+                    }
+                    //buscar luego una estructura de tipo array
+                    if(Buscar_Array(atr, entorno))
+                    {
+                        continue;
+                    }
                 }
             }
         }
 
-        public void Buscar_Objeto(Atributo atributo, Entorno entorno)
+        public bool Buscar_Objeto(Atributo atributo, Entorno entorno)
         {
             SimboloObjeto simboloObjeto = entorno.searchObjeto(atributo.getObjeto().getObjetoId());
             if(simboloObjeto == null)
             {
-                throw new Exception("El type object: " + atributo.getObjeto().getObjetoId() + " no esta definido");
+                return false;
             }
             atributo.getObjeto().seTipo(Objeto.TipoObjeto.OBJECTS);
             atributo.getObjeto().symObj = simboloObjeto;
+            return true;
+        }
+
+        public bool Buscar_Array(Atributo atributo, Entorno entorno)
+        {
+            SimboloArreglo simboloArreglo = entorno.searchArreglo(atributo.getObjeto().getObjetoId());
+            if(simboloArreglo == null)
+            {
+                return false;
+            }
+            atributo.getObjeto().seTipo(Objeto.TipoObjeto.ARRAY);
+            atributo.getObjeto().symArray = simboloArreglo;
+            return true;
         }
 
     }

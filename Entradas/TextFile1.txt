@@ -37,3 +37,65 @@ for contador := 0  to 10 do
   
 end.
 
+
+
+
+program Hello;
+
+type 
+cuadro =object
+var atr:integer;
+var atr1:real;
+var atr2:boolean;
+var atr3:string;
+end;
+
+type 
+vector1 = array[0..4] of cuadro;
+
+var contador:integer;
+    ob:vector1;
+    ob2:vector1;
+
+
+begin
+  
+  for contador:=0 to 4 do 
+  begin
+    writeln('Imprimiendo ob valores por defecto posicion: ', contador);
+    writeln(ob[contador].atr);
+    writeln(ob[contador].atr1);
+    writeln(ob[contador].atr2);
+    writeln(ob[contador].atr3);
+    ob[contador].atr := contador;
+    ob[contador].atr1 := contador * 2.5;
+    ob[contador].atr2 := TRUE;
+    ob[contador].atr3 := 'Var ob2 tipo tipo arreglo del objeto cuadro';
+  end;
+  
+  ob2:= ob;
+  
+  for contador:=0 to 4 do 
+  begin
+    writeln('Imprimiendo ob2 que es arreglo tipo cuadro posicion: ', contador);
+    writeln(ob2[contador].atr);
+    writeln(ob2[contador].atr1);
+    writeln(ob2[contador].atr2);
+    writeln(ob2[contador].atr3);
+    ob[contador].atr := contador * 2;
+    ob[contador].atr1 := contador * 2.5 +1;
+    ob[contador].atr2 := FALSE;
+    ob[contador].atr3 := 'Var ob tipo tipo arreglo del objeto cuadro';
+  end;
+  
+  for contador:=0 to 4 do 
+  begin
+    writeln('Imprimiendo ob2 tipo arreglo de cuadro posicion: ', contador);
+    writeln(ob[contador].atr);
+    writeln(ob[contador].atr1);
+    writeln(ob[contador].atr2);
+    writeln(ob[contador].atr3);
+  end;
+  
+end.
+

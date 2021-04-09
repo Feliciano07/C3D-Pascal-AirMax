@@ -60,21 +60,31 @@ namespace C3D_Pascal_AirMax.Analisis
 
                 AsignacionId primero = new AsignacionId(linea, columna, nombre, null);
 
-                AsignacionId retorno = Niveles_abajo(entrada.ChildNodes[2], primero);
+                Nodo retorno = Niveles_abajo(entrada.ChildNodes[2], primero);
 
                 return new Asignacion(linea, columna, retorno, expresion);
             }
             else if (entrada.ChildNodes.Count == 6)
             {
-                //TODO: acceso a arreglo de objeto
+                string nombre = entrada.ChildNodes[0].Token.Text;
+                LinkedList<Nodo> dimensiones = Main.lista_expresion(entrada.ChildNodes[2]);
+
+                AsignacionArray primero = new AsignacionArray(linea, columna, nombre, dimensiones);
+
+                primero.setAnterior(null);
+
+                Nodo retorno = Niveles_abajo(entrada.ChildNodes[5], primero);
+
+                return new Asignacion(linea, columna, retorno, expresion);
+
             }
 
             return null;
         }
 
-        public static AsignacionId Niveles_abajo(ParseTreeNode entrada, AsignacionId primero)
+        public static Nodo Niveles_abajo(ParseTreeNode entrada, Nodo primero)
         {
-            AsignacionId auxiliar = null;
+            Nodo auxiliar = null;
 
             for (int i = 0; i < entrada.ChildNodes.Count; i++)
             {
@@ -83,23 +93,49 @@ namespace C3D_Pascal_AirMax.Analisis
 
                 if (i == 0)
                 {
-                    AsignacionId acceso = new AsignacionId();
-                    acceso = Llamada_id(entrada.ChildNodes[i]);
-                    acceso.setAnterior(primero);
-                    auxiliar = acceso;
+                    Nodo salida = Llamada_id(entrada.ChildNodes[i]);
+                    if(salida is AsignacionId)
+                    {
+                        AsignacionId acceso = new AsignacionId();
+                        acceso = (AsignacionId)salida;
+                        acceso.setAnterior(primero);
+                        auxiliar = acceso;
+                    }
+                    else
+                    {
+                        AsignacionArray acceso = new AsignacionArray();
+                        acceso = (AsignacionArray)salida;
+                        acceso.setAnterior(primero);
+                        auxiliar = acceso;
+                    }
+                    
                 }
                 else
                 {
-                    AsignacionId acceso = new AsignacionId();
-                    acceso = Llamada_id(entrada.ChildNodes[i]);
-                    acceso.setAnterior(auxiliar);
-                    auxiliar = acceso;
+                    Nodo salida = Llamada_id(entrada.ChildNodes[i]);
+
+                    if(salida is AsignacionId)
+                    {
+                        AsignacionId acceso = new AsignacionId();
+                        acceso = (AsignacionId)salida;
+                        acceso.setAnterior(auxiliar);
+                        auxiliar = acceso;
+                    }
+                    else
+                    {
+                        AsignacionArray acceso = new AsignacionArray();
+                        acceso = (AsignacionArray)salida;
+                        acceso.setAnterior(auxiliar);
+                        auxiliar = acceso;
+                    }
+
+                    
                 }
             }
             return auxiliar;
         }
 
-        public static AsignacionId Llamada_id(ParseTreeNode entrada)
+        public static Nodo Llamada_id(ParseTreeNode entrada)
         {
             // prueba solo con id
 
@@ -118,8 +154,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     }
                 case "acceso_array":
                     {
-                        //TODO: acceso arreglo
-                        break;
+                        return Arreglo_Unico(entrada);
+                        
                     }
 
             }

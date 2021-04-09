@@ -153,6 +153,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 Master.getInstancia.addSetStack(posicion_stack, inicio_objeto);
 
                 Reservar_Espacio_Objeto(sym_obj, inicio_objeto);
+                Reservar_Espacio_Arreglo(sym_obj, inicio_objeto);
 
             }
             
@@ -204,6 +205,40 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                         break;
                 }
                 contador++;
+            }
+        }
+
+
+        public void Reservar_Espacio_Arreglo(SimboloObjeto simboloObjeto, string posicionInicial)
+        {
+            int contador = 0;
+
+            foreach(Atributo atributo in simboloObjeto.GetAtributos())
+            {
+                if(atributo.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
+                {
+                    SimboloArreglo simboloArreglo = atributo.getObjeto().symArray;
+                    string inicio_arreglo = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addUnaria(inicio_arreglo, Master.getInstancia.heap_p);
+
+                    switch (simboloArreglo.objeto.getTipo())
+                    {
+                        case Objeto.TipoObjeto.INTEGER:
+                        case Objeto.TipoObjeto.REAL:
+                        case Objeto.TipoObjeto.BOOLEAN:
+                            Llenar_Arreglo_Primitivos(simboloArreglo);
+                            break;
+                        case Objeto.TipoObjeto.STRING:
+                        case Objeto.TipoObjeto.OBJECTS:
+                        case Objeto.TipoObjeto.ARRAY:
+                            Llenar_Cadenas(simboloArreglo);
+                            break;
+                    }
+                    string posicion_heap = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addBinaria(posicion_heap, posicionInicial, contador.ToString(), "+");
+                    Master.getInstancia.addSetHeap(posicion_heap, inicio_arreglo);
+                    Llenar_Arreglo_Objetos(simboloArreglo, inicio_arreglo);
+                }
             }
         }
 

@@ -231,6 +231,9 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 case Objeto.TipoObjeto.STRING:
                     Copiar_Array_Cadena(simboloArreglo, inicial_asig, inicial_valor);
                     break;
+                case Objeto.TipoObjeto.OBJECTS:
+                    Copiar_Array_Objeto(simboloArreglo, inicial_asig, inicial_valor);
+                    break;
             }
         }
 
@@ -273,5 +276,43 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             Master.getInstancia.addLabel(false_if);
         }
         
+
+        public void Copiar_Array_Objeto(SimboloArreglo simboloArreglo, string inicial_asig, string inicial_valor)
+        {
+            string contador = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addUnaria(contador, "0");
+
+            string total = simboloArreglo.Espacios_Utilizar();
+
+            string true_if = Master.getInstancia.newLabel();
+            string false_if = Master.getInstancia.newLabel();
+            string retorno = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addLabel(retorno);
+            Master.getInstancia.addif(contador, total, "<=", true_if);
+            Master.getInstancia.addGoto(false_if);
+
+            Master.getInstancia.addLabel(true_if);
+
+            string heap_asig = Master.getInstancia.newTemporalEntero();
+            string heap_valor = Master.getInstancia.newTemporalEntero();
+
+            Master.getInstancia.addBinaria(heap_asig, inicial_asig, contador, "+");
+            Master.getInstancia.addBinaria(heap_valor, inicial_valor, contador, "+");
+
+            string asig1 = Master.getInstancia.newTemporalEntero();
+            string valor1 = Master.getInstancia.newTemporalEntero();
+
+            Master.getInstancia.addGetHeap(asig1, heap_asig);
+            Master.getInstancia.addGetHeap(valor1, heap_valor);
+
+            Copiar_Objeto(simboloArreglo.objeto.symObj, asig1, valor1);
+
+            Master.getInstancia.addBinaria(contador, contador, "1", "+");
+            Master.getInstancia.addGoto(retorno);
+            Master.getInstancia.addLabel(false_if);
+
+        }
+
     }
 }
