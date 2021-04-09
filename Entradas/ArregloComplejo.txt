@@ -1,0 +1,76 @@
+﻿program Hello;
+
+type 
+reporte = object
+var nombre:string;
+end;
+
+
+type 
+vector1 = array[0..4] of integer;
+vector2 = array[0..4] of real;
+vector3 = array[0..4] of boolean;
+vector4 = array[0..4] of string;
+vector5 = array[0..4] of reporte;
+
+
+type
+cuadro = object
+var atr:vector1;
+var atr1:vector2;
+var atr2:vector3;
+var atr3:vector4;
+var atr4:vector5;
+end;
+
+
+var ob:cuadro;
+contador:integer;
+
+var ob2:cuadro;
+
+begin
+  for contador:=0 to 4 do 
+  begin
+    ob.atr[contador]:= contador * 2 + 1;
+    ob.atr1[contador]:=contador * 2 +1;
+    if ((contador mod 2 ) = 0) then
+    begin
+            ob.atr2[contador]:= true;
+            ob.atr3[contador]:= 'Soy par';
+            ob.atr4[contador].nombre := 'Objeto interno ..';
+    end
+    else
+    begin
+            ob.atr2[contador]:= false;
+            ob.atr3[contador]:= 'Soy impar';
+            ob.atr4[contador].nombre := 'Objeto interno **';
+            
+    end;
+    
+    
+  end;
+
+    
+    for contador:= 0 to 4 do 
+    begin
+      writeln(ob.atr[contador]);
+      writeln(ob.atr1[contador]);
+      writeln(ob.atr2[contador]);
+      writeln(ob.atr3[contador]);
+      writeln(ob.atr4[contador].nombre);
+    end;
+
+    ob2 := ob;
+    
+    for contador:= 0 to 4 do 
+    begin
+      writeln(ob2.atr[contador], ' ob2');
+      writeln(ob2.atr1[contador], ' ob2');
+      writeln(ob2.atr2[contador], ' ob2');
+      writeln(ob2.atr3[contador], ' ob2');
+      writeln(ob2.atr4[contador].nombre, ' ob2');
+    end;
+
+end.
+

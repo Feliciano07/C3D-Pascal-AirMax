@@ -98,7 +98,10 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Copiar_Objeto(asig.getObjeto().symObj, posicion_heap, value.getValor());
                 }else if(asig.getTipo() == Objeto.TipoObjeto.ARRAY)
                 {
-
+                    
+                    string posicion_heap = Master.getInstancia.newTemporal();
+                    Master.getInstancia.addGetHeap(posicion_heap, asig.getValor());
+                    Copiar_Arreglo(asig.getObjeto().symArray, posicion_heap, value.getValor());
                 }
                 else
                 {
@@ -136,6 +139,8 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                         Copiar_Objeto_Interno(inicial_asig, inicial_valor, contador.ToString(),atributo);
                         break;
                     case Objeto.TipoObjeto.ARRAY:
+                        
+                        Copiar_Arreglo_Interno(inicial_asig, inicial_valor, contador.ToString(), atributo);
                         break;
                 }
                 contador++;
@@ -213,6 +218,24 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             Master.getInstancia.addGetHeap(valor2, valor1);
 
             Copiar_Objeto(atributo.objeto.symObj, asig2, valor2);
+        }
+
+        public void Copiar_Arreglo_Interno(string inicia_asi, string inicial_valor, string contador, Atributo atributo)
+        {
+            string pos1 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(pos1, inicia_asi, contador, "+");
+            string asi = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addGetHeap(asi, pos1);
+
+            string pos2 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(pos2, inicial_valor, contador, "+");
+            string valor = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addGetHeap(valor, pos2);
+
+            SimboloArreglo simboloArreglo = atributo.objeto.symArray;
+
+            Copiar_Arreglo(simboloArreglo, asi, valor);
+
         }
 
         /*
