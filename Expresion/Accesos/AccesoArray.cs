@@ -47,7 +47,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
 
                 if (res_anterior.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
-                    return Obtener_Atributo_Objeto(res_anterior);
+                    return Obtener_Atributo_Objeto(res_anterior, entorno);
                 }
             }
             return null;
@@ -84,7 +84,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             //extraemos el valor del heap
             string valor = Master.getInstancia.newTemporal();
             Master.getInstancia.addGetHeap(valor, posicion_absoluta);
-            if(simbolo_aux.objeto.getTipo() != TipoDatos.Objeto.TipoObjeto.BOOLEAN)
+            if(simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
                 return new Retorno(valor, true, simbolo_aux.objeto, sym);
             }
@@ -122,7 +122,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
         }
 
 
-        public Retorno Obtener_Atributo_Objeto(Retorno res_anterior)
+        public Retorno Obtener_Atributo_Objeto(Retorno res_anterior, Entorno entorno)
         {
             SimboloObjeto simboloObjeto = res_anterior.getObjeto().symObj;
             /*
@@ -153,7 +153,12 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
              * (types) valor = guarda una posicion en el heap del atributo
              */
             Master.getInstancia.addGetHeap(valor, pos_heap);
-            if (atributo.atributo.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
+
+            if(atributo.atributo.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
+            {
+                return Arreglo_Objeto(atributo.atributo, valor, entorno);
+            }
+            else if (atributo.atributo.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
                 return new Retorno(valor, true, atributo.atributo.getObjeto());
             }
@@ -167,6 +172,42 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             retorno.trueLabel = this.trueLabel;
             retorno.falseLabel = this.falseLabel;
             return retorno;
+        }
+
+
+        public Retorno Arreglo_Objeto(Atributo atributo, string inicio_arreglo, Entorno entorno)
+        {
+            if(this.dimensiones == null)
+            {
+                return new Retorno(inicio_arreglo, true, atributo.getObjeto());
+            }
+            else
+            {
+                SimboloArreglo simboloArreglo = atributo.getObjeto().symArray;
+
+                string posicion_arreglo = Ubicar_posicion(entorno, simboloArreglo);
+
+                string posicion_absoluta = Master.getInstancia.newTemporalEntero();
+
+                Master.getInstancia.addBinaria(posicion_absoluta, inicio_arreglo, posicion_arreglo, "+");
+
+
+                string valor = Master.getInstancia.newTemporal();
+                Master.getInstancia.addGetHeap(valor, posicion_absoluta);
+                if (simboloArreglo.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                {
+                    return new Retorno(valor, true, simboloArreglo.objeto);
+                }
+                Retorno retorno = new Retorno("", false, simboloArreglo.objeto);
+                this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+                this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+                Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
+                Master.getInstancia.addGoto(this.falseLabel);
+                retorno.trueLabel = this.trueLabel;
+                retorno.falseLabel = this.falseLabel;
+                return retorno;
+
+            }
         }
 
     }

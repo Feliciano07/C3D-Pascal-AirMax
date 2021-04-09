@@ -27,13 +27,17 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             Retorno res_right = right.compilar(entorno);
             Objeto.TipoObjeto tipo_dominante = TablaTipo.tabla[res_left.getTipo().GetHashCode(), res_right.getTipo().GetHashCode()];
 
-            string tem = Master.getInstancia.newTemporal();
+            string gl = Master.getInstancia.newTemporal();
 
             switch (tipo_dominante)
             {
                 case Objeto.TipoObjeto.INTEGER:
-                    Master.getInstancia.addBinaria(tem, res_left.getValor(), res_right.getValor(), "%");
-                    return new Retorno(tem, true, new Objeto(tipo_dominante));
+                    string tem = Master.getInstancia.newTemporalEntero();
+                    string tem2 = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addUnaria(tem, res_left.getValor());
+                    Master.getInstancia.addUnaria(tem2, res_right.getValor());
+                    Master.getInstancia.addBinaria(gl, tem, tem2, "%");
+                    return new Retorno(gl, true, new Objeto(tipo_dominante));
                 default:
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                    "No se puede obtener el modulo de tipos de datos" + res_left.getTipo().ToString() + "con" + res_right.getTipo().ToString());

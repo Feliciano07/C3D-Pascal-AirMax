@@ -239,6 +239,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Master.getInstancia.addSetHeap(posicion_heap, inicio_arreglo);
                     Llenar_Arreglo_Objetos(simboloArreglo, inicio_arreglo);
                 }
+                contador++;
             }
         }
 

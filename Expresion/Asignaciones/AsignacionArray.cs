@@ -45,7 +45,7 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                 Retorno res_anterior = this.anterior.compilar(entorno);
                 if(res_anterior.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
-                    return Obtener_Atributo_Objeto(res_anterior);
+                    return Obtener_Atributo_Objeto(res_anterior, entorno);
                 }
             }
 
@@ -111,7 +111,7 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             return "0";
         }
 
-        public Retorno Obtener_Atributo_Objeto(Retorno res_retorno)
+        public Retorno Obtener_Atributo_Objeto(Retorno res_retorno, Entorno entorno)
         {
             SimboloObjeto simboloObjeto = res_retorno.getObjeto().symObj;
             Atributo_Index atributo = simboloObjeto.getAtributo(this.id);
@@ -146,11 +146,40 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
 
             Master.getInstancia.addBinaria(valor, posicion, atributo.index.ToString(), "+");
 
+            if(atributo.atributo.objeto.getTipo() == Objeto.TipoObjeto.ARRAY)
+            {
+                string inicio_arreglo = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addGetHeap(inicio_arreglo, valor);
+                return Arreglo_Objeto(atributo, inicio_arreglo, entorno);
+            }
+
             /*
              * retorno el valor y un simbolo que posee la posicion relativa al objeto encontrado
              */
             return new Retorno(valor, true, atributo.atributo.getObjeto(), new Simbolo(this.id, atributo.atributo.getObjeto(),
                 Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false));
+        }
+
+        public Retorno Arreglo_Objeto(Atributo_Index atributo, string inicio, Entorno entorno)
+        {
+            if(this.dimensiones == null)
+            {
+                return new Retorno(inicio, true, atributo.atributo.getObjeto(), new Simbolo(this.id, atributo.atributo.getObjeto(),
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false));
+            }
+            else
+            {
+                SimboloArreglo simboloArreglo = atributo.atributo.objeto.symArray;
+
+                string posicion_arreglo = Ubicar_posicion(entorno, simboloArreglo);
+
+                string posicion_absoluta = Master.getInstancia.newTemporalEntero();
+
+                Master.getInstancia.addBinaria(posicion_absoluta, inicio, posicion_arreglo, "+");
+
+                return new Retorno(posicion_absoluta, true, simboloArreglo.objeto,
+                new Simbolo("", simboloArreglo.objeto, Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false));
+            }
         }
 
     }
