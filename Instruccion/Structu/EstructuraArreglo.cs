@@ -26,7 +26,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Structu
 
         public override Retorno compilar(Entorno entorno)
         {
-            //TODO: validar si el tipo ya existe y setear ese tipo aca
+            
 
             if(this.objeto.getTipo() == Objeto.TipoObjeto.TYPES)
             {

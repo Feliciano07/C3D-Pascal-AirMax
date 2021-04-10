@@ -165,8 +165,7 @@ namespace C3D_Pascal_AirMax.Analisis
 
             for (int i = 0; i < entrada.ChildNodes.Count; i++)
             {
-                //TODO: Validar si es solo id o un arreglo
-
+                
 
                 if (i == 0)
                 {

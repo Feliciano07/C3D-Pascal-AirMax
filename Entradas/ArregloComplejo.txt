@@ -74,3 +74,69 @@ begin
 
 end.
 
+
+
+
+program Hello;
+
+type
+interno = object
+var a:real;
+var b:string;
+end;
+
+
+type 
+vector1 = array[0..4] of integer;
+vector2 = array[0..4] of real;
+vector3 = array[0..4] of string;
+vector4 = array[0..4] of boolean;
+vector5 = array[0..4] of interno;
+
+type
+reporte = object
+var atr:vector1;
+var atr1:vector2;
+var atr2:vector3;
+var atr3:vector4;
+var atr4:vector5;
+end;
+
+
+type 
+cuadro = object
+var atr:reporte;
+end;
+
+var ob:cuadro;
+
+var contador:integer;
+var concatenar:string;
+
+begin
+ 
+ concatenar:= 'Que hubo bebe';
+ 
+  for contador := 0 to 4 do 
+  begin
+    ob.atr.atr[contador]:=contador;
+    ob.atr.atr1[contador]:= contador * 0.5;
+    ob.atr.atr2[contador]:= 'Hola estoy probando';
+    ob.atr.atr3[contador]:= true;
+    ob.atr.atr4[contador].a := ob.atr.atr[contador] + ob.atr.atr1[contador];
+    ob.atr.atr4[contador].b := '** ' + concatenar;
+  end;
+  
+    for contador := 0 to 4 do 
+  begin
+    writeln(ob.atr.atr[contador]);
+    writeln(ob.atr.atr1[contador]);
+    writeln(ob.atr.atr2[contador]);
+    writeln(ob.atr.atr3[contador]);
+    writeln('Atributos del arreglo del objeto mas interno');
+    writeln(ob.atr.atr4[contador].a);
+    writeln(ob.atr.atr4[contador].b);
+  end;
+  
+end.
+

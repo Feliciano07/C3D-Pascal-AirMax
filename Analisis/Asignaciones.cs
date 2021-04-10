@@ -50,7 +50,7 @@ namespace C3D_Pascal_AirMax.Analisis
 
         public static Nodo Primer_Nivel(ParseTreeNode entrada, Nodo expresion)
         {
-            //TODO: validar si es id o array
+            
             int linea = entrada.ChildNodes[0].Span.Location.Line;
             int columna = entrada.ChildNodes[0].Span.Location.Column;
             if (entrada.ChildNodes.Count == 3)
@@ -88,7 +88,7 @@ namespace C3D_Pascal_AirMax.Analisis
 
             for (int i = 0; i < entrada.ChildNodes.Count; i++)
             {
-                //TODO: Validar si es solo id o un arreglo
+                
 
 
                 if (i == 0)

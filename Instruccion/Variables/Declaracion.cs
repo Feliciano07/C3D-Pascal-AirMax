@@ -152,7 +152,15 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
                 Master.getInstancia.addSetStack(posicion_stack, inicio_objeto);
 
+                /*
+                 * Verifica si dentro del objeto a declarar existe un atributo 
+                 * tipo objeto, de ser asi realiza la reservacion del objeto en el heap
+                 */
                 Reservar_Espacio_Objeto(sym_obj, inicio_objeto);
+                /*
+                 * Verifica si dentro del objeto a declarar existe un atributo de tipo array
+                 * de ser asi realiza la reservacion de espacio en el heap
+                 */
                 Reservar_Espacio_Arreglo(sym_obj, inicio_objeto);
 
             }
@@ -201,6 +209,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                             Master.getInstancia.addBinaria(posicion_heap, posicionInicial, contador.ToString(), "+");
                             Master.getInstancia.addSetHeap(posicion_heap, inicio_objeto);
                             Reservar_Espacio_Objeto(auxiliar, inicio_objeto);
+                            Reservar_Espacio_Arreglo(auxiliar, inicio_objeto);
                         }
                         break;
                 }
@@ -230,6 +239,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                             break;
                         case Objeto.TipoObjeto.STRING:
                         case Objeto.TipoObjeto.OBJECTS:
+                            //TODO: hacer array de array?
                         case Objeto.TipoObjeto.ARRAY:
                             Llenar_Cadenas(simboloArreglo);
                             break;

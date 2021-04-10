@@ -40,7 +40,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 string posicion_stack = Master.getInstancia.newTemporalEntero();
                 
 
-                if (asig.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
+                if (asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
                 {
                     // Asigna un valor a un valor booleano
                     string aux = Master.getInstancia.newLabel();

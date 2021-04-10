@@ -43,7 +43,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Structu
         
         public void validarParametros(Entorno entorno)
         {
-            //TODO: los atributos dentro de un objeto, por el momento solo son primitivos
+            
             HashSet<string> ids = new HashSet<string>();
             foreach(Atributo atr in this.atributos)
             {
