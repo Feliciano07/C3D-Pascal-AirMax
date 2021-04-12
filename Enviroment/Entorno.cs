@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using C3D_Pascal_AirMax.TipoDatos;
 using C3D_Pascal_AirMax.Utilidades;
+using C3D_Pascal_AirMax.Instruccion.Funciones;
 
 namespace C3D_Pascal_AirMax.Enviroment
 {
@@ -13,19 +14,43 @@ namespace C3D_Pascal_AirMax.Enviroment
         private Dictionary<string, Simbolo> variables;
         private Dictionary<string, SimboloObjeto> objetos;
         private Dictionary<string, SimboloArreglo> arreglos;
+        private Dictionary<string, SimboloFuncion> funciones;
         private string nombre_entorno;
-        private int size;
+        public int size;
         private Entorno anterior;
+
+        private SimboloFuncion actual_funcion;
+        private string label_return;
 
         public Entorno( string nombre)
         {
             this.variables = new Dictionary<string, Simbolo>();
             this.objetos = new Dictionary<string, SimboloObjeto>();
             this.arreglos = new Dictionary<string, SimboloArreglo>();
+            this.funciones = new Dictionary<string, SimboloFuncion>();
             this.nombre_entorno = nombre;
             this.size = 0;
             this.anterior = null;
         }
+
+        public Entorno(Entorno anterior, string nombre)
+        {
+            this.variables = new Dictionary<string, Simbolo>();
+            this.objetos = new Dictionary<string, SimboloObjeto>();
+            this.arreglos = new Dictionary<string, SimboloArreglo>();
+            this.funciones = new Dictionary<string, SimboloFuncion>();
+            this.nombre_entorno = nombre;
+            this.size = 0;
+            this.anterior = anterior;
+        }
+
+        public void setFuncion(string id,SimboloFuncion simboloFuncion, string label_return )
+        {
+            this.nombre_entorno = id;
+            this.actual_funcion = simboloFuncion;
+            this.label_return = label_return;
+        }
+
 
         public string getNombreEntorno()
         {
@@ -40,8 +65,9 @@ namespace C3D_Pascal_AirMax.Enviroment
             {
                 return null;
             }
-            Simbolo simbolo = new Simbolo(id, tipo, rol, pointer, this.size++, this.nombre_entorno,
-                this.anterior == null ? true:false);
+            this.size++;
+            Simbolo simbolo = new Simbolo(id, tipo, rol, pointer, this.size, this.nombre_entorno,
+                true);
             this.variables.Add(id, simbolo);
             return simbolo;
         }
@@ -49,12 +75,18 @@ namespace C3D_Pascal_AirMax.Enviroment
         // Falta ver como manejar los entornos enlazados
         public Simbolo getSimbolo(string id)
         {
-            id = id.ToLower();
-            if(this.variables.ContainsKey(id)== true)
+            Entorno aux = this;
+
+            while(aux != null)
             {
-                Simbolo sym;
-                this.variables.TryGetValue(id, out sym);
-                return sym;
+                id = id.ToLower();
+                if (aux.variables.ContainsKey(id) == true)
+                {
+                    Simbolo sym;
+                    aux.variables.TryGetValue(id, out sym);
+                    return sym;
+                }
+                aux = aux.anterior;
             }
             return null;
         }
@@ -72,12 +104,18 @@ namespace C3D_Pascal_AirMax.Enviroment
 
         public SimboloObjeto searchObjeto(string id)
         {
-            id = id.ToLower();
-            if (this.objetos.ContainsKey(id))
+            Entorno aux = this;
+
+            while(aux != null)
             {
-                SimboloObjeto objeto;
-                this.objetos.TryGetValue(id, out objeto);
-                return objeto;
+                id = id.ToLower();
+                if (aux.objetos.ContainsKey(id))
+                {
+                    SimboloObjeto objeto;
+                    aux.objetos.TryGetValue(id, out objeto);
+                    return objeto;
+                }
+                aux = aux.anterior;
             }
             return null;
         }
@@ -95,17 +133,57 @@ namespace C3D_Pascal_AirMax.Enviroment
 
         public SimboloArreglo searchArreglo(string id)
         {
-            id = id.ToLower();
-            if (this.arreglos.ContainsKey(id))
+            Entorno aux = this;
+
+            while(aux != null)
             {
-                SimboloArreglo arreglo;
-                this.arreglos.TryGetValue(id, out arreglo);
-                return arreglo;
+                id = id.ToLower();
+                if (aux.arreglos.ContainsKey(id))
+                {
+                    SimboloArreglo arreglo;
+                    aux.arreglos.TryGetValue(id, out arreglo);
+                    return arreglo;
+                }
+                aux = aux.anterior;
             }
             return null;
         }
 
+        public bool addFuncion(string id, Objeto objeto, LinkedList<Parametro> parametros )
+        {
+            id = id.ToLower();
+            if (this.funciones.ContainsKey(id)){
+                return true;
+            }
+            this.funciones.Add(id, new SimboloFuncion(id, parametros, objeto));
+            return false;
+        }
 
+        public SimboloFuncion getFuncion(string id)
+        {
+            id = id.ToLower();
+            SimboloFuncion funcion;
+            this.funciones.TryGetValue(id, out funcion);
+            return funcion;
+        }
+
+        public SimboloFuncion searchFuncion(string id)
+        {
+            Entorno aux = this;
+
+            while(aux != null)
+            {
+                id = id.ToLower();
+                if (aux.funciones.ContainsKey(id))
+                {
+                    SimboloFuncion simboloFuncion;
+                    aux.funciones.TryGetValue(id, out simboloFuncion);
+                    return simboloFuncion;
+                }
+                aux = aux.anterior;
+            }
+            return null;
+        }
 
         public int getSize()
         {

@@ -20,12 +20,12 @@ namespace C3D_Pascal_AirMax.Analisis
             if (entrada.ChildNodes.Count == 7)
             {
                 LinkedList<Atributo> atributos = Lista_atributos(entrada.ChildNodes[4]);
-                Manejador.Master.getInstancia.addCompilar(new Estructura(linea, columna, nombre, atributos));
+                Manejador.Master.getInstancia.addTypes(new Estructura(linea, columna, nombre, atributos));
             }
             else if (entrada.ChildNodes.Count == 6)
             {
                 LinkedList<Atributo> atributos = new LinkedList<Atributo>();
-                Manejador.Master.getInstancia.addCompilar(new Estructura(linea, columna, nombre, atributos));
+                Manejador.Master.getInstancia.addTypes(new Estructura(linea, columna, nombre, atributos));
             }
         }
 

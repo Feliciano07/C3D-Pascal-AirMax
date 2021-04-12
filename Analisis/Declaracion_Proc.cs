@@ -5,6 +5,7 @@ using Irony.Parsing;
 using C3D_Pascal_AirMax.Utilidades;
 using C3D_Pascal_AirMax.TipoDatos;
 using C3D_Pascal_AirMax.Abstract;
+using C3D_Pascal_AirMax.Instruccion.Funciones;
 
 namespace C3D_Pascal_AirMax.Analisis
 {
@@ -16,29 +17,32 @@ namespace C3D_Pascal_AirMax.Analisis
          */
 
 
-        public static void Procedimiento(ParseTreeNode entrada)
+        public static void Crear_Procedimiento(ParseTreeNode entrada)
         {
             string id = entrada.ChildNodes[1].Token.Text;
             int linea = entrada.ChildNodes[1].Span.Location.Line;
             int columna = entrada.ChildNodes[1].Span.Location.Column;
 
-            //TODO: mandar a obtener los parametros (puede manejarse como atributos)
-            LinkedList<Parametro> parametros = Obtener_parametros(entrada.ChildNodes[3]);
             
-            if(entrada.ChildNodes.Count == 8)
+            LinkedList<Parametro> parametros = Obtener_parametros(entrada.ChildNodes[3]);
+            Objeto objeto = new Objeto(Objeto.TipoObjeto.VOID);
+
+            if (entrada.ChildNodes.Count == 8)
             {
                 LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
                 Declaracion_Variables(entrada.ChildNodes[6], instrucciones);
                 Instrucciones_Funcion(entrada.ChildNodes[7], instrucciones);
 
-                //TODO: retornar el procedimiento
+                Procedimiento proc = new Procedimiento(linea, columna, id, parametros, instrucciones, objeto);
+                Manejador.Master.getInstancia.compilar_fun(proc);
+                
 
             }else if(entrada.ChildNodes.Count == 7)
             {
                 LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
                 Instrucciones_Funcion(entrada.ChildNodes[6], instrucciones);
-
-                //TODO: retornar el procedimiento
+                Procedimiento proc = new Procedimiento(linea, columna, id, parametros, instrucciones,objeto);
+                Manejador.Master.getInstancia.compilar_fun(proc);
             }
 
         }
@@ -53,8 +57,10 @@ namespace C3D_Pascal_AirMax.Analisis
                 switch (term)
                 {
                     case "parametros_valor":
+                        Parametros_Valor(node, parametros);
                         break;
                     case "parametros_referencia":
+                        Parametros_Referencia(node, parametros);
                         break;
                 }
             }

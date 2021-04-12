@@ -1,4 +1,6 @@
-﻿using C3D_Pascal_AirMax.TipoDatos;
+﻿using C3D_Pascal_AirMax.Instruccion.Funciones;
+using C3D_Pascal_AirMax.TipoDatos;
+using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,16 +9,16 @@ namespace C3D_Pascal_AirMax.Enviroment
 {
     public class SimboloFuncion
     {
-        private Objeto.TipoObjeto tipo;
-        private string nombre;
-        private int size;
-        private LinkedList<Object> parametros;
+        public Objeto objeto;
+        public string id;
+        public int size;
+        public LinkedList<Parametro> parametros;
 
-        public SimboloFuncion(Objeto.TipoObjeto tipo, string nombre, int size, LinkedList<Object> parametros)
+        public SimboloFuncion(string id, LinkedList<Parametro> parametros, Objeto objeto)
         {
-            this.tipo = tipo;
-            this.nombre = nombre;
-            this.size = size;
+            this.objeto = objeto;
+            this.id = id.ToLower();
+            this.size = parametros.Count;
             this.parametros = parametros;
         }
 

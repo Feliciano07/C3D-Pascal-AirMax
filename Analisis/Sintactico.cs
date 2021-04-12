@@ -10,6 +10,13 @@ namespace C3D_Pascal_AirMax.Analisis
 {
     public class Sintactico
     {
+
+        public enum Pasada
+        {
+            TYPES,
+            FUNCIONES,
+            VARIABLES
+        }
         
         public bool Analizar(string texto)
         {
@@ -47,7 +54,9 @@ namespace C3D_Pascal_AirMax.Analisis
             if (actual.ChildNodes.Count == 5)
             {
                 // declaracion de variables, objetos, arrays, funciones
-                declaraciones(actual.ChildNodes[3]);
+                declaraciones(actual.ChildNodes[3], Pasada.TYPES);
+                declaraciones(actual.ChildNodes[3], Pasada.FUNCIONES);
+                declaraciones(actual.ChildNodes[3], Pasada.VARIABLES);
 
                 Instrucciones(actual.ChildNodes[4].ChildNodes[1]);
 
@@ -58,38 +67,59 @@ namespace C3D_Pascal_AirMax.Analisis
             }
         }
 
-        public void declaraciones(ParseTreeNode actual)
+        public void declaraciones(ParseTreeNode actual, Pasada pasada)
         {
 
             foreach (ParseTreeNode node in actual.ChildNodes)
             {
 
-                declaracion(node.ChildNodes[0]);
+                declaracion(node.ChildNodes[0], pasada);
 
             }
         }
 
         // esto deberia de guardarse antes
-        public void declaracion(ParseTreeNode actual)
+        public void declaracion(ParseTreeNode actual, Pasada pasada)
         {
             String toke = actual.Term.Name;
 
-            switch (toke)
+            if(pasada == Pasada.TYPES)
             {
-                
-                case "variable":
-                    Variable.Lista_variables(actual.ChildNodes[1]);
-                    break;
-                case "constante":
-                    Variable.Lista_Constante(actual.ChildNodes[1]);
-                    break;
-                case "objectos":
-                    TypeObjeto.Definicion_Objeto(actual);
-                    break;
-                case "arrays":
-                    TypeArray.Declaracion_Arreglo(actual.ChildNodes[1]);
-                    break;
+                switch (toke)
+                {
+                    case "objectos":
+                        TypeObjeto.Definicion_Objeto(actual);
+                        break;
+                    case "arrays":
+                        TypeArray.Declaracion_Arreglo(actual.ChildNodes[1]);
+                        break;
+                }
+            }else if(pasada == Pasada.FUNCIONES)
+            {
+                switch (toke)
+                {
+                    case "dec_procedimiento":
+                        Declaracion_Proc.Crear_Procedimiento(actual);
+                        break;
+                    case "dec_funcion":
+                        break;
+                }
             }
+            else
+            {
+                switch (toke)
+                {
+
+                    case "variable":
+                        Variable.Lista_variables(actual.ChildNodes[1]);
+                        break;
+                    case "constante":
+                        Variable.Lista_Constante(actual.ChildNodes[1]);
+                        break;
+                }
+            }
+
+
         }
 
         public void Instrucciones(ParseTreeNode entrada)
@@ -136,6 +166,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.For(actual);
                 case "asignacion":
                     return Asignaciones.Tipo_asignacion(actual);
+                case "llamada_funciones":
+                    return Main.Llamada_Funcion(actual);
                 default:
                     break;
             }
