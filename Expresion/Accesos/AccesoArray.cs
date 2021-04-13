@@ -86,9 +86,9 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             Master.getInstancia.addGetHeap(valor, posicion_absoluta);
             if(simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
-                return new Retorno(valor, true, simbolo_aux.objeto, sym);
+                return new Retorno(valor, true, simbolo_aux.objeto, sym, posicion_absoluta);
             }
-            Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym);
+            Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym, posicion_absoluta);
             this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
             Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
@@ -160,11 +160,15 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             }
             else if (atributo.atributo.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
-                return new Retorno(valor, true, atributo.atributo.getObjeto());
+                return new Retorno(valor, true, atributo.atributo.getObjeto(),
+                    new Simbolo(this.id, atributo.atributo.getObjeto(),
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false), pos_heap);
             }
             
 
-            Retorno retorno = new Retorno("", false, atributo.atributo.getObjeto());
+            Retorno retorno = new Retorno("", false, atributo.atributo.getObjeto(),
+                new Simbolo(this.id, atributo.atributo.getObjeto(),
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false), pos_heap);
             this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
             Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
@@ -196,9 +200,14 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                 Master.getInstancia.addGetHeap(valor, posicion_absoluta);
                 if (simboloArreglo.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
                 {
-                    return new Retorno(valor, true, simboloArreglo.objeto);
+                    return new Retorno(valor, true, simboloArreglo.objeto,
+                        new Simbolo(this.id, simboloArreglo.objeto,
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false), posicion_absoluta);
                 }
-                Retorno retorno = new Retorno("", false, simboloArreglo.objeto);
+                Retorno retorno = new Retorno("", false, simboloArreglo.objeto,
+                    new Simbolo(this.id, simboloArreglo.objeto,
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false), posicion_absoluta);
+
                 this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
                 this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
                 Master.getInstancia.addif(valor, "1", "==", this.trueLabel);

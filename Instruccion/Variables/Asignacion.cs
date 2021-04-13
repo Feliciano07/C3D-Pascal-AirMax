@@ -42,17 +42,37 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
                 if (asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
                 {
-                    // Asigna un valor a un valor booleano
-                    string aux = Master.getInstancia.newLabel();
-                    Master.getInstancia.addLabel(value.trueLabel);
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
-                    Master.getInstancia.addSetStack(posicion_stack, "1");
-                    Master.getInstancia.addGoto(aux);
-                    Master.getInstancia.addLabel(value.falseLabel);
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
-                    Master.getInstancia.addSetStack(posicion_stack, "0");
-                    Master.getInstancia.addLabel(aux);
-                    return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    if(simbolo.isReferencia == false)
+                    {
+                        string aux = Master.getInstancia.newLabel();
+                        Master.getInstancia.addLabel(value.trueLabel);
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addSetStack(posicion_stack, "1");
+                        Master.getInstancia.addGoto(aux);
+                        Master.getInstancia.addLabel(value.falseLabel);
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addSetStack(posicion_stack, "0");
+                        Master.getInstancia.addLabel(aux);
+                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    }
+                    else
+                    {
+                        string posicion_real = Master.getInstancia.newTemporalEntero();
+                        string aux = Master.getInstancia.newLabel();
+                        Master.getInstancia.addLabel(value.trueLabel);
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addGetStack(posicion_real, posicion_stack);
+                        Master.getInstancia.addSetStack(posicion_real, "1");
+                        Master.getInstancia.addGoto(aux);
+                        Master.getInstancia.addLabel(value.falseLabel);
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addGetStack(posicion_real, posicion_stack);
+                        Master.getInstancia.addSetStack(posicion_real, "0");
+                        Master.getInstancia.addLabel(aux);
+                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    }
+                    
+                    
                 }else if(asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
                     // asigna un objeto con otro objeto
@@ -60,8 +80,12 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     string inicial = Master.getInstancia.newTemporalEntero();
                     Master.getInstancia.addGetStack(inicial, posicion_stack);
                     Copiar_Objeto(asig.getObjeto().symObj, inicial, value.getValor());
+
+                    //TODO: falta ver objeto por referencia
+
                 }else if(asig.getTipo() == Objeto.TipoObjeto.ARRAY)
                 {
+                    //TODO: falta ver objeto por referencia
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                     string inicial = Master.getInstancia.newTemporal();
                     Master.getInstancia.addGetStack(inicial, posicion_stack);
@@ -69,9 +93,22 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 }
                 else
                 {
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
-                    Master.getInstancia.addSetStack(posicion_stack, value.getValor());
-                    return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    if(simbolo.isReferencia == false)
+                    {
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addSetStack(posicion_stack, value.getValor());
+                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    }
+                    else
+                    {
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        string posicion_real = Master.getInstancia.newTemporalEntero();
+                        Master.getInstancia.addGetStack(posicion_real, posicion_stack);
+                        Master.getInstancia.addSetStack(posicion_real, value.getValor());
+                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    }
+
+                   
                 }
             }else if(simbolo.pointer == Simbolo.Pointer.HEAP)
             {

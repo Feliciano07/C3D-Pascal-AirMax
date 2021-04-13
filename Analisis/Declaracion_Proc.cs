@@ -162,6 +162,9 @@ namespace C3D_Pascal_AirMax.Analisis
                 case "writeln":
                     lista.AddLast(Main.Inst_Write(actual, true));
                     break;
+                case "asignacion":
+                    lista.AddLast(Asignaciones.Tipo_asignacion(actual));
+                    break;
             }
         }
 

@@ -25,6 +25,7 @@ namespace C3D_Pascal_AirMax.Enviroment
         public Pointer pointer;
         private string entorno;
         private bool isGlobal;
+        public bool isReferencia;
 
         // para guardar variables locales
         public Simbolo(string id, Objeto tipo, Rol rol, Pointer pointer, int posicion, string entorno, bool global)

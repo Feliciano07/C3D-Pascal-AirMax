@@ -45,28 +45,60 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                  * (primitivo)tem: guarda el valor como tal de la variable
                  * (types)tem: guarda la posicion de donde inicia en el heap
                  */
-                string tem = Master.getInstancia.newTemporal();
-                // guarda la posicion en el stack donde esta almacena la variable
-                string posicion_stack = Master.getInstancia.newTemporalEntero();
-                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
+                
 
-                if (sym.getGlobal())
+                if(sym.isReferencia == false)
                 {
-                    Master.getInstancia.addGetStack(tem, posicion_stack);
-
-                    if(sym.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                    string tem = Master.getInstancia.newTemporal();
+                    // guarda la posicion en el stack donde esta almacena la variable
+                    string posicion_stack = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
+                    if (sym.getGlobal())
                     {
-                        return new Retorno(tem, true, sym.getObjeto(), sym);
+                        Master.getInstancia.addGetStack(tem, posicion_stack);
+
+                        if (sym.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                        {
+                            return new Retorno(tem, true, sym.getObjeto(), sym, posicion_stack);
+                        }
+                        Retorno retorno = new Retorno("", false, sym.getObjeto(), sym, posicion_stack);
+                        this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+                        this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+                        Master.getInstancia.addif(tem, "1", "==", this.trueLabel);
+                        Master.getInstancia.addGoto(this.falseLabel);
+                        retorno.trueLabel = this.trueLabel;
+                        retorno.falseLabel = this.falseLabel;
+                        return retorno;
                     }
-                    Retorno retorno = new Retorno("", false, sym.getObjeto(), sym);
-                    this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
-                    this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
-                    Master.getInstancia.addif(tem, "1", "==", this.trueLabel);
-                    Master.getInstancia.addGoto(this.falseLabel);
-                    retorno.trueLabel = this.trueLabel;
-                    retorno.falseLabel = this.falseLabel;
-                    return retorno;
                 }
+                else
+                {
+                    string tem = Master.getInstancia.newTemporalEntero();
+                    // guarda la posicion en el stack donde esta almacena la variable
+                    string posicion_stack = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
+                    if (sym.getGlobal())
+                    {
+                        Master.getInstancia.addGetStack(tem, posicion_stack);
+                        string posicion_correcta = Master.getInstancia.newTemporalEntero();
+                        Master.getInstancia.addGetStack(posicion_correcta, tem);
+
+                        if (sym.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                        {
+                            return new Retorno(posicion_correcta, true, sym.getObjeto(), sym, posicion_stack);
+                        }
+                        Retorno retorno = new Retorno("", false, sym.getObjeto(), sym, posicion_stack);
+                        this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+                        this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+                        Master.getInstancia.addif(posicion_correcta, "1", "==", this.trueLabel);
+                        Master.getInstancia.addGoto(this.falseLabel);
+                        retorno.trueLabel = this.trueLabel;
+                        retorno.falseLabel = this.falseLabel;
+                        return retorno;
+                    }
+                }
+
+                
             }
             else
             {
@@ -113,10 +145,15 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             Master.getInstancia.addGetHeap(valor, pos_heap);
             if (atributo.atributo.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
-                return new Retorno(valor, true, atributo.atributo.getObjeto());
+                return new Retorno(valor, true, atributo.atributo.getObjeto(),
+                    new Simbolo(this.id, atributo.atributo.getObjeto(),
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false), pos_heap);
             }
 
-            Retorno retorno = new Retorno("", false, atributo.atributo.getObjeto());
+            Retorno retorno = new Retorno("", false, atributo.atributo.getObjeto(),
+                new Simbolo(this.id, atributo.atributo.getObjeto(),
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false), pos_heap);
+
             this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
             Master.getInstancia.addif(valor, "1", "==", this.trueLabel);

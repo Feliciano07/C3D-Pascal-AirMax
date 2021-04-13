@@ -66,7 +66,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
             
             foreach(Parametro parametro in this.parametros)
             {
-                entorno.addSimbolo(parametro.id, parametro.objeto, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                entorno.addSimboloFuncion(parametro.id, parametro.objeto, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
             }
         }
 

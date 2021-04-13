@@ -14,6 +14,7 @@ namespace C3D_Pascal_AirMax.Manejador
         public string trueLabel;
         public string falseLabel;
         public Simbolo sym;
+        public string posicion;
         // constante
         public Retorno(string valor, bool temp, Objeto objeto)
         {
@@ -29,6 +30,16 @@ namespace C3D_Pascal_AirMax.Manejador
             this.objeto = objeto;
             this.trueLabel = this.falseLabel = "";
             this.sym = simbolo;
+        }
+
+        public Retorno(string valor, bool temp, Objeto objeto, Simbolo simbolo, string posicion)
+        {
+            this.valor = valor;
+            this.isTemp = temp;
+            this.objeto = objeto;
+            this.trueLabel = this.falseLabel = "";
+            this.sym = simbolo;
+            this.posicion = posicion;
         }
 
         public string getValor()

@@ -2,6 +2,7 @@
 using C3D_Pascal_AirMax.Enviroment;
 using C3D_Pascal_AirMax.Manejador;
 using C3D_Pascal_AirMax.TipoDatos;
+using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -39,7 +40,9 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             //TODO: tengo que mandar a guardar mis temporales, cuando se hace una llamada
 
             string temp = Master.getInstancia.newTemporalEntero();
-            this.getValores(entorno, temp);
+            Master.getInstancia.addComentario("simulacion de cambio de entorno");
+
+            this.getValores(entorno, temp, simboloFuncion);
             /*
              * Cambio del entorno formal
              */
@@ -54,41 +57,83 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             return this.Devolver_valor_funcion(tem2, simboloFuncion);
         }
 
-        public void getValores(Entorno entorno, string temp)
+        public void getValores(Entorno entorno, string temp, SimboloFuncion simboloFuncion)
         {
-            LinkedList<Retorno> valores_parametro = new LinkedList<Retorno>();
+            
             if(this.parametros.Count > 0)
             {
+                Parametro[] aux_para = new Parametro[this.parametros.Count];
+                simboloFuncion.parametros.CopyTo(aux_para, 0);
                 Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, entorno.size.ToString(), "+");
+                int contador = 0;
                 foreach (Nodo instruccion in this.parametros)
                 {
 
                     Retorno retorno = instruccion.compilar(entorno);
-                    this.Simulacion_Entorno(entorno, retorno, temp);
+                    this.Simulacion_Entorno(entorno, retorno, temp, aux_para[contador]);
+                    contador++;
                 }
             }
             
             
         }
 
-        public void Simulacion_Entorno(Entorno entorno, Retorno aux, string temp)
+        public void Simulacion_Entorno(Entorno entorno, Retorno aux, string temp, Parametro parametro)
         {
-            if (aux.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
+            if(parametro.param == Parametro.Tipo_Parametro.VALOR)
             {
-                Master.getInstancia.addBinaria(temp, temp, "1", "+");
-                Master.getInstancia.addSetStack(temp, aux.getValor());
+                if(aux.getObjeto().getTipo() == Objeto.TipoObjeto.OBJECTS)
+                {
+
+                }else if(aux.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
+                {
+
+                }
+                else if (aux.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                {
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, aux.getValor());
+                }
+                else
+                {
+                    string salida = Master.getInstancia.newLabel();
+                    Master.getInstancia.addLabel(aux.trueLabel);
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, "1");
+                    Master.getInstancia.addGoto(salida);
+                    Master.getInstancia.addLabel(aux.falseLabel);
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, "0");
+                    Master.getInstancia.addLabel(salida);
+                }
             }
             else
             {
-                string salida = Master.getInstancia.newLabel();
-                Master.getInstancia.addLabel(aux.trueLabel);
-                Master.getInstancia.addBinaria(temp, temp, "1", "+");
-                Master.getInstancia.addSetStack(temp, "1");
-                Master.getInstancia.addGoto(salida);
-                Master.getInstancia.addLabel(aux.falseLabel);
-                Master.getInstancia.addBinaria(temp, temp, "1", "+");
-                Master.getInstancia.addSetStack(temp, "0");
-                Master.getInstancia.addLabel(salida);
+                if (aux.getObjeto().getTipo() == Objeto.TipoObjeto.OBJECTS)
+                {
+
+                }
+                else if (aux.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
+                {
+
+                }
+                else if (aux.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                {
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, aux.posicion);
+                }
+                else
+                {
+                    string salida = Master.getInstancia.newLabel();
+                    Master.getInstancia.addLabel(aux.trueLabel);
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, aux.posicion);
+                    Master.getInstancia.addGoto(salida);
+                    Master.getInstancia.addLabel(aux.falseLabel);
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, aux.posicion);
+                    Master.getInstancia.addLabel(salida);
+                }
             }
         }
 
