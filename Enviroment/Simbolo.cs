@@ -37,6 +37,7 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.posicion = posicion;
             this.entorno = entorno;
             this.isGlobal = global;
+            this.isReferencia = false;
         }
 
 

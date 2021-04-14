@@ -51,7 +51,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                     string valor = Master.getInstancia.newTemporal();
                     string posicion_stack = Master.getInstancia.newTemporalEntero();
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
-                    Master.getInstancia.addGetStack(valor, sym.getPosicion());
+                    Master.getInstancia.addGetStack(valor, posicion_stack);
                     if (sym.getTipo() != Objeto.TipoObjeto.BOOLEAN)
                     {
                         return new Retorno(valor, true, sym.getObjeto(), sym, posicion_stack);
@@ -73,7 +73,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                         string valor = Master.getInstancia.newTemporal();
                         string posicion_stack = Master.getInstancia.newTemporalEntero();
                         Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
-                        Master.getInstancia.addGetStack(valor, sym.getPosicion());
+                        Master.getInstancia.addGetStack(valor, posicion_stack);
                         if (sym.getTipo() != Objeto.TipoObjeto.BOOLEAN)
                         {
                             return new Retorno(valor, true, sym.getObjeto(), sym, posicion_stack);
@@ -137,7 +137,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
 
             if(sym.getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
-                return new Retorno(valor, true, sym.getObjeto(), sym, posicion_stack);
+                return new Retorno(valor, true, sym.getObjeto(), sym, posicion);
             }
 
             Retorno retorno = new Retorno("", false, sym.getObjeto(), sym, posicion_stack);
@@ -178,6 +178,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
              * (primitivo) valor = guarda el valor como tal del atributo
              * (types) valor = guarda una posicion en el heap del atributo
              */
+
             Master.getInstancia.addGetHeap(valor, pos_heap);
             if (atributo.atributo.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
@@ -197,6 +198,39 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             retorno.trueLabel = this.trueLabel;
             retorno.falseLabel = this.falseLabel;
             return retorno;
+
+
+        }
+
+        public string Obtener_Posicion_Referencia(Simbolo sym)
+        {
+            string posicion_stack = Master.getInstancia.newTemporalEntero();
+            string valor = Master.getInstancia.newTemporal();
+            string posicion = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, (sym.posicion + 1).ToString(), "+");
+            Master.getInstancia.addGetStack(valor, posicion_stack);
+
+            string label_true = Master.getInstancia.newLabel();
+            string label_false = Master.getInstancia.newLabel();
+            string salida = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addBinaria(posicion_stack, posicion_stack, "1", "-");
+            Master.getInstancia.addGetStack(posicion, posicion_stack);
+
+            Master.getInstancia.addif(valor, "0", "==", label_true);
+            Master.getInstancia.addGoto(label_false);
+
+            Master.getInstancia.addLabel(label_true);
+            Master.getInstancia.addGetStack(valor, posicion);
+
+            Master.getInstancia.addGoto(salida);
+
+            Master.getInstancia.addLabel(label_false);
+            Master.getInstancia.addGetHeap(valor, posicion);
+
+            Master.getInstancia.addLabel(salida);
+
+            return valor;
         }
 
     }

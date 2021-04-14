@@ -64,38 +64,133 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                 throw new Exception("No existe la variable: " + this.id);
             }
 
-            SimboloArreglo simbolo_aux = sym.getObjeto().symArray;
-
-            // me ubico en la posicion del stack donde esta la variable
-            string posicion_stack = Master.getInstancia.newTemporalEntero();
-            string posicion_heap = Master.getInstancia.newTemporalEntero();
-            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
-
-
-            // obtengo la posicion del heap que se guardaba en el stack
-            Master.getInstancia.addGetStack(posicion_heap, posicion_stack);
-
-            string posicion_arreglo = Ubicar_posicion(entorno, simbolo_aux);
-
-            string posicion_absoluta = Master.getInstancia.newTemporalEntero();
-
-            Master.getInstancia.addBinaria(posicion_absoluta, posicion_heap, posicion_arreglo, "+");
-
-            //extraemos el valor del heap
-            string valor = Master.getInstancia.newTemporal();
-            Master.getInstancia.addGetHeap(valor, posicion_absoluta);
-            if(simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+            if (sym.getGlobal())
             {
-                return new Retorno(valor, true, simbolo_aux.objeto, sym, posicion_absoluta);
+                SimboloArreglo simbolo_aux = sym.getObjeto().symArray;
+
+                // me ubico en la posicion del stack donde esta la variable
+                string posicion_stack = Master.getInstancia.newTemporalEntero();
+                string posicion_heap = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
+
+
+                // obtengo la posicion del heap que se guardaba en el stack
+                Master.getInstancia.addGetStack(posicion_heap, posicion_stack);
+
+                string posicion_arreglo = Ubicar_posicion(entorno, simbolo_aux);
+
+                string posicion_absoluta = Master.getInstancia.newTemporalEntero();
+
+                Master.getInstancia.addBinaria(posicion_absoluta, posicion_heap, posicion_arreglo, "+");
+
+                //extraemos el valor del heap
+                string valor = Master.getInstancia.newTemporal();
+                Master.getInstancia.addGetHeap(valor, posicion_absoluta);
+                if (simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                {
+                    return new Retorno(valor, true, simbolo_aux.objeto, sym, posicion_absoluta);
+                }
+                Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym, posicion_absoluta);
+                this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+                this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+                Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
+                Master.getInstancia.addGoto(this.falseLabel);
+                retorno.trueLabel = this.trueLabel;
+                retorno.falseLabel = this.falseLabel;
+                return retorno;
             }
-            Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym, posicion_absoluta);
-            this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
-            this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
-            Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
-            Master.getInstancia.addGoto(this.falseLabel);
-            retorno.trueLabel = this.trueLabel;
-            retorno.falseLabel = this.falseLabel;
-            return retorno;
+            else
+            {
+                if(sym.isReferencia == false)
+                {
+                    SimboloArreglo simbolo_aux = sym.getObjeto().symArray;
+
+                    // me ubico en la posicion del stack donde esta la variable
+                    string posicion_stack = Master.getInstancia.newTemporalEntero();
+                    string posicion_heap = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
+
+
+                    // obtengo la posicion del heap que se guardaba en el stack
+                    Master.getInstancia.addGetStack(posicion_heap, posicion_stack);
+
+                    string posicion_arreglo = Ubicar_posicion(entorno, simbolo_aux);
+
+                    string posicion_absoluta = Master.getInstancia.newTemporalEntero();
+
+                    Master.getInstancia.addBinaria(posicion_absoluta, posicion_heap, posicion_arreglo, "+");
+
+                    //extraemos el valor del heap
+                    string valor = Master.getInstancia.newTemporal();
+                    Master.getInstancia.addGetHeap(valor, posicion_absoluta);
+                    if (simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                    {
+                        return new Retorno(valor, true, simbolo_aux.objeto, sym, posicion_absoluta);
+                    }
+                    Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym, posicion_absoluta);
+                    this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+                    this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+                    Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
+                    Master.getInstancia.addGoto(this.falseLabel);
+                    retorno.trueLabel = this.trueLabel;
+                    retorno.falseLabel = this.falseLabel;
+                    return retorno;
+                }
+                else
+                {
+                    SimboloArreglo simbolo_aux = sym.getObjeto().symArray;
+                    string posicion_arreglo = Ubicar_posicion(entorno, simbolo_aux);
+                    string posicion_x = Variable_Referencia(sym);
+                    string posicion_absoluta = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addBinaria(posicion_absoluta, posicion_x, posicion_arreglo, "+");
+                    string valor = Master.getInstancia.newTemporal();
+                    Master.getInstancia.addGetHeap(valor, posicion_absoluta);
+                    if (simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
+                    {
+                        return new Retorno(valor, true, simbolo_aux.objeto, sym, posicion_absoluta);
+                    }
+                    Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym, posicion_absoluta);
+                    this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+                    this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+                    Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
+                    Master.getInstancia.addGoto(this.falseLabel);
+                    retorno.trueLabel = this.trueLabel;
+                    retorno.falseLabel = this.falseLabel;
+                    return retorno;
+                }
+            }
+
+
+        }
+
+        public string Variable_Referencia(Simbolo sym)
+        {
+            string posicion_stack = Master.getInstancia.newTemporalEntero();
+            string valor = Master.getInstancia.newTemporal();
+            string posicion = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, (sym.posicion + 1).ToString(), "+");
+            Master.getInstancia.addGetStack(valor, posicion_stack);
+
+            string label_true = Master.getInstancia.newLabel();
+            string label_false = Master.getInstancia.newLabel();
+            string salida = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addBinaria(posicion_stack, posicion_stack, "1", "-");
+            Master.getInstancia.addGetStack(posicion, posicion_stack);
+
+            Master.getInstancia.addif(valor, "0", "==", label_true);
+            Master.getInstancia.addGoto(label_false);
+
+            Master.getInstancia.addLabel(label_true);
+            Master.getInstancia.addGetStack(valor, posicion);
+
+            Master.getInstancia.addGoto(salida);
+
+            Master.getInstancia.addLabel(label_false);
+            Master.getInstancia.addGetHeap(valor, posicion);
+
+            Master.getInstancia.addLabel(salida);
+            return valor;
         }
 
         public string Ubicar_posicion(Entorno entorno, SimboloArreglo arreglo)

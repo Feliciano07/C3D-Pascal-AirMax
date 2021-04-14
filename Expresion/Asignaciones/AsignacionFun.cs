@@ -126,11 +126,17 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
         {
             if (aux.getObjeto().getTipo() == Objeto.TipoObjeto.OBJECTS)
             {
-
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, aux.posicion);
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, "0");
             }
             else if (aux.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
             {
-
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, aux.posicion);
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, "0");
             }
             else if (aux.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
@@ -161,11 +167,17 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
         {
             if (aux.getObjeto().getTipo() == Objeto.TipoObjeto.OBJECTS)
             {
-
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, aux.posicion);
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, "1");
             }
             else if (aux.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
             {
-
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, aux.posicion);
+                Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                Master.getInstancia.addSetStack(temp, "1");
             }
             else if (aux.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
             {
