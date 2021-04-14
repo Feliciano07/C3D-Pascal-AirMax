@@ -41,11 +41,15 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                     throw new Exception("No existe la variable: " + this.id);
                 }
 
-
                 if (sym.getGlobal())
                 {
 
                     return new Retorno(sym.getPosicion(), false, sym.getObjeto(),sym);
+                }
+                else
+                {
+                    return new Retorno(sym.getPosicion(), false, sym.getObjeto(), sym);
+
                 }
             }
             else

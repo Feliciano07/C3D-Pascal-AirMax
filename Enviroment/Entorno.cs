@@ -67,13 +67,13 @@ namespace C3D_Pascal_AirMax.Enviroment
             }
             this.size++;
             Simbolo simbolo = new Simbolo(id, tipo, rol, pointer, this.size, this.nombre_entorno,
-                true);
+                 this.anterior == null ? true : false);
             simbolo.isReferencia = false;
             this.variables.Add(id, simbolo);
             return simbolo;
         }
 
-        public Simbolo addSimboloFuncion(string id, Objeto tipo, Simbolo.Rol rol, Simbolo.Pointer pointer)
+        public Simbolo addSimboloFuncion(string id, Objeto tipo, Simbolo.Rol rol, Simbolo.Pointer pointer, Parametro.Tipo_Parametro tipo_Parametro)
         {
             id = id.ToLower();
             if (this.variables.ContainsKey(id) == true)
@@ -82,8 +82,16 @@ namespace C3D_Pascal_AirMax.Enviroment
             }
             this.size++;
             Simbolo simbolo = new Simbolo(id, tipo, rol, pointer, this.size, this.nombre_entorno,
-                true);
-            simbolo.isReferencia = true;
+                 this.anterior == null ? true : false);
+            this.size++;
+            if(tipo_Parametro == Parametro.Tipo_Parametro.VALOR)
+            {
+                simbolo.isReferencia = false;
+            }
+            else
+            {
+                simbolo.isReferencia = true;
+            }
             this.variables.Add(id, simbolo);
             return simbolo;
         }
