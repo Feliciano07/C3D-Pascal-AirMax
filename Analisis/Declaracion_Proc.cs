@@ -162,8 +162,36 @@ namespace C3D_Pascal_AirMax.Analisis
                 case "writeln":
                     lista.AddLast(Main.Inst_Write(actual, true));
                     break;
+                case "ifthen":
+                    lista.AddLast(Main.Instruccion_IfThen(actual));
+                    break;
+                case "ifelse":
+                    lista.AddLast(Main.Instruccion_Ifelse(actual));
+                    break;
+                case "caseof":
+                    lista.AddLast(Main.Instruccion_case_of(actual.ChildNodes[0]));
+                    break;
+                case "whiledo":
+                    lista.AddLast(Main.Instruccion_While(actual));
+                    break;
+                case "repeat":
+                    lista.AddLast(Main.Repeat(actual));
+                    break;
+                case "no_for":
+                    lista.AddLast(Main.For(actual));
+                    break;
                 case "asignacion":
                     lista.AddLast(Asignaciones.Tipo_asignacion(actual));
+                    break;
+                //TODO: sentencias de transferencia
+                case "sentencia_case":
+                    lista.AddLast(Main.Instruccion_case_of(actual));
+                    break;
+                case "sentencia_while":
+                    lista.AddLast(Main.Instruccion_While_If(actual));
+                    break;
+                case "sentencia_repeat":
+                    lista.AddLast(Main.Repeat(actual));
                     break;
             }
         }

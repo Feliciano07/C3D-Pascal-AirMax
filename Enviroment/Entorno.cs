@@ -83,13 +83,14 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.size++;
             Simbolo simbolo = new Simbolo(id, tipo, rol, pointer, this.size, this.nombre_entorno,
                  this.anterior == null ? true : false);
-            this.size++;
+            
             if(tipo_Parametro == Parametro.Tipo_Parametro.VALOR)
             {
                 simbolo.isReferencia = false;
             }
             else
             {
+                this.size++;
                 simbolo.isReferencia = true;
             }
             this.variables.Add(id, simbolo);
