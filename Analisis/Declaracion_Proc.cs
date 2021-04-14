@@ -183,7 +183,15 @@ namespace C3D_Pascal_AirMax.Analisis
                 case "asignacion":
                     lista.AddLast(Asignaciones.Tipo_asignacion(actual));
                     break;
-                //TODO: sentencias de transferencia
+                case "continue":
+                    lista.AddLast(Sentencias.Sentencia_Continue(actual));
+                    break;
+                case "break":
+                    lista.AddLast(Sentencias.Sentencia_break(actual));
+                    break;
+                case "exit":
+                    lista.AddLast(Sentencias.Sentencia_Exit(actual));
+                    break;
                 case "sentencia_case":
                     lista.AddLast(Main.Instruccion_case_of(actual));
                     break;

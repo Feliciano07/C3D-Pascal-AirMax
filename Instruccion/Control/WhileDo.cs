@@ -26,6 +26,11 @@ namespace C3D_Pascal_AirMax.Instruccion.Control
 
             if (retorno.getTipo() == TipoDatos.Objeto.TipoObjeto.BOOLEAN)
             {
+                //Guardo el retorno que sirve como continue
+                //Guardo el label_false que sirve como brea;
+                entorno.setContinue(label_retorno);
+                entorno.setBreak(retorno.falseLabel);
+
                 Master.getInstancia.addComentario("Inicia el while do");
                 
                 Master.getInstancia.addLabel(retorno.trueLabel);

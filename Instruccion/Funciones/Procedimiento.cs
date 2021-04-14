@@ -43,8 +43,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
 
             Entorno entorno_fun = new Entorno(entorno, this.id);
             string label_return = Master.getInstancia.newLabel();
-
-            
+            entorno_fun.setFuncion(this.id, simboloFuncion, label_return);
 
             this.Agregar_variables(entorno_fun);
 

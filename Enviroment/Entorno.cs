@@ -19,8 +19,15 @@ namespace C3D_Pascal_AirMax.Enviroment
         public int size;
         private Entorno anterior;
 
+        //Para manejar algo de master
         private SimboloFuncion actual_funcion;
-        private string label_return;
+        public string label_return;
+
+        //Para manejar los break y continue
+
+        public Stack<string> label_break;
+        public Stack<string> label_continue;
+
 
         public Entorno( string nombre)
         {
@@ -28,6 +35,10 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.objetos = new Dictionary<string, SimboloObjeto>();
             this.arreglos = new Dictionary<string, SimboloArreglo>();
             this.funciones = new Dictionary<string, SimboloFuncion>();
+
+            this.label_break = new Stack<string>();
+            this.label_continue = new Stack<string>();
+
             this.nombre_entorno = nombre;
             this.size = 0;
             this.anterior = null;
@@ -39,6 +50,10 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.objetos = new Dictionary<string, SimboloObjeto>();
             this.arreglos = new Dictionary<string, SimboloArreglo>();
             this.funciones = new Dictionary<string, SimboloFuncion>();
+
+            this.label_break = new Stack<string>();
+            this.label_continue = new Stack<string>();
+
             this.nombre_entorno = nombre;
             this.size = 0;
             this.anterior = anterior;
@@ -190,6 +205,25 @@ namespace C3D_Pascal_AirMax.Enviroment
             SimboloFuncion funcion;
             this.funciones.TryGetValue(id, out funcion);
             return funcion;
+        }
+
+        public void setBreak(string label)
+        {
+            this.label_break.Push(label);
+        }
+        public string getBreak()
+        {
+            return this.label_break.Pop();
+        }
+
+        public void setContinue(string label)
+        {
+            this.label_continue.Push(label);
+        }
+
+        public string getContinue()
+        {
+            return this.label_continue.Pop();
         }
 
         public SimboloFuncion searchFuncion(string id)

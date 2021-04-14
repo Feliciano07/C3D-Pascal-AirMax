@@ -87,7 +87,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 {
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                     Master.getInstancia.addSetStack(posicion_stack, value.getValor());
-                    return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    return new Retorno(posicion_stack, false, simbolo.getObjeto(), simbolo);
 
                 }
             }
@@ -156,7 +156,6 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     }
                     else
                     {
-                        //TODO: falta ver booleano por referencia local
                         Asignar_referencia_booleano(simbolo, value);
 
                     }
@@ -201,7 +200,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     {
                         Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                         Master.getInstancia.addSetStack(posicion_stack, value.getValor());
-                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                        return new Retorno(posicion_stack, false, simbolo.getObjeto(), simbolo);
                     }
                     else
                     {

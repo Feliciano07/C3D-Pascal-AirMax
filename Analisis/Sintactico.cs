@@ -166,8 +166,14 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.For(actual);
                 case "asignacion":
                     return Asignaciones.Tipo_asignacion(actual);
+                case "continue":
+                    return Sentencias.Sentencia_Continue(actual);
+                case "break":
+                    return Sentencias.Sentencia_break(actual);
                 case "llamada_funciones":
                     return Main.Llamada_Funcion(actual);
+                case "exit":
+                    return Sentencias.Sentencia_Exit(actual);
                 default:
                     break;
             }

@@ -40,7 +40,6 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 throw new Exception("Tipos de datos diferentes: " + valor.getTipo().ToString() + "," + this.tipo.ToString());
             }
 
-            //TODO: solo se crean constante globales, falta ver como crear constantes locales
 
             Simbolo newVar = entorno.addSimbolo(this.nombre, new Objeto(this.tipo), Simbolo.Rol.CONSTANTE, Simbolo.Pointer.STACK);
             if (newVar == null)

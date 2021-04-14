@@ -28,7 +28,6 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
         }
 
-        //TODO: falta manejar variables locales
         public override Retorno compilar(Entorno entorno)
         {
             /*

@@ -127,13 +127,18 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.For_if(actual);
                 case "asignacion":
                     return Asignaciones.Tipo_asignacion(actual);
-                //TODO: falta mas intrucciones
+                case "continue":
+                    return Sentencias.Sentencia_Continue(actual);
+                case "break":
+                    return Sentencias.Sentencia_break(actual);
                 case "no_for":
                     return Main.For(actual);
                 case "whiledo":
                     return Main.Instruccion_While(actual);
                 case "repeat":
                     return Main.Repeat(actual);
+                case "exit":
+                    return Sentencias.Sentencia_Exit(actual);
                 default:
                     break;
             }
@@ -411,7 +416,10 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.For(actual);
                 case "asignacion":
                     return Asignaciones.Tipo_asignacion(actual);
-                //TODO: aqui van mas instrucciones
+                case "continue":
+                    return Sentencias.Sentencia_Continue(actual);
+                case "break":
+                    return Sentencias.Sentencia_break(actual);
                 case "opcion_else":
                     return Main.Opcion_else(actual);
                 case "sentencia_case":
@@ -422,6 +430,8 @@ namespace C3D_Pascal_AirMax.Analisis
                     return Main.Repeat(actual);
                 case "sentencia_for":
                     return Main.For_if(actual);
+                case "exit":
+                    return Sentencias.Sentencia_Exit(actual);
             }
             return null;
         }
