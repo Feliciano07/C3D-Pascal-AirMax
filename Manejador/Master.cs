@@ -10,9 +10,20 @@ namespace C3D_Pascal_AirMax.Manejador
     public sealed class Master
     {
         private static readonly Master instancia = new Master();
+
+
+        // Maneja lo que esta en el body
         private LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
+        //  Maneja variables, types
         private LinkedList<Nodo> compilacion = new LinkedList<Nodo>();
+        // Contiene funciones y procedimientos
+        private LinkedList<Nodo> compilar_funcion = new LinkedList<Nodo>();
+        // Maneja funciones nativas
         public LinkedList<Nodo> nativas = new LinkedList<Nodo>();
+
+        public LinkedList<Nodo> types_objetos = new LinkedList<Nodo>();
+
+
         private LinkedList<Error> lista_errores = new LinkedList<Error>();
 
         private int temporal = 0;
@@ -50,6 +61,16 @@ namespace C3D_Pascal_AirMax.Manejador
             this.compilacion.AddLast(nodo);
         }
 
+        public void compilar_fun(Nodo nodo)
+        {
+            this.compilar_funcion.AddLast(nodo);
+        }
+
+        public void addTypes(Nodo nodo)
+        {
+            this.types_objetos.AddLast(nodo);
+        }
+
         public void addError(Error error)
         {
             this.lista_errores.AddLast(error);
@@ -71,12 +92,42 @@ namespace C3D_Pascal_AirMax.Manejador
                 node.compilar(null);
             }
         }
+
         /*
          * Ejecuta el flujo basico del programa
          */
         public void ejecutar()
         {
             Entorno entorno = new Entorno("Global");
+
+            /*
+             * Ejecuta las instrucciones que son definicion de types objects y types arrays
+             */
+            foreach(Nodo node in this.types_objetos)
+            {
+                try
+                {
+                    node.compilar(entorno);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+            /*
+             * Ejecuta las instrucciones necesarias para crear las funciones
+             */
+            foreach(Nodo node in this.compilar_funcion)
+            {
+                try
+                {
+                    node.compilar(entorno);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
 
             /*
              * Ejecuta el flujo para que se pueda llenar la tabla de simbolos

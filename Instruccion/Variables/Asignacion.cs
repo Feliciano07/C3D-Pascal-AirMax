@@ -20,6 +20,8 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             this.valor = valor;
         }
 
+        public Asignacion() : base(0, 0) { }
+
         public override Retorno compilar(Entorno entorno)
         {
             Retorno asig = this.variable.compilar(entorno);
@@ -37,12 +39,23 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
             if (simbolo.getGlobal())
             {
-                string posicion_stack = Master.getInstancia.newTemporalEntero();
-                
+                return Asignar_Variable_Global(simbolo, asig, value);
+            }
+            else
+            {
+                return Asignar_Variable_Local(simbolo, asig, value);
+            }
+        }
 
+
+
+        public Retorno Asignar_Variable_Global(Simbolo simbolo, Retorno asig, Retorno value)
+        {
+            if(simbolo.pointer == Simbolo.Pointer.STACK)
+            {
+                string posicion_stack = Master.getInstancia.newTemporalEntero();
                 if (asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
                 {
-                    // Asigna un valor a un valor booleano
                     string aux = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(value.trueLabel);
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
@@ -53,14 +66,17 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Master.getInstancia.addSetStack(posicion_stack, "0");
                     Master.getInstancia.addLabel(aux);
                     return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
-                }else if(asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
                     // asigna un objeto con otro objeto
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                     string inicial = Master.getInstancia.newTemporalEntero();
                     Master.getInstancia.addGetStack(inicial, posicion_stack);
                     Copiar_Objeto(asig.getObjeto().symObj, inicial, value.getValor());
-                }else if(asig.getTipo() == Objeto.TipoObjeto.ARRAY)
+
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.ARRAY)
                 {
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                     string inicial = Master.getInstancia.newTemporal();
@@ -72,46 +88,283 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                     Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
                     Master.getInstancia.addSetStack(posicion_stack, value.getValor());
                     return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
-                }
-            }else if(simbolo.pointer == Simbolo.Pointer.HEAP)
-            {
-                
 
-                if(asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
+                }
+            }
+            else
+            {
+
+                if (asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
                 {
                     string aux = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(value.trueLabel);
-                   /*
-                    * asig.getValor() = retorna la posicion del heap donde esta guardado un atributo
-                    */
+                    /*
+                     * asig.getValor() = retorna la posicion del heap donde esta guardado un atributo
+                     */
                     Master.getInstancia.addSetHeap(asig.getValor(), "1");
                     Master.getInstancia.addGoto(aux);
                     Master.getInstancia.addLabel(value.falseLabel);
-                    
+
                     Master.getInstancia.addSetHeap(asig.getValor(), "0");
                     Master.getInstancia.addLabel(aux);
                     return new Retorno(asig.getValor(), false, simbolo.getObjeto(), simbolo);
-                }else if(asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
                     string posicion_heap = Master.getInstancia.newTemporalEntero();
                     Master.getInstancia.addGetHeap(posicion_heap, asig.getValor());
                     Copiar_Objeto(asig.getObjeto().symObj, posicion_heap, value.getValor());
-                }else if(asig.getTipo() == Objeto.TipoObjeto.ARRAY)
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.ARRAY)
                 {
-                    
+
                     string posicion_heap = Master.getInstancia.newTemporal();
                     Master.getInstancia.addGetHeap(posicion_heap, asig.getValor());
                     Copiar_Arreglo(asig.getObjeto().symArray, posicion_heap, value.getValor());
                 }
                 else
                 {
-                    
+
                     Master.getInstancia.addSetHeap(asig.getValor(), value.getValor());
                     return new Retorno(asig.getValor(), false, simbolo.getObjeto(), simbolo);
                 }
             }
-
             return null;
+        }
+
+
+        public Retorno Asignar_Variable_Local(Simbolo simbolo, Retorno asig, Retorno value)
+        {
+            if (simbolo.pointer == Simbolo.Pointer.STACK)
+            {
+                string posicion_stack = Master.getInstancia.newTemporalEntero();
+
+                if (asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
+                {
+                    if(simbolo.isReferencia == false)
+                    {
+                        string aux = Master.getInstancia.newLabel();
+                        Master.getInstancia.addLabel(value.trueLabel);
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addSetStack(posicion_stack, "1");
+                        Master.getInstancia.addGoto(aux);
+                        Master.getInstancia.addLabel(value.falseLabel);
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addSetStack(posicion_stack, "0");
+                        Master.getInstancia.addLabel(aux);
+                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    }
+                    else
+                    {
+                        //TODO: falta ver booleano por referencia local
+                        Asignar_referencia_booleano(simbolo, value);
+
+                    }
+                    
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
+                {
+                    if(simbolo.isReferencia == false)
+                    {
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        string inicial = Master.getInstancia.newTemporalEntero();
+                        Master.getInstancia.addGetStack(inicial, posicion_stack);
+                        Copiar_Objeto(asig.getObjeto().symObj, inicial, value.getValor());
+                    }
+                    else
+                    {
+                        string inicial = Obtener_Posicion_Referencia(simbolo);
+                        Copiar_Objeto(asig.getObjeto().symObj, inicial, value.getValor());
+                    }
+                    
+
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.ARRAY)
+                {
+                    if(simbolo.isReferencia == false)
+                    {
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        string inicial = Master.getInstancia.newTemporal();
+                        Master.getInstancia.addGetStack(inicial, posicion_stack);
+                        Copiar_Arreglo(asig.getObjeto().symArray, inicial, value.getValor());
+                    }
+                    else
+                    {
+                        string inicial = Obtener_Posicion_Referencia(simbolo);
+                        Copiar_Arreglo(asig.getObjeto().symArray, inicial, value.getValor());
+                    }
+
+                }
+                else
+                {
+                    if(simbolo.isReferencia == false)
+                    {
+                        Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                        Master.getInstancia.addSetStack(posicion_stack, value.getValor());
+                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    }
+                    else
+                    {
+                        Asignar_referencia_primitivo(simbolo, value.getValor());
+                        return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
+                    }
+                    
+
+                }
+
+            }
+            else
+            {
+
+                if (asig.getTipo() == Objeto.TipoObjeto.BOOLEAN)
+                {
+                    string aux = Master.getInstancia.newLabel();
+                    Master.getInstancia.addLabel(value.trueLabel);
+                    /*
+                     * asig.getValor() = retorna la posicion del heap donde esta guardado un atributo
+                     */
+                    Master.getInstancia.addSetHeap(asig.getValor(), "1");
+                    Master.getInstancia.addGoto(aux);
+                    Master.getInstancia.addLabel(value.falseLabel);
+
+                    Master.getInstancia.addSetHeap(asig.getValor(), "0");
+                    Master.getInstancia.addLabel(aux);
+                    return new Retorno(asig.getValor(), false, simbolo.getObjeto(), simbolo);
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
+                {
+                    string posicion_heap = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addGetHeap(posicion_heap, asig.getValor());
+                    Copiar_Objeto(asig.getObjeto().symObj, posicion_heap, value.getValor());
+                }
+                else if (asig.getTipo() == Objeto.TipoObjeto.ARRAY)
+                {
+
+                    string posicion_heap = Master.getInstancia.newTemporal();
+                    Master.getInstancia.addGetHeap(posicion_heap, asig.getValor());
+                    Copiar_Arreglo(asig.getObjeto().symArray, posicion_heap, value.getValor());
+                }
+                else
+                {
+
+                    Master.getInstancia.addSetHeap(asig.getValor(), value.getValor());
+                    return new Retorno(asig.getValor(), false, simbolo.getObjeto(), simbolo);
+                }
+            }
+            return null;
+        }
+
+        public string Obtener_Posicion_Referencia(Simbolo sym)
+        {
+            string posicion_stack = Master.getInstancia.newTemporalEntero();
+            string valor = Master.getInstancia.newTemporal();
+            string posicion = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, (sym.posicion + 1).ToString(), "+");
+            Master.getInstancia.addGetStack(valor, posicion_stack);
+
+            string label_true = Master.getInstancia.newLabel();
+            string label_false = Master.getInstancia.newLabel();
+            string salida = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addBinaria(posicion_stack, posicion_stack, "1", "-");
+            Master.getInstancia.addGetStack(posicion, posicion_stack);
+
+            Master.getInstancia.addif(valor, "0", "==", label_true);
+            Master.getInstancia.addGoto(label_false);
+
+            Master.getInstancia.addLabel(label_true);
+            Master.getInstancia.addGetStack(valor, posicion);
+
+            Master.getInstancia.addGoto(salida);
+
+            Master.getInstancia.addLabel(label_false);
+            Master.getInstancia.addGetHeap(valor, posicion);
+
+            Master.getInstancia.addLabel(salida);
+
+            return valor;
+        }
+
+        public void Asignar_referencia_primitivo(Simbolo simbolo, string valor)
+        {
+            string posicion_stack = Master.getInstancia.newTemporalEntero();
+            string posicion = Master.getInstancia.newTemporalEntero();
+
+            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, (simbolo.posicion + 1).ToString(), "+");
+
+            string tipo = Master.getInstancia.newTemporal();
+
+            Master.getInstancia.addGetStack(tipo, posicion_stack);
+
+            Master.getInstancia.addBinaria(posicion_stack, posicion_stack, "1", "-");
+            Master.getInstancia.addGetStack(posicion, posicion_stack);
+            string label_true = Master.getInstancia.newLabel();
+            string label_false = Master.getInstancia.newLabel();
+            string salida = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addif(tipo, "0", "==", label_true);
+            Master.getInstancia.addGoto(label_false);
+            Master.getInstancia.addLabel(label_true);
+            Master.getInstancia.addSetStack(posicion, valor);
+            Master.getInstancia.addGoto(salida);
+            Master.getInstancia.addLabel(label_false);
+            Master.getInstancia.addSetHeap(posicion, valor);
+            Master.getInstancia.addLabel(salida);
+
+        }
+
+        public void Asignar_referencia_booleano(Simbolo simbolo, Retorno aux)
+        {
+            string posicion_stack = Master.getInstancia.newTemporalEntero();
+            string posicion = Master.getInstancia.newTemporalEntero();
+
+            
+
+            string tipo = Master.getInstancia.newTemporal();
+
+            
+
+            
+
+
+            string label_true = Master.getInstancia.newLabel();
+            string label_false = Master.getInstancia.newLabel();
+            string salida = Master.getInstancia.newLabel();
+            string salida_bool = Master.getInstancia.newLabel();
+
+            string valor = Master.getInstancia.newTemporalEntero();
+
+            Master.getInstancia.addLabel(aux.trueLabel);
+            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, (simbolo.posicion + 1).ToString(), "+");
+            Master.getInstancia.addGetStack(tipo, posicion_stack);
+            Master.getInstancia.addBinaria(posicion_stack, posicion_stack, "1", "-");
+            Master.getInstancia.addGetStack(posicion, posicion_stack);
+
+
+            Master.getInstancia.addUnaria(valor, "1");
+            Master.getInstancia.addGoto(salida_bool);
+
+            Master.getInstancia.addLabel(aux.falseLabel);
+            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, (simbolo.posicion + 1).ToString(), "+");
+            Master.getInstancia.addGetStack(tipo, posicion_stack);
+            Master.getInstancia.addBinaria(posicion_stack, posicion_stack, "1", "-");
+            Master.getInstancia.addGetStack(posicion, posicion_stack);
+
+            Master.getInstancia.addUnaria(valor, "0");
+            Master.getInstancia.addLabel(salida_bool);
+
+
+
+
+
+            Master.getInstancia.addif(tipo, "0", "==", label_true);
+            Master.getInstancia.addGoto(label_false);
+            Master.getInstancia.addLabel(label_true);
+            Master.getInstancia.addSetStack(posicion, valor);
+            Master.getInstancia.addGoto(salida);
+            Master.getInstancia.addLabel(label_false);
+            Master.getInstancia.addSetHeap(posicion, valor);
+            Master.getInstancia.addLabel(salida);
         }
 
 

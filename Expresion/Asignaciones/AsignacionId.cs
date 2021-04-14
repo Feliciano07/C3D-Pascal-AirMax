@@ -41,11 +41,15 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                     throw new Exception("No existe la variable: " + this.id);
                 }
 
-
                 if (sym.getGlobal())
                 {
 
                     return new Retorno(sym.getPosicion(), false, sym.getObjeto(),sym);
+                }
+                else
+                {
+                    return new Retorno(sym.getPosicion(), false, sym.getObjeto(), sym);
+
                 }
             }
             else
@@ -82,25 +86,85 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
              * (primitivo) valor = guarda el valor como tal del atributo
              * (types) valor = guarda una posicion en el heap del atributo
              */
-            if (res_retorno.sym.pointer == Simbolo.Pointer.HEAP)
+
+            if(res_retorno.sym.isReferencia == false)
             {
-                
-                Master.getInstancia.addGetHeap(posicion, res_retorno.getValor());
+                if (res_retorno.sym.pointer == Simbolo.Pointer.HEAP)
+                {
+
+                    Master.getInstancia.addGetHeap(posicion, res_retorno.getValor());
+                }
+                else
+                {
+                    string contador = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addBinaria(contador, Master.getInstancia.stack_p, res_retorno.getValor(), "+");
+                    Master.getInstancia.addGetStack(posicion, contador);
+                }
+
+                Master.getInstancia.addBinaria(valor, posicion, atributo.index.ToString(), "+");
+
+                /*
+                 * retorno el valor y un simbolo que posee la posicion relativa al objeto encontrado
+                 */
+                return new Retorno(valor, true, atributo.atributo.getObjeto(), new Simbolo(this.id, atributo.atributo.getObjeto(),
+                    Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false));
             }
             else
             {
-                string contador = Master.getInstancia.newTemporalEntero();
-                Master.getInstancia.addBinaria(contador, Master.getInstancia.stack_p, res_retorno.getValor(), "+");
-                Master.getInstancia.addGetStack(posicion, contador);
+                string valor_referencia = Obtener_Posicion_Referencia(res_retorno.sym);
+
+                if (res_retorno.sym.pointer == Simbolo.Pointer.HEAP)
+                {
+
+                    Master.getInstancia.addGetHeap(posicion, valor_referencia);
+                }
+                else
+                {
+                    string contador = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addBinaria(contador, Master.getInstancia.stack_p, valor_referencia, "+");
+                    Master.getInstancia.addGetStack(posicion, contador);
+                }
+
+                Master.getInstancia.addBinaria(valor, posicion, atributo.index.ToString(), "+");
+
+                /*
+                 * retorno el valor y un simbolo que posee la posicion relativa al objeto encontrado
+                 */
+                return new Retorno(valor, true, atributo.atributo.getObjeto(), new Simbolo(this.id, atributo.atributo.getObjeto(),
+                    Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, atributo.index, "", false));
             }
 
-            Master.getInstancia.addBinaria(valor, posicion, atributo.index.ToString(), "+");
+        }
 
-            /*
-             * retorno el valor y un simbolo que posee la posicion relativa al objeto encontrado
-             */
-            return new Retorno(valor, true, atributo.atributo.getObjeto(), new Simbolo(this.id, atributo.atributo.getObjeto(),
-                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP,atributo.index, "", false));
+        public string Obtener_Posicion_Referencia(Simbolo sym)
+        {
+            string posicion_stack = Master.getInstancia.newTemporalEntero();
+            string valor = Master.getInstancia.newTemporal();
+            string posicion = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, (sym.posicion + 1).ToString(), "+");
+            Master.getInstancia.addGetStack(valor, posicion_stack);
+
+            string label_true = Master.getInstancia.newLabel();
+            string label_false = Master.getInstancia.newLabel();
+            string salida = Master.getInstancia.newLabel();
+
+            Master.getInstancia.addBinaria(posicion_stack, posicion_stack, "1", "-");
+            Master.getInstancia.addGetStack(posicion, posicion_stack);
+
+            Master.getInstancia.addif(valor, "0", "==", label_true);
+            Master.getInstancia.addGoto(label_false);
+
+            Master.getInstancia.addLabel(label_true);
+            Master.getInstancia.addGetStack(valor, posicion);
+
+            Master.getInstancia.addGoto(salida);
+
+            Master.getInstancia.addLabel(label_false);
+            Master.getInstancia.addGetHeap(valor, posicion);
+
+            Master.getInstancia.addLabel(salida);
+
+            return valor;
         }
 
     }

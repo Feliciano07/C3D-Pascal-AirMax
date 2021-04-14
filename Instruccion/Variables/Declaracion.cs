@@ -22,6 +22,12 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             this.expresion = exp;
             this.tipo = tipo;
         }
+
+        public Declaracion() : base(0, 0)
+        {
+
+        }
+
         //TODO: falta manejar variables locales
         public override Retorno compilar(Entorno entorno)
         {

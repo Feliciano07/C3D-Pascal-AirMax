@@ -5,6 +5,7 @@ using System.Text;
 using Irony.Parsing;
 using C3D_Pascal_AirMax.Instruccion.Funciones;
 using C3D_Pascal_AirMax.Instruccion.Control;
+using C3D_Pascal_AirMax.Expresion.Asignaciones;
 
 namespace C3D_Pascal_AirMax.Analisis
 {
@@ -19,6 +20,28 @@ namespace C3D_Pascal_AirMax.Analisis
             }
             return parametros;
         }
+
+        public static Nodo Llamada_Funcion(ParseTreeNode entrada)
+        {
+            int linea = entrada.Span.Location.Line;
+            int columna = entrada.Span.Location.Column;
+
+            if(entrada.ChildNodes.Count == 4)
+            {
+                LinkedList<Nodo> expresiones;
+                expresiones = lista_expresion(entrada.ChildNodes[2]);
+                string id = entrada.ChildNodes[0].Token.Text;
+                return new AsignacionFun(linea, columna, id, expresiones);
+            }
+            else if(entrada.ChildNodes.Count == 3)
+            {
+                LinkedList<Nodo> expresiones = new LinkedList<Nodo>();
+                string id = entrada.ChildNodes[0].Token.Text;
+                return new AsignacionFun(linea, columna, id, expresiones);
+            }
+            return null;
+        }
+
 
         public static Nodo Inst_Write(ParseTreeNode entrada,bool tipo)
         {

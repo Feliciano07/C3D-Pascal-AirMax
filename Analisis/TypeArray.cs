@@ -15,7 +15,8 @@ namespace C3D_Pascal_AirMax.Analisis
         {
             foreach(ParseTreeNode node in entrada.ChildNodes)
             {
-                Manejador.Master.getInstancia.addCompilar(definicion_arreglo(node));
+                
+                Manejador.Master.getInstancia.addTypes(definicion_arreglo(node));
             }
         }
 
