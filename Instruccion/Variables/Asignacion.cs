@@ -20,6 +20,8 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             this.valor = valor;
         }
 
+        public Asignacion() : base(0, 0) { }
+
         public override Retorno compilar(Entorno entorno)
         {
             Retorno asig = this.variable.compilar(entorno);

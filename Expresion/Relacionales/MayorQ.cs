@@ -95,7 +95,7 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
         public Retorno Llamada_Nativa_Comparar(Retorno res_left, Retorno res_right, int size)
         {
             string tem = Master.getInstancia.newTemporal();
-            Master.getInstancia.addBinaria(tem, Master.getInstancia.stack_p, size.ToString(), "+");
+            Master.getInstancia.addBinaria(tem, Master.getInstancia.stack_p, (size + 1).ToString(), "+");
             string tem1 = Master.getInstancia.newTemporalEntero();
             Master.getInstancia.addBinaria(tem1, tem, "1", "+");
             Master.getInstancia.addSetStack(tem1, res_left.getValor());
@@ -103,12 +103,12 @@ namespace C3D_Pascal_AirMax.Expresion.Relacionales
             Master.getInstancia.addBinaria(tem1, tem, "2", "+");
             Master.getInstancia.addSetStack(tem1, res_right.getValor());
             //cambio entorno
-            Master.getInstancia.plusStack(size.ToString());
+            Master.getInstancia.plusStack((size + 1).ToString());
             Master.getInstancia.callFuncion("native_mayor_que_str");
             Master.getInstancia.addBinaria(tem1, Master.getInstancia.stack_p, "0", "+");
             string tem2 = Master.getInstancia.newTemporal();// posicion  que tiene si se cumple la condicion o no
             Master.getInstancia.addGetStack(tem2, tem1);
-            Master.getInstancia.substracStack(size.ToString());
+            Master.getInstancia.substracStack((size + 1).ToString());
             this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
             Master.getInstancia.addif(tem2, "1", "==", this.trueLabel);

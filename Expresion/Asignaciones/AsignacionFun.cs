@@ -1,5 +1,6 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
+using C3D_Pascal_AirMax.Instruccion.Variables;
 using C3D_Pascal_AirMax.Manejador;
 using C3D_Pascal_AirMax.TipoDatos;
 using C3D_Pascal_AirMax.Utilidades;
@@ -46,12 +47,12 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             /*
              * Cambio del entorno formal
              */
-            Master.getInstancia.plusStack(entorno.size.ToString());
+            Master.getInstancia.plusStack((entorno.size + 1).ToString());
             Master.getInstancia.callFuncion(simboloFuncion.id);
             Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, "0", "+");
             string tem2 = Master.getInstancia.newTemporal();// posicion inicio de nueva cadena
             Master.getInstancia.addGetStack(tem2, temp);
-            Master.getInstancia.substracStack(entorno.getSize().ToString());
+            Master.getInstancia.substracStack((entorno.size + 1).ToString());
 
 
             return this.Devolver_valor_funcion(tem2, simboloFuncion);
@@ -64,7 +65,7 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             {
                 Parametro[] aux_para = new Parametro[this.parametros.Count];
                 simboloFuncion.parametros.CopyTo(aux_para, 0);
-                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, entorno.size.ToString(), "+");
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, (entorno.size +1 ).ToString(), "+");
                 int contador = 0;
                 foreach (Nodo instruccion in this.parametros)
                 {
@@ -84,10 +85,21 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             {
                 if(aux.getObjeto().getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
+                    Asignacion asignacion = new Asignacion();
+                    string inicio_copia = Crear_Objeto(aux.getObjeto().symObj);
+                    asignacion.Copiar_Objeto(aux.getObjeto().symObj, inicio_copia, aux.getValor());
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, inicio_copia);
 
-                }else if(aux.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
+                }
+                else if(aux.getObjeto().getTipo() == Objeto.TipoObjeto.ARRAY)
                 {
+                    Asignacion asignacion = new Asignacion();
+                    string inicio_copia = Crear_arreglo(aux.getObjeto().symArray);
+                    asignacion.Copiar_Arreglo(aux.getObjeto().symArray, inicio_copia, aux.getValor());
 
+                    Master.getInstancia.addBinaria(temp, temp, "1", "+");
+                    Master.getInstancia.addSetStack(temp, inicio_copia);
                 }
                 else if (aux.getObjeto().getTipo() != Objeto.TipoObjeto.BOOLEAN)
                 {
@@ -202,6 +214,71 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                 Master.getInstancia.addSetStack(temp, "1");
                 Master.getInstancia.addLabel(salida);
             }
+        }
+
+        public string Crear_Objeto(SimboloObjeto sym_obj)
+        {
+            // guarda la posicion inicial del objeto en el heap
+            string inicio_objeto = Master.getInstancia.newTemporal();
+            Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
+
+            //Empiezo a recorrer los atributos para guardar el espacio del nuevo objeto
+            foreach (Atributo atr in sym_obj.GetAtributos())
+            {
+                switch (atr.getObjeto().getTipo())
+                {
+                    //se guarda el valor por defecto
+                    case Objeto.TipoObjeto.INTEGER:
+                    case Objeto.TipoObjeto.REAL:
+                    case Objeto.TipoObjeto.BOOLEAN:
+                        Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "0");
+                        break;
+                    // se manda -1 debido a que va a guardar una direccion del heap 
+                    case Objeto.TipoObjeto.STRING:
+                    case Objeto.TipoObjeto.OBJECTS:
+                    case Objeto.TipoObjeto.ARRAY:
+                        Master.getInstancia.addSetHeap(Master.getInstancia.heap_p, "-1");
+                        break;
+
+                }
+                Master.getInstancia.nextHeap();
+            }
+            // Reservo espacio de objetos internos si existen
+            Declaracion declaracion = new Declaracion();
+            declaracion.Reservar_Espacio_Objeto(sym_obj, inicio_objeto);
+            //Reservo el espacio de arreglos si existen
+            declaracion.Reservar_Espacio_Arreglo(sym_obj, inicio_objeto);
+
+            return inicio_objeto;
+        }
+
+        public string Crear_arreglo(SimboloArreglo simboloArreglo)
+        {
+            // guarda la posicion inicial del objeto en el heap
+            string inicio_arreglo = Master.getInstancia.newTemporal();
+            Master.getInstancia.addUnaria(inicio_arreglo, Master.getInstancia.heap_p);
+
+            //Utilizar variable Declaracion
+            Declaracion declaracion = new Declaracion();
+
+            switch (simboloArreglo.objeto.getTipo())
+            {
+                case Objeto.TipoObjeto.INTEGER:
+                case Objeto.TipoObjeto.REAL:
+                case Objeto.TipoObjeto.BOOLEAN:
+                    declaracion.Llenar_Arreglo_Primitivos(simboloArreglo);
+                    break;
+                case Objeto.TipoObjeto.STRING:
+                case Objeto.TipoObjeto.OBJECTS:
+                case Objeto.TipoObjeto.ARRAY:
+                    declaracion.Llenar_Cadenas(simboloArreglo);
+                    break;
+            }
+
+            declaracion.Llenar_Arreglo_Objetos(simboloArreglo, inicio_arreglo);
+
+            return inicio_arreglo;
+
         }
 
         public Retorno Devolver_valor_funcion(string tem, SimboloFuncion simboloFuncion)

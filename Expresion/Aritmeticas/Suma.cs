@@ -51,7 +51,7 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
         public Retorno Llamada_nativa_concatenar(Retorno res_left, Retorno res_right, int size)
         {
             string tem = Master.getInstancia.newTemporal();
-            Master.getInstancia.addBinaria(tem, Master.getInstancia.stack_p, size.ToString() , "+");
+            Master.getInstancia.addBinaria(tem, Master.getInstancia.stack_p, (size + 1).ToString() , "+");
             string tem1 = Master.getInstancia.newTemporalEntero();
             Master.getInstancia.addBinaria(tem1, tem, "1", "+");
             Master.getInstancia.addSetStack(tem1, res_left.getValor());
@@ -59,12 +59,12 @@ namespace C3D_Pascal_AirMax.Expresion.Aritmeticas
             Master.getInstancia.addBinaria(tem1, tem, "2", "+");
             Master.getInstancia.addSetStack(tem1, res_right.getValor());
             //cambio entorno
-            Master.getInstancia.plusStack(size.ToString());
+            Master.getInstancia.plusStack((size + 1).ToString());
             Master.getInstancia.callFuncion("native_concat_str");
             Master.getInstancia.addBinaria(tem1, Master.getInstancia.stack_p, "0", "+");
             string tem2 = Master.getInstancia.newTemporal();// posicion inicio de nueva cadena
             Master.getInstancia.addGetStack(tem2, tem1);
-            Master.getInstancia.substracStack(size.ToString());
+            Master.getInstancia.substracStack((size + 1).ToString());
             return new Retorno(tem2, true, new Objeto(Objeto.TipoObjeto.STRING));
         }
 

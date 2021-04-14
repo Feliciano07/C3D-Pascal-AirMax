@@ -140,7 +140,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                 return new Retorno(valor, true, sym.getObjeto(), sym, posicion);
             }
 
-            Retorno retorno = new Retorno("", false, sym.getObjeto(), sym, posicion_stack);
+            Retorno retorno = new Retorno("", false, sym.getObjeto(), sym, posicion);
             this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
             Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
