@@ -25,7 +25,8 @@ namespace C3D_Pascal_AirMax.Expresion.Logicas
             this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
 
             this.left.trueLabel = this.right.trueLabel = this.trueLabel;
-            this.right.falseLabel = Master.getInstancia.newLabel();
+            this.left.falseLabel = Master.getInstancia.newLabel();
+            this.right.falseLabel = this.falseLabel;
 
             Retorno res_left = this.left.compilar(entorno);
             Master.getInstancia.addLabel(this.left.falseLabel);
