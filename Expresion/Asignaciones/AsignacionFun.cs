@@ -26,7 +26,6 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             /*
              * Realizamos la busquedad de la funcion
              */
-            //TODO: verificar si es funcion o proc
             SimboloFuncion simboloFuncion = entorno.searchFuncion(this.id);
             if(simboloFuncion == null)
             {
@@ -37,25 +36,32 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             }
 
             
-            
-            //TODO: tengo que mandar a guardar mis temporales, cuando se hace una llamada
+            if(simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.VOID)
+            {
+                //TODO: tengo que mandar a guardar mis temporales, cuando se hace una llamada
 
-            string temp = Master.getInstancia.newTemporalEntero();
-            Master.getInstancia.addComentario("simulacion de cambio de entorno");
+                string temp = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addComentario("simulacion de cambio de entorno");
 
-            this.getValores(entorno, temp, simboloFuncion);
-            /*
-             * Cambio del entorno formal
-             */
-            Master.getInstancia.plusStack((entorno.size + 1).ToString());
-            Master.getInstancia.callFuncion(simboloFuncion.id);
-            Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, "0", "+");
-            string tem2 = Master.getInstancia.newTemporal();// posicion inicio de nueva cadena
-            Master.getInstancia.addGetStack(tem2, temp);
-            Master.getInstancia.substracStack((entorno.size + 1).ToString());
+                /*
+                 * Simulamos el cambio de entorno del procedimiento
+                 */
+                this.getValores(entorno, temp, simboloFuncion);
+                /*
+                 * Cambio del entorno formal
+                 */
+                Master.getInstancia.plusStack((entorno.size + 1).ToString());
+                Master.getInstancia.callFuncion(simboloFuncion.id);
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, "0", "+");
+                string tem2 = Master.getInstancia.newTemporal();
+                //aca mando a obtener el valor de retorno
+                Master.getInstancia.addGetStack(tem2, temp);
+                Master.getInstancia.substracStack((entorno.size + 1).ToString());
 
+                return this.Devolver_valor_funcion(tem2, simboloFuncion);
+            }
+            return null;
 
-            return this.Devolver_valor_funcion(tem2, simboloFuncion);
         }
 
         public void getValores(Entorno entorno, string temp, SimboloFuncion simboloFuncion)
@@ -285,7 +291,8 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
         {
             if(simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.VOID)
             {
-                return null;
+                return new Retorno(tem, true, simboloFuncion.objeto);
+
             }else if(simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.BOOLEAN)
             {
                 //TODO: retornar un booleano

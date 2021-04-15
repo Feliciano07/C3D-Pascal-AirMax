@@ -11,7 +11,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
 {
     public class Procedimiento : Nodo
     {
-        private string id;
+        private string id; 
         private LinkedList<Parametro> parametros;
         private LinkedList<Nodo> instrucciones;
         private Objeto objeto;
