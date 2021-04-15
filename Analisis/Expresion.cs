@@ -124,6 +124,8 @@ namespace C3D_Pascal_AirMax.Analisis
                         {
                             return Arreglo_Unico(entrada.ChildNodes[0]);
                         }
+                    case "llamada_funciones":
+                        return Main.Llamada_Funcion(entrada.ChildNodes[0]);
 
                 }
 

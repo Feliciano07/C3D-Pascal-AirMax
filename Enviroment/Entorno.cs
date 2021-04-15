@@ -11,7 +11,7 @@ namespace C3D_Pascal_AirMax.Enviroment
 {
     public class Entorno
     {
-        private Dictionary<string, Simbolo> variables;
+        public Dictionary<string, Simbolo> variables;
         private Dictionary<string, SimboloObjeto> objetos;
         private Dictionary<string, SimboloArreglo> arreglos;
         private Dictionary<string, SimboloFuncion> funciones;

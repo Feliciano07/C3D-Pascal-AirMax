@@ -60,8 +60,58 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
 
                 return this.Devolver_valor_funcion(tem2, simboloFuncion);
             }
-            return null;
+            else
+            {
+                //TODO: tengo que mandar a guardar mis temporales, para manejar recursividad
+                
+                //Simulamos el cambio de entorno
+                string temp = Master.getInstancia.newTemporalEntero();
+                Master.getInstancia.addComentario("simulacion de cambio de entorno");
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, (entorno.size + 1).ToString(), "+");
 
+                //Setemos el valor del retorno, que estara en la posicion 0
+                this.Generar_Retorno(simboloFuncion, temp);
+
+                //Setemos los valores de los parametros
+                this.getValores(entorno, temp, simboloFuncion);
+
+                //Generamos el cambio de entorno formal
+                Master.getInstancia.plusStack((entorno.size + 1).ToString());
+                Master.getInstancia.callFuncion(simboloFuncion.id);
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, "0", "+");
+                string tem_retorno = Master.getInstancia.newTemporal();
+
+                //retornamos al entorno anterior
+                Master.getInstancia.addGetStack(tem_retorno, temp);
+                Master.getInstancia.substracStack((entorno.size + 1).ToString());
+
+                return this.Devolver_valor_funcion(tem_retorno, simboloFuncion);
+            }
+
+        }
+
+        public void Generar_Retorno(SimboloFuncion simboloFuncion, string temp)
+        {
+            if(simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.OBJECTS)
+            {
+                //TODO: probar con esto
+                string inicio = Crear_Objeto(simboloFuncion.objeto.symObj);
+                Master.getInstancia.addSetStack(temp, inicio);
+
+            }else if(simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.ARRAY)
+            {
+                //TODO: probar con esto
+                string inicio = Crear_arreglo(simboloFuncion.objeto.symArray);
+                Master.getInstancia.addSetStack(temp, inicio);
+
+            }else if(simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.STRING)
+            {
+                Master.getInstancia.addSetStack(temp, "-1");
+            }
+            else
+            {
+                Master.getInstancia.addSetStack(temp, "0");
+            }
         }
 
         public void getValores(Entorno entorno, string temp, SimboloFuncion simboloFuncion)
@@ -71,7 +121,7 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
             {
                 Parametro[] aux_para = new Parametro[this.parametros.Count];
                 simboloFuncion.parametros.CopyTo(aux_para, 0);
-                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, (entorno.size +1 ).ToString(), "+");
+                
                 int contador = 0;
                 foreach (Nodo instruccion in this.parametros)
                 {
@@ -295,8 +345,14 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
 
             }else if(simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.BOOLEAN)
             {
-                //TODO: retornar un booleano
-                return null;
+                Retorno retorno = new Retorno(tem, true, simboloFuncion.objeto);
+                this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
+                this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
+                Master.getInstancia.addif(tem, "1", "==", this.trueLabel);
+                Master.getInstancia.addGoto(this.falseLabel);
+                retorno.trueLabel = this.trueLabel;
+                retorno.falseLabel = this.falseLabel;
+                return retorno;
             }
             else
             {

@@ -9,29 +9,27 @@ using System.Text;
 
 namespace C3D_Pascal_AirMax.Instruccion.Funciones
 {
-    public class Procedimiento : Nodo
+    public class Funcion : Nodo
     {
-        private string id; 
+        private string id;
         private LinkedList<Parametro> parametros;
         private LinkedList<Nodo> instrucciones;
         private Objeto objeto;
 
-        public Procedimiento(int linea, int columna, string id, LinkedList<Parametro> parametros, LinkedList<Nodo> nodos,
+        public Funcion(int linea, int columna,string id, LinkedList<Parametro> parametros, LinkedList<Nodo> instrucciones, 
             Objeto objeto):base(linea, columna)
         {
             this.id = id;
             this.parametros = parametros;
-            this.instrucciones = nodos;
+            this.instrucciones = instrucciones;
             this.objeto = objeto;
         }
 
         public override Retorno compilar(Entorno entorno)
         {
             this.Validar_Parametros(entorno);
-            
 
-            //Guardo la funcion;
-            if(entorno.addFuncion(this.id, this.objeto, this.parametros))
+            if (entorno.addFuncion(this.id, this.objeto, this.parametros))
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
                     "Ya existe una funcion con el id: " + this.id);
@@ -39,31 +37,43 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
                 throw new Exception("Ya existe una funcion con el id: " + this.id);
             }
 
+            //Obtengo la funcion
             SimboloFuncion simboloFuncion = entorno.getFuncion(this.id);
-
+            //creo el nuevo entorno de la funcion
             Entorno entorno_fun = new Entorno(entorno, this.id);
+            //creo una etiqueta que me mando al retorno
             string label_return = Master.getInstancia.newLabel();
+            //seteo atributos al entorno, con respecto a la funcion
             entorno_fun.setFuncion(this.id, simboloFuncion, label_return);
 
+
+            //Mando a setear un simbolo que representa a la funcion
+            this.Setear_Simbolo_Funcion(entorno_fun, simboloFuncion);
             this.Agregar_variables(entorno_fun);
 
-            //Genero el codigo para la creacion de la funcion
-
             Master.getInstancia.addFuncion(simboloFuncion.id);
-
+            //Genero el codigo de la funcion
             this.Compilar_body(entorno_fun);
-
             Master.getInstancia.addLabel(label_return);
+
+            //TODO: deberia hacer algo para devolver el retorno?
+
             Master.getInstancia.Retorno_funcion();
             Master.getInstancia.addFinFuncion();
-
             return null;
+        }
+
+        public void Setear_Simbolo_Funcion(Entorno entorno, SimboloFuncion simboloFuncion)
+        {
+            Simbolo simbolo = new Simbolo(simboloFuncion.id.ToLower(), simboloFuncion.objeto, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK,
+                0, simboloFuncion.id, false);
+            entorno.variables.Add(simboloFuncion.id.ToLower(), simbolo);
         }
 
         public void Agregar_variables(Entorno entorno)
         {
-            
-            foreach(Parametro parametro in this.parametros)
+
+            foreach (Parametro parametro in this.parametros)
             {
                 entorno.addSimboloFuncion(parametro.id, parametro.objeto, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK, parametro.param);
             }
@@ -71,12 +81,13 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
 
         public void Compilar_body(Entorno entorno)
         {
-            foreach(Nodo instruccion in this.instrucciones)
+            foreach (Nodo instruccion in this.instrucciones)
             {
                 try
                 {
                     instruccion.compilar(entorno);
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -84,10 +95,12 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
         }
 
 
+
+
         public void Validar_Parametros(Entorno entorno)
         {
             HashSet<string> ids = new HashSet<string>();
-            foreach(Parametro parametro in this.parametros)
+            foreach (Parametro parametro in this.parametros)
             {
                 if (ids.Contains(parametro.id))
                 {
@@ -98,7 +111,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
                 }
                 else
                 {
-                    if(parametro.objeto.getTipo() == Objeto.TipoObjeto.TYPES)
+                    if (parametro.objeto.getTipo() == Objeto.TipoObjeto.TYPES)
                     {
                         //busca primero una estructura de tipo objeto
                         if (Buscar_Objeto(parametro, entorno))
@@ -110,14 +123,18 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
                         {
                             continue;
                         }
+
                         Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                         "La estructura: " + parametro.objeto.getObjetoId() + " no esta definida");
+                            "La estructura: " + parametro.objeto.getObjetoId() + " no esta definida");
                         Master.getInstancia.addError(error);
                         throw new Exception("La estructura: " + parametro.objeto.getObjetoId() + " no esta definida");
                     }
                 }
             }
         }
+
+
+
         public bool Buscar_Objeto(Parametro parametro, Entorno entorno)
         {
             SimboloObjeto simboloObjeto = entorno.searchObjeto(parametro.getObjeto().getObjetoId());
@@ -141,6 +158,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
             parametro.getObjeto().symArray = simboloArreglo;
             return true;
         }
+
 
     }
 }

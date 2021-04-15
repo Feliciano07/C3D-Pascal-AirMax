@@ -204,5 +204,39 @@ namespace C3D_Pascal_AirMax.Analisis
             }
         }
 
+
+        public static void Crear_funcion(ParseTreeNode entrada)
+        {
+            int linea = entrada.ChildNodes[1].Span.Location.Line;
+            int columna = entrada.ChildNodes[1].Span.Location.Column;
+
+            string nombre_funcion = entrada.ChildNodes[1].Token.Text;
+            LinkedList<Parametro> parametros = Obtener_parametros(entrada.ChildNodes[3]);
+
+            Objeto tipo_objeto = new Objeto(Variable.getTipo(entrada.ChildNodes[6]), Variable.Nombre_Tipo(entrada.ChildNodes[6]));
+
+            if(entrada.ChildNodes.Count == 10)
+            {
+                LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
+
+                Declaracion_Variables(entrada.ChildNodes[8], instrucciones);
+                Instrucciones_Funcion(entrada.ChildNodes[9], instrucciones);
+
+                Funcion funcion = new Funcion(linea, columna, nombre_funcion, parametros, instrucciones, tipo_objeto);
+
+                Manejador.Master.getInstancia.compilar_fun(funcion);
+
+            }
+            else if(entrada.ChildNodes.Count == 9)
+            {
+                LinkedList<Nodo> instrucciones = new LinkedList<Nodo>();
+                Instrucciones_Funcion(entrada.ChildNodes[8], instrucciones);
+
+                Funcion funcion = new Funcion(linea, columna, nombre_funcion, parametros, instrucciones, tipo_objeto);
+                Manejador.Master.getInstancia.compilar_fun(funcion);
+            }
+
+        }
+
     }
 }

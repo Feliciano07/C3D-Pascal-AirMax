@@ -102,6 +102,7 @@ namespace C3D_Pascal_AirMax.Analisis
                         Declaracion_Proc.Crear_Procedimiento(actual);
                         break;
                     case "dec_funcion":
+                        Declaracion_Proc.Crear_funcion(actual);
                         break;
                 }
             }
