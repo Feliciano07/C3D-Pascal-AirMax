@@ -50,7 +50,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                 {
                     string valor = Master.getInstancia.newTemporal();
                     string posicion_stack = Master.getInstancia.newTemporalEntero();
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
+                    Master.getInstancia.addUnaria(posicion_stack, sym.getPosicion());
                     Master.getInstancia.addGetStack(valor, posicion_stack);
                     if (sym.getTipo() != Objeto.TipoObjeto.BOOLEAN)
                     {

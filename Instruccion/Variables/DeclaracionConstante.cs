@@ -23,11 +23,38 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
         public override Retorno compilar(Entorno entorno)
         {
+            if(base.pre_compilar == true)
+            {
+                return Crear_simbolo_constante(entorno);
+            }
+            else
+            {
+                return Crear_Constante(entorno);
+            }
+        }
+
+        public Retorno Crear_simbolo_constante(Entorno entorno)
+        {
+            
+            Simbolo newVar = entorno.addSimbolo(this.nombre, new Objeto(this.tipo), Simbolo.Rol.CONSTANTE, Simbolo.Pointer.STACK);
+            if (newVar == null)
+            {
+                Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                    "La constate: " + this.nombre + " ya existe en el ambito");
+                Master.getInstancia.addError(error);
+                throw new Exception("La constate: " + this.nombre + " ya existe en el ambito");
+            }
+            return null;
+        }
+    
+        
+        public Retorno Crear_Constante(Entorno entorno)
+        {
             Retorno valor = this.expresion.compilar(entorno);
             /*
              * Se verifica si el valor fue asignado un tipo explicito
              */
-            if(this.tipo == Objeto.TipoObjeto.CONST)
+            if (this.tipo == Objeto.TipoObjeto.CONST)
             {
                 this.tipo = valor.getTipo();
             }
@@ -41,43 +68,39 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             }
 
 
-            Simbolo newVar = entorno.addSimbolo(this.nombre, new Objeto(this.tipo), Simbolo.Rol.CONSTANTE, Simbolo.Pointer.STACK);
+            Simbolo newVar = entorno.getSimbolo(this.nombre);
+
             if (newVar == null)
             {
                 Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                    "La constate: " + this.nombre + " ya existe en el ambito");
+                    "La constate: " + this.nombre + " no existe en el ambito");
                 Master.getInstancia.addError(error);
-                throw new Exception("La constate: " + this.nombre + " ya existe en el ambito");
+                throw new Exception("La constate: " + this.nombre + " no existe en el ambito");
             }
 
-            if (newVar.getGlobal())
+            Master.getInstancia.addComentario("Constante: " + this.nombre);
+            string posicion_stack = Master.getInstancia.newTemporalEntero();
+
+            if (this.tipo == Objeto.TipoObjeto.BOOLEAN)
             {
-                Master.getInstancia.addComentario("Constante: " + this.nombre);
-                string posicion_stack = Master.getInstancia.newTemporalEntero();
+                string label_salida = Master.getInstancia.newLabel();
+                Master.getInstancia.addLabel(valor.trueLabel);
                 Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
-                if (this.tipo == Objeto.TipoObjeto.BOOLEAN)
-                {
-                    string label_salida = Master.getInstancia.newLabel();
-                    Master.getInstancia.addLabel(valor.trueLabel);
-                    Master.getInstancia.addSetStack(posicion_stack, "1");
-                    Master.getInstancia.addGoto(label_salida);
-                    Master.getInstancia.addLabel(valor.falseLabel);
-                    Master.getInstancia.addSetStack(posicion_stack, "0");
-                    Master.getInstancia.addLabel(label_salida);
-                }
-                else
-                {
-                    Master.getInstancia.addSetStack(posicion_stack, valor.getValor());
-                }
+                Master.getInstancia.addSetStack(posicion_stack, "1");
+                Master.getInstancia.addGoto(label_salida);
+                Master.getInstancia.addLabel(valor.falseLabel);
+                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
+                Master.getInstancia.addSetStack(posicion_stack, "0");
+                Master.getInstancia.addLabel(label_salida);
             }
             else
             {
-                if(this.tipo == Objeto.TipoObjeto.BOOLEAN)
-                {
-
-                }
+                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, newVar.getPosicion(), "+");
+                Master.getInstancia.addSetStack(posicion_stack, valor.getValor());
             }
+
             return null;
         }
+
     }
 }

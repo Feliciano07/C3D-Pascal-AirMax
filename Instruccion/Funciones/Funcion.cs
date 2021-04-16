@@ -83,6 +83,24 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
 
         public void Compilar_body(Entorno entorno)
         {
+            //ejecuta la sentencias para guardar simbolos
+            foreach (Nodo instruccion in this.instrucciones)
+            {
+                try
+                {
+                    if(instruccion.pre_compilar == true)
+                    {
+                        instruccion.compilar(entorno);
+                        instruccion.pre_compilar = false;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            // ejecuta todas las instrucciones
             foreach (Nodo instruccion in this.instrucciones)
             {
                 try

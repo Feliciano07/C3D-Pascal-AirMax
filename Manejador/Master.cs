@@ -114,10 +114,31 @@ namespace C3D_Pascal_AirMax.Manejador
                     Console.WriteLine(e.ToString());
                 }
             }
+
+            /*
+             * Ejecuta las sentencias que se deben de precompilar, esto para guardar la tabla de simbolo necesaria
+             */
+            foreach (Nodo node in this.compilacion)
+            {
+                try
+                {
+                    if (node.pre_compilar == true)
+                    {
+                        node.compilar(entorno);
+                        node.pre_compilar = false;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
+
             /*
              * Ejecuta las instrucciones necesarias para crear las funciones
              */
-            foreach(Nodo node in this.compilar_funcion)
+            foreach (Nodo node in this.compilar_funcion)
             {
                 try
                 {

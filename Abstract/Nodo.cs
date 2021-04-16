@@ -13,6 +13,7 @@ namespace C3D_Pascal_AirMax.Abstract
         private int columna;
         public string trueLabel;
         public string falseLabel;
+        public bool pre_compilar;
 
         public Nodo(int linea, int columna)
         {

@@ -129,7 +129,9 @@ namespace C3D_Pascal_AirMax.Analisis
         {
             foreach(ParseTreeNode node in entrada.ChildNodes)
             {
-                instrucciones.AddLast(Variable.Evaluar_Variable(node));
+                Nodo salida = Variable.Evaluar_Variable(node);
+                salida.pre_compilar = true;
+                instrucciones.AddLast(salida);
             }
         }
 
@@ -137,7 +139,9 @@ namespace C3D_Pascal_AirMax.Analisis
         {
             foreach(ParseTreeNode node in entrada.ChildNodes)
             {
-                instrucciones.AddLast(Variable.Evaluar_Constante(node));
+                Nodo salida = Variable.Evaluar_Constante(node);
+                salida.pre_compilar = true;
+                instrucciones.AddLast(salida);
             }
         }
 
@@ -200,6 +204,9 @@ namespace C3D_Pascal_AirMax.Analisis
                     break;
                 case "sentencia_repeat":
                     lista.AddLast(Main.Repeat(actual));
+                    break;
+                case "llamada_funciones":
+                    lista.AddLast(Main.Llamada_Funcion(actual));
                     break;
             }
         }

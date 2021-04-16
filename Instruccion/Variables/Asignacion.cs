@@ -58,11 +58,11 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 {
                     string aux = Master.getInstancia.newLabel();
                     Master.getInstancia.addLabel(value.trueLabel);
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                    Master.getInstancia.addUnaria(posicion_stack,  simbolo.getPosicion());
                     Master.getInstancia.addSetStack(posicion_stack, "1");
                     Master.getInstancia.addGoto(aux);
                     Master.getInstancia.addLabel(value.falseLabel);
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                    Master.getInstancia.addUnaria(posicion_stack, simbolo.getPosicion());
                     Master.getInstancia.addSetStack(posicion_stack, "0");
                     Master.getInstancia.addLabel(aux);
                     return new Retorno(simbolo.getPosicion(), false, simbolo.getObjeto(), simbolo);
@@ -70,7 +70,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 else if (asig.getTipo() == Objeto.TipoObjeto.OBJECTS)
                 {
                     // asigna un objeto con otro objeto
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                    Master.getInstancia.addUnaria(posicion_stack, simbolo.getPosicion());
                     string inicial = Master.getInstancia.newTemporalEntero();
                     Master.getInstancia.addGetStack(inicial, posicion_stack);
                     Copiar_Objeto(asig.getObjeto().symObj, inicial, value.getValor());
@@ -78,14 +78,14 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 }
                 else if (asig.getTipo() == Objeto.TipoObjeto.ARRAY)
                 {
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                    Master.getInstancia.addUnaria(posicion_stack, simbolo.getPosicion());
                     string inicial = Master.getInstancia.newTemporal();
                     Master.getInstancia.addGetStack(inicial, posicion_stack);
                     Copiar_Arreglo(asig.getObjeto().symArray, inicial, value.getValor());
                 }
                 else
                 {
-                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, simbolo.getPosicion(), "+");
+                    Master.getInstancia.addUnaria(posicion_stack, simbolo.getPosicion());
                     Master.getInstancia.addSetStack(posicion_stack, value.getValor());
                     return new Retorno(posicion_stack, false, simbolo.getObjeto(), simbolo);
 

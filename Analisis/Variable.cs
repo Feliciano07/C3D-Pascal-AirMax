@@ -20,7 +20,9 @@ namespace C3D_Pascal_AirMax.Analisis
         {
             foreach (ParseTreeNode node in entrada.ChildNodes)
             {
-                Master.getInstancia.addCompilar(Evaluar_Variable(node));
+                Nodo salida = Evaluar_Variable(node);
+                salida.pre_compilar = true;
+                Master.getInstancia.addCompilar(salida);
             }
             return null;
         }
@@ -33,7 +35,9 @@ namespace C3D_Pascal_AirMax.Analisis
         {
             foreach(ParseTreeNode node in entrada.ChildNodes)
             {
-                Master.getInstancia.addCompilar(Evaluar_Constante(node));
+                Nodo salida = Evaluar_Constante(node);
+                salida.pre_compilar = true;
+                Master.getInstancia.addCompilar(salida);
             }
             return null;
         }

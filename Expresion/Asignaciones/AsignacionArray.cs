@@ -70,7 +70,7 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                 // me ubico en la posicion del stack donde esta la variable
                 string posicion_stack = Master.getInstancia.newTemporalEntero();
                 string posicion_heap = Master.getInstancia.newTemporalEntero();
-                Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, sym.getPosicion(), "+");
+                Master.getInstancia.addUnaria(posicion_stack,sym.getPosicion());
 
 
                 // obtengo la posicion del heap que se guardaba en el stack

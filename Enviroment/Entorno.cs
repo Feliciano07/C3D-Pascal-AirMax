@@ -117,10 +117,10 @@ namespace C3D_Pascal_AirMax.Enviroment
         public Simbolo getSimbolo(string id)
         {
             Entorno aux = this;
-
-            while(aux != null)
+            id = id.ToLower();
+            while (aux != null)
             {
-                id = id.ToLower();
+                
                 if (aux.variables.ContainsKey(id) == true)
                 {
                     Simbolo sym;
@@ -146,10 +146,11 @@ namespace C3D_Pascal_AirMax.Enviroment
         public SimboloObjeto searchObjeto(string id)
         {
             Entorno aux = this;
+            id = id.ToLower();
 
-            while(aux != null)
+            while (aux != null)
             {
-                id = id.ToLower();
+                
                 if (aux.objetos.ContainsKey(id))
                 {
                     SimboloObjeto objeto;
@@ -175,10 +176,11 @@ namespace C3D_Pascal_AirMax.Enviroment
         public SimboloArreglo searchArreglo(string id)
         {
             Entorno aux = this;
+            id = id.ToLower();
 
-            while(aux != null)
+            while (aux != null)
             {
-                id = id.ToLower();
+                
                 if (aux.arreglos.ContainsKey(id))
                 {
                     SimboloArreglo arreglo;

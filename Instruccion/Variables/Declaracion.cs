@@ -14,7 +14,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
         private string[] ids;
         private Nodo expresion;
         private Objeto tipo;
-
+        
 
         public Declaracion(int linea, int columna, string[] ids, Nodo exp, Objeto tipo) : base(linea, columna)
         {
@@ -28,6 +28,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
         }
 
+        //TODO: primero guardar el simbolo y luego genero el codigo
         public override Retorno compilar(Entorno entorno)
         {
             /*
@@ -35,26 +36,133 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
              */
             if(this.tipo.getTipo() != Objeto.TipoObjeto.TYPES)
             {
-                Crear_Variable_Primitiva(entorno);
-            }
+                if(base.pre_compilar == true)
+                {
+                    Crear_Simbolo_primtivia(entorno);
+                }
+                else
+                {
+                    Crear_Variable_Primitiva(entorno);
+                }
 
+
+            }
             else
             {
                 /*
                  * Esta parte se encarga de ir a buscar si existe un type object y que se guarde la variable como ese tipo
                  */
-                if (Crear_Variable_Objeto(entorno))
+                if(base.pre_compilar == true)
                 {
-                    return null;
+                    if (Crear_Simbolo_Objeto(entorno))
+                    {
+                        return null;
+                    }
+                    if (Crear_simbolo_arreglo(entorno))
+                    {
+                        return null;
+                    }
                 }
+                else
+                {
+                    if (Crear_Variable_Objeto(entorno))
+                    {
+                        return null;
+                    }
 
-                if (Crear_Variable_Array(entorno)){
-                    return null;
+                    if (Crear_Variable_Array(entorno))
+                    {
+                        return null;
+                    }
                 }
+                
+
 
             }
             return null;
         }
+
+        public void Crear_Simbolo_primtivia(Entorno entorno)
+        {
+            
+            foreach (string str in ids)
+            {
+                Simbolo newVar = entorno.addSimbolo(str, this.tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                if (newVar == null)
+                {
+                    Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                        "La variable: " + str + " ya existe en el ambito");
+                    Master.getInstancia.addError(error);
+                    throw new Exception("La variable: " + str + " ya existe en el ambito");
+                }
+            }
+        }
+
+        public bool Crear_Simbolo_Objeto(Entorno entorno)
+        {
+            SimboloObjeto sym_obj = entorno.searchObjeto(this.tipo.getObjetoId());
+            if (sym_obj == null)
+            {
+                return false;
+            }
+
+            Master.getInstancia.addComentario("Inicia declarando una variable de type: " + this.tipo.getObjetoId());
+            foreach (string nombre in this.ids)
+            {
+                // guarda la posicion inicial del objeto en el heap
+                string inicio_objeto = Master.getInstancia.newTemporal();
+                Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
+                /*
+                 * Guarda un tipo objeto OBJECT
+                 * guarda la definicion del simbolo objeto, para poder manipular sus atributos
+                 * guarda el nombre de la estructura (cuadro, carro, circulo, etc)
+                 */
+                Objeto tipo = new Objeto(Objeto.TipoObjeto.OBJECTS, sym_obj, sym_obj.id);
+
+                Simbolo newVar = entorno.addSimbolo(nombre, tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                if (newVar == null)
+                {
+                    Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                        "La variable: " + nombre + " ya existe en el ambito");
+                    Master.getInstancia.addError(error);
+                    throw new Exception("La variable: " + nombre + " ya existe en el ambito");
+                }
+            }
+
+            return true;
+        }
+
+        public bool Crear_simbolo_arreglo(Entorno entorno)
+        {
+            SimboloArreglo simboloArreglo = entorno.searchArreglo(this.tipo.getObjetoId());
+
+            if (simboloArreglo == null)
+            {
+                return false;
+            }
+            Master.getInstancia.addComentario("Inicia la declaracion de variable tipo arreglo");
+
+            foreach (string nombre in this.ids)
+            {
+                // guarda la posicion inicial del objeto en el heap
+                string inicio_arreglo = Master.getInstancia.newTemporal();
+                Master.getInstancia.addUnaria(inicio_arreglo, Master.getInstancia.heap_p);
+
+
+                Objeto tipo = new Objeto(Objeto.TipoObjeto.ARRAY, simboloArreglo, simboloArreglo.id);
+                Simbolo newVar = entorno.addSimbolo(nombre, tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                if (newVar == null)
+                {
+                    Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
+                        "La variable: " + nombre + " ya existe en el ambito");
+                    Master.getInstancia.addError(error);
+                    throw new Exception("La variable: " + nombre + " ya existe en el ambito");
+                }
+            }
+            return true;
+        }
+
+
 
         public void Crear_Variable_Primitiva(Entorno entorno)
         {
@@ -69,13 +177,13 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
             foreach (string str in ids)
             {
-                Simbolo newVar = entorno.addSimbolo(str, this.tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                Simbolo newVar = entorno.getSimbolo(str);
                 if (newVar == null)
                 {
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                        "La variable: " + str + " ya existe en el ambito");
+                        "La variable: " + str + " no existe en el ambito");
                     Master.getInstancia.addError(error);
-                    throw new Exception("La variable: " + str + " ya existe en el ambito");
+                    throw new Exception("La variable: " + str + " no existe en el ambito");
                 }
 
                 Master.getInstancia.addComentario("variable: " + str);
@@ -115,21 +223,15 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 // guarda la posicion inicial del objeto en el heap
                 string inicio_objeto = Master.getInstancia.newTemporal();
                 Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
-                /*
-                 * Guarda un tipo objeto OBJECT
-                 * guarda la definicion del simbolo objeto, para poder manipular sus atributos
-                 * guarda el nombre de la estructura (cuadro, carro, circulo, etc)
-                 */
-                Objeto tipo = new Objeto(Objeto.TipoObjeto.OBJECTS, sym_obj, sym_obj.id);
 
-                Simbolo newVar = entorno.addSimbolo(nombre, tipo , Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                Simbolo newVar = entorno.getSimbolo(nombre);
 
                 if (newVar == null)
                 {
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                        "La variable: " + nombre + " ya existe en el ambito");
+                        "La variable: " + nombre + " no existe en el ambito");
                     Master.getInstancia.addError(error);
-                    throw new Exception("La variable: " + nombre + " ya existe en el ambito");
+                    throw new Exception("La variable: " + nombre + " no existe en el ambito");
                 }
 
                 foreach (Atributo atr in sym_obj.GetAtributos())
@@ -274,16 +376,15 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 // guarda la posicion inicial del objeto en el heap
                 string inicio_arreglo = Master.getInstancia.newTemporal();
                 Master.getInstancia.addUnaria(inicio_arreglo, Master.getInstancia.heap_p);
-                
 
-                Objeto tipo = new Objeto(Objeto.TipoObjeto.ARRAY, simboloArreglo ,simboloArreglo.id);
-                Simbolo newVar = entorno.addSimbolo(nombre, tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
+                Simbolo newVar = entorno.getSimbolo(nombre);
+
                 if(newVar == null)
                 {
                     Error error = new Error(base.getLinea(), base.getColumna(), Error.Errores.Semantico,
-                        "La variable: " + nombre + " ya existe en el ambito");
+                        "La variable: " + nombre + " no existe en el ambito");
                     Master.getInstancia.addError(error);
-                    throw new Exception("La variable: " + nombre + " ya existe en el ambito");
+                    throw new Exception("La variable: " + nombre + " no existe en el ambito");
                 }
 
                 switch (simboloArreglo.objeto.getTipo())
