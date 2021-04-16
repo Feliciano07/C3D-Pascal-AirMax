@@ -109,14 +109,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             Master.getInstancia.addComentario("Inicia declarando una variable de type: " + this.tipo.getObjetoId());
             foreach (string nombre in this.ids)
             {
-                // guarda la posicion inicial del objeto en el heap
-                string inicio_objeto = Master.getInstancia.newTemporal();
-                Master.getInstancia.addUnaria(inicio_objeto, Master.getInstancia.heap_p);
-                /*
-                 * Guarda un tipo objeto OBJECT
-                 * guarda la definicion del simbolo objeto, para poder manipular sus atributos
-                 * guarda el nombre de la estructura (cuadro, carro, circulo, etc)
-                 */
+                
                 Objeto tipo = new Objeto(Objeto.TipoObjeto.OBJECTS, sym_obj, sym_obj.id);
 
                 Simbolo newVar = entorno.addSimbolo(nombre, tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
@@ -144,11 +137,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
             foreach (string nombre in this.ids)
             {
-                // guarda la posicion inicial del objeto en el heap
-                string inicio_arreglo = Master.getInstancia.newTemporal();
-                Master.getInstancia.addUnaria(inicio_arreglo, Master.getInstancia.heap_p);
-
-
+                
                 Objeto tipo = new Objeto(Objeto.TipoObjeto.ARRAY, simboloArreglo, simboloArreglo.id);
                 Simbolo newVar = entorno.addSimbolo(nombre, tipo, Simbolo.Rol.VARIABLE, Simbolo.Pointer.STACK);
                 if (newVar == null)

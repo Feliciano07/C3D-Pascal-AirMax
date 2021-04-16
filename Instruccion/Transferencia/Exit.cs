@@ -1,5 +1,6 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
+using C3D_Pascal_AirMax.Instruccion.Variables;
 using C3D_Pascal_AirMax.Manejador;
 using C3D_Pascal_AirMax.TipoDatos;
 using System;
@@ -72,10 +73,41 @@ namespace C3D_Pascal_AirMax.Instruccion.Transferencia
             }
             else if( objeto.getTipo() == Objeto.TipoObjeto.OBJECTS)
             {
-                //TODO: exit de un objeto
+                Simbolo simbolo = retorno.sym;
+
+                if(simbolo.isReferencia == false)
+                {
+                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, "0", "+");
+                    string inicial = Master.getInstancia.newTemporalEntero();
+                    Master.getInstancia.addGetStack(inicial, posicion_stack);
+                    Asignacion asignacion = new Asignacion();
+                    asignacion.Copiar_Objeto(retorno.getObjeto().symObj, inicial, retorno.getValor());
+                }
+                else
+                {
+                    Asignacion asignacion = new Asignacion();
+                    string inicial = asignacion.Obtener_Posicion_Referencia(simbolo);
+                    asignacion.Copiar_Objeto(retorno.getObjeto().symObj, inicial, retorno.getValor());
+                }
             }else if(objeto.getTipo() == Objeto.TipoObjeto.ARRAY)
             {
-                //TODO: exit de un arreglo
+                Simbolo simbolo = retorno.sym;
+
+                if(simbolo.isReferencia == false)
+                {
+                    Master.getInstancia.addBinaria(posicion_stack, Master.getInstancia.stack_p, "0", "+");
+                    string inicial = Master.getInstancia.newTemporal();
+                    Master.getInstancia.addGetStack(inicial, posicion_stack);
+                    Asignacion asignacion = new Asignacion();
+                    asignacion.Copiar_Arreglo(retorno.getObjeto().symArray, inicial, retorno.getValor());
+                }
+                else
+                {
+                    Asignacion asignacion = new Asignacion();
+                    string inicial = asignacion.Obtener_Posicion_Referencia(simbolo);
+                    asignacion.Copiar_Arreglo(retorno.getObjeto().symArray, inicial, retorno.getValor());
+                }
+
             }
             else
             {

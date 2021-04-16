@@ -48,7 +48,8 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
             //seteo atributos al entorno, con respecto a la funcion
             entorno_fun.setFuncion(this.id, simboloFuncion, label_return);
 
-
+            //verifico el tipo
+            this.Validar_Retorno(entorno);
             //Mando a setear un simbolo que representa a la funcion
             this.Setear_Simbolo_Funcion(entorno_fun, simboloFuncion);
             this.Agregar_variables(entorno_fun);
@@ -151,6 +152,28 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
                     }
                 }
             }
+        }
+
+        public bool Validar_Retorno(Entorno entorno)
+        {
+            if(this.objeto.getTipo() == Objeto.TipoObjeto.TYPES)
+            {
+                SimboloObjeto simboloObjeto = entorno.searchObjeto(this.objeto.getObjetoId());
+                if(simboloObjeto != null)
+                {
+                    this.objeto.seTipo(Objeto.TipoObjeto.OBJECTS);
+                    this.objeto.symObj = simboloObjeto;
+                    return true;
+                }
+                SimboloArreglo simboloArreglo = entorno.searchArreglo(this.objeto.getObjetoId());
+                if(simboloArreglo != null)
+                {
+                    this.objeto.seTipo(Objeto.TipoObjeto.ARRAY);
+                    this.objeto.symArray = simboloArreglo;
+                    return true;
+                }
+            }
+            return false;
         }
 
 
