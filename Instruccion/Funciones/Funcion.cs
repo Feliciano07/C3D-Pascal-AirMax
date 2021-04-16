@@ -43,6 +43,8 @@ namespace C3D_Pascal_AirMax.Instruccion.Funciones
             Entorno entorno_fun = new Entorno(entorno, this.id);
             //creo una etiqueta que me mando al retorno
             string label_return = Master.getInstancia.newLabel();
+            //creo una etiqueta del exit
+            string label_exit = Master.getInstancia.newLabel();
             //seteo atributos al entorno, con respecto a la funcion
             entorno_fun.setFuncion(this.id, simboloFuncion, label_return);
 

@@ -20,8 +20,9 @@ namespace C3D_Pascal_AirMax.Enviroment
         private Entorno anterior;
 
         //Para manejar algo de master
-        private SimboloFuncion actual_funcion;
+        public SimboloFuncion actual_funcion;
         public string label_return;
+        
 
         //Para manejar los break y continue
 

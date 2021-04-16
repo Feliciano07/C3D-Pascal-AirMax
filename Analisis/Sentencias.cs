@@ -30,8 +30,8 @@ namespace C3D_Pascal_AirMax.Analisis
 
             if(entrada.ChildNodes.Count == 4)
             {
-                //TODO: exit con valor
-                return null;
+                Nodo expresion = Expresion.evaluar(entrada.ChildNodes[2]);
+                return new Exit(linea, columna, expresion);
             }
             else
             {
