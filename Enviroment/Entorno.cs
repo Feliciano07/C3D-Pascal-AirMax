@@ -29,6 +29,8 @@ namespace C3D_Pascal_AirMax.Enviroment
         public Stack<string> label_break;
         public Stack<string> label_continue;
 
+        public Stack<Llamada> llamadas;
+
 
         public Entorno( string nombre)
         {
@@ -43,6 +45,8 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.nombre_entorno = nombre;
             this.size = 0;
             this.anterior = null;
+
+            this.llamadas = new Stack<Llamada>();
         }
 
         public Entorno(Entorno anterior, string nombre)
@@ -58,6 +62,8 @@ namespace C3D_Pascal_AirMax.Enviroment
             this.nombre_entorno = nombre;
             this.size = 0;
             this.anterior = anterior;
+
+            this.llamadas = new Stack<Llamada>();
         }
 
         public void setFuncion(string id,SimboloFuncion simboloFuncion, string label_return )

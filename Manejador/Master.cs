@@ -1,5 +1,6 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
+using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,8 +30,10 @@ namespace C3D_Pascal_AirMax.Manejador
         private int temporal = 0;
         private int label = 0;
         private LinkedList<string> codigo = new LinkedList<string>();
+
         private LinkedList<string> storageTemp = new LinkedList<string>();
         private LinkedList<string> storageTempInt = new LinkedList<string>();
+
         private LinkedList<string> storageLabel = new LinkedList<string>();
 
         public string heap = "Heap";
@@ -373,6 +376,66 @@ namespace C3D_Pascal_AirMax.Manejador
         {
             this.codigo.AddLast("/***" + comentario + "*/");
         }
+
+        public int saveTemporales(Entorno entorno)
+        {
+            string aux = this.newTemporalEntero();
+            int contador = 0;
+
+            this.addBinaria(aux, stack_p, (entorno.size + 1).ToString(), "+");
+
+            int total = this.storageTemp.Count + this.storageTempInt.Count;
+
+            LinkedList<string> storage = new LinkedList<string>(); ;
+
+            foreach (string tem in this.storageTemp)
+            {
+                contador++;
+                this.addSetStack(aux, tem);
+                storage.AddLast(tem);
+                if (contador != total)
+                this.addBinaria(aux, aux, "1" , "+");
+
+                
+            }
+
+            foreach(string tem in this.storageTempInt)
+            {
+                contador++;
+                this.addSetStack(aux, tem);
+                storage.AddLast(tem);
+                if (contador != total)
+                this.addBinaria(aux, aux, "1" , "+");
+
+            }
+
+            int tamanio_anterior = entorno.size;
+            entorno.size = tamanio_anterior + contador;
+            Llamada llamada = new Llamada(tamanio_anterior, storage);
+            entorno.llamadas.Push(llamada);
+            return tamanio_anterior;
+        }
+
+        public void RecoverTemporales(Entorno entorno)
+        {
+            string aux = this.newTemporalEntero();
+            Llamada llamada = entorno.llamadas.Pop();
+
+            this.addBinaria(aux, stack_p, (llamada.inicio + 1).ToString(), "+");
+
+            int total = llamada.storageTemp.Count;
+            int contador = 0;
+
+            foreach (string tem in llamada.storageTemp)
+            {
+                contador++;
+                this.addGetStack(tem, aux);
+                if(contador != total)
+                this.addBinaria(aux, aux, "1", "+");
+            }
+            entorno.size = llamada.inicio;
+        }
+
 
 
         public void ReccorerErrores()
