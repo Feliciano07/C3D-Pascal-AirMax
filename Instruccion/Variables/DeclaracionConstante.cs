@@ -69,6 +69,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
 
             Simbolo newVar = entorno.getSimbolo(this.nombre);
+            newVar.getObjeto().seTipo(this.tipo);
 
             if (newVar == null)
             {

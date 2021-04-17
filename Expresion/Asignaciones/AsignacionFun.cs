@@ -43,7 +43,20 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                 throw new Exception("La funcion: " + this.id + " no se encontro");
             }
 
+            if(string.Compare(simboloFuncion.id.ToLower(), entorno.getNombreEntorno().ToLower()) == 0)
+            {
+                return this.Recursiva(entorno, simboloFuncion);
+            }
+            else
+            {
+                return this.No_Recursiva(entorno, simboloFuncion);
+            }
 
+        }
+
+
+        public Retorno Recursiva(Entorno entorno, SimboloFuncion simboloFuncion)
+        {
             if (simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.VOID)
             {
                 //TODO: tengo que mandar a guardar mis temporales, para manejar recursividad
@@ -89,12 +102,50 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
 
                 //Simulamos el cambio de entorno
                 string temp = Master.getInstancia.newTemporalEntero();
-                
+
                 Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, (entorno.size + 1).ToString(), "+");
-                
+
+
+                //correomos los parametros
+                LinkedList<Retorno> salida = this.getRetornos(entorno);
+
+                Master.getInstancia.addComentario("simulacion de cambio de entorno");
+                //Setemos los valores de los parametros
 
                 //Setemos el valor del retorno, que estara en la posicion 0
+                Master.getInstancia.addComentario("creamos el retorno de la funcionn");
                 this.Generar_Retorno(simboloFuncion, temp);
+
+                this.getValores(temp, simboloFuncion, salida);
+
+                //Generamos el cambio de entorno formal
+                Master.getInstancia.plusStack((entorno.size + 1).ToString());
+
+
+
+                Master.getInstancia.callFuncion(simboloFuncion.id);
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, "0", "+");
+                string tem_retorno = Master.getInstancia.newTemporal();
+
+                //retornamos al entorno anterior
+                Master.getInstancia.addGetStack(tem_retorno, temp);
+                Master.getInstancia.substracStack((entorno.size + 1).ToString());
+                Master.getInstancia.addComentario("Recupero mis temporales");
+                Master.getInstancia.RecoverTemporales(entorno);
+
+                return this.Devolver_valor_funcion(tem_retorno, simboloFuncion);
+            }
+        }
+
+
+        public Retorno No_Recursiva(Entorno entorno, SimboloFuncion simboloFuncion)
+        {
+            if (simboloFuncion.objeto.getTipo() == Objeto.TipoObjeto.VOID)
+            {
+                //Simulamos el cambio de entorno
+                string temp = Master.getInstancia.newTemporalEntero();
+
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, (entorno.size + 1).ToString(), "+");
 
                 //correomos los parametros
                 LinkedList<Retorno> salida = this.getRetornos(entorno);
@@ -115,14 +166,50 @@ namespace C3D_Pascal_AirMax.Expresion.Asignaciones
                 //retornamos al entorno anterior
                 Master.getInstancia.addGetStack(tem_retorno, temp);
                 Master.getInstancia.substracStack((entorno.size + 1).ToString());
-                Master.getInstancia.addComentario("Recupero mis temporales");
-                Master.getInstancia.RecoverTemporales(entorno);
+               
 
                 return this.Devolver_valor_funcion(tem_retorno, simboloFuncion);
             }
+            else
+            {
+
+                //Simulamos el cambio de entorno
+                string temp = Master.getInstancia.newTemporalEntero();
+
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, (entorno.size + 1).ToString(), "+");
 
 
+                
+
+                //correomos los parametros
+                LinkedList<Retorno> salida = this.getRetornos(entorno);
+
+                Master.getInstancia.addComentario("simulacion de cambio de entorno");
+
+                Master.getInstancia.addComentario("generamos el retorno");
+                //Setemos el valor del retorno, que estara en la posicion 0
+                this.Generar_Retorno(simboloFuncion, temp);
+                //Setemos los valores de los parametros
+                this.getValores(temp, simboloFuncion, salida);
+
+                //Generamos el cambio de entorno formal
+                Master.getInstancia.plusStack((entorno.size + 1).ToString());
+
+
+
+                Master.getInstancia.callFuncion(simboloFuncion.id);
+                Master.getInstancia.addBinaria(temp, Master.getInstancia.stack_p, "0", "+");
+                string tem_retorno = Master.getInstancia.newTemporal();
+
+                //retornamos al entorno anterior
+                Master.getInstancia.addGetStack(tem_retorno, temp);
+                Master.getInstancia.substracStack((entorno.size + 1).ToString());
+
+
+                return this.Devolver_valor_funcion(tem_retorno, simboloFuncion);
+            }
         }
+
 
         public void Generar_Retorno(SimboloFuncion simboloFuncion, string temp)
         {
