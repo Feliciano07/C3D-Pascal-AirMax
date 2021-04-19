@@ -88,9 +88,13 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                 Master.getInstancia.addGetHeap(valor, posicion_absoluta);
                 if (simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
                 {
-                    return new Retorno(valor, true, simbolo_aux.objeto, sym, posicion_absoluta);
+                    return new Retorno(valor, true, simbolo_aux.objeto,
+                        new Simbolo(this.id, simbolo_aux.objeto,
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false), posicion_absoluta);
                 }
-                Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym, posicion_absoluta);
+                Retorno retorno = new Retorno("", false, simbolo_aux.objeto,
+                    new Simbolo(this.id, simbolo_aux.objeto,
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false), posicion_absoluta);
                 this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
                 this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
                 Master.getInstancia.addif(valor, "1", "==", this.trueLabel);
@@ -101,6 +105,7 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
             }
             else
             {
+                //TODO: cambiar el retorno
                 if(sym.isReferencia == false)
                 {
                     SimboloArreglo simbolo_aux = sym.getObjeto().symArray;
@@ -125,9 +130,13 @@ namespace C3D_Pascal_AirMax.Expresion.Accesos
                     Master.getInstancia.addGetHeap(valor, posicion_absoluta);
                     if (simbolo_aux.objeto.getTipo() != Objeto.TipoObjeto.BOOLEAN)
                     {
-                        return new Retorno(valor, true, simbolo_aux.objeto, sym, posicion_absoluta);
+                        return new Retorno(valor, true, simbolo_aux.objeto,
+                            new Simbolo(this.id, simbolo_aux.objeto,
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false), posicion_absoluta);
                     }
-                    Retorno retorno = new Retorno("", false, simbolo_aux.objeto, sym, posicion_absoluta);
+                    Retorno retorno = new Retorno("", false, simbolo_aux.objeto,
+                        new Simbolo(this.id, simbolo_aux.objeto,
+                Simbolo.Rol.VARIABLE, Simbolo.Pointer.HEAP, 0, "", false), posicion_absoluta);
                     this.trueLabel = this.trueLabel == "" ? Master.getInstancia.newLabel() : this.trueLabel;
                     this.falseLabel = this.falseLabel == "" ? Master.getInstancia.newLabel() : this.falseLabel;
                     Master.getInstancia.addif(valor, "1", "==", this.trueLabel);

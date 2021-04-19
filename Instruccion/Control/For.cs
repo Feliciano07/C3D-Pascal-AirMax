@@ -45,6 +45,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Control
             {
                 if(iterador.sym.isReferencia == false)
                 {
+                    Master.getInstancia.addComentario("Inicial el for");
                     Master.getInstancia.addLabel(label_retorno);
                     Master.getInstancia.addGetStack(temporal_variable, iterador.getValor());
                     Master.getInstancia.addif(temporal_variable, condicion.getValor(), ">=", label_true);
@@ -52,10 +53,13 @@ namespace C3D_Pascal_AirMax.Instruccion.Control
                     Master.getInstancia.addLabel(label_true);
                     Ejecutar(entorno);
                     Master.getInstancia.addLabel(label_conteo);
+
+                    Master.getInstancia.addComentario("Se cambia el valor");
                     Master.getInstancia.addBinaria(temporal_variable, temporal_variable, "1", "-");
                     Master.getInstancia.addSetStack(iterador.getValor(), temporal_variable);
                     Master.getInstancia.addGoto(label_retorno);
                     Master.getInstancia.addLabel(label_false);
+                    Master.getInstancia.addComentario("fin del for");
                 }
                 else
                 {
@@ -72,6 +76,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Control
             {
                 if(iterador.sym.isReferencia == false)
                 {
+                    Master.getInstancia.addComentario("Inicial el for");
                     Master.getInstancia.addLabel(label_retorno);
                     Master.getInstancia.addGetStack(temporal_variable, iterador.getValor());
                     Master.getInstancia.addif(temporal_variable, condicion.getValor(), "<=", label_true);
@@ -79,10 +84,12 @@ namespace C3D_Pascal_AirMax.Instruccion.Control
                     Master.getInstancia.addLabel(label_true);
                     Ejecutar(entorno);
                     Master.getInstancia.addLabel(label_conteo);
+                    Master.getInstancia.addComentario("Se cambia el valor");
                     Master.getInstancia.addBinaria(temporal_variable, temporal_variable, "1", "+");
                     Master.getInstancia.addSetStack(iterador.getValor(), temporal_variable);
                     Master.getInstancia.addGoto(label_retorno);
                     Master.getInstancia.addLabel(label_false);
+                    Master.getInstancia.addComentario("fin del for");
                 }
                 else
                 {
