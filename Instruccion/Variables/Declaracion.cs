@@ -106,7 +106,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
                 return false;
             }
 
-            Master.getInstancia.addComentario("Inicia declarando una variable de type: " + this.tipo.getObjetoId());
+            
             foreach (string nombre in this.ids)
             {
                 
@@ -133,7 +133,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             {
                 return false;
             }
-            Master.getInstancia.addComentario("Inicia la declaracion de variable tipo arreglo");
+           
 
             foreach (string nombre in this.ids)
             {
@@ -498,6 +498,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
 
             Master.getInstancia.addSetHeap(posicion, inicio_objeto);
             Reservar_Espacio_Objeto(simboloObjeto, inicio_objeto);
+            Reservar_Espacio_Arreglo(simboloObjeto, inicio_objeto);
 
             Master.getInstancia.addBinaria(contador, contador, "1", "+");
             Master.getInstancia.addGoto(retorno);
