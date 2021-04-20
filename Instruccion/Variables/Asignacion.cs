@@ -521,7 +521,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             string false_if = Master.getInstancia.newLabel();
             string retorno = Master.getInstancia.newLabel();
             Master.getInstancia.addLabel(retorno);
-            Master.getInstancia.addif(contador, total, "<=", true_if);
+            Master.getInstancia.addif(contador, total, "<", true_if);
             Master.getInstancia.addGoto(false_if);
             Master.getInstancia.addLabel(true_if);
             Copiar_Interger_real_bool(inicial_asig, inicial_valor, contador);
@@ -542,7 +542,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             string retorno = Master.getInstancia.newLabel();
 
             Master.getInstancia.addLabel(retorno);
-            Master.getInstancia.addif(contador, total, "<=", true_if);
+            Master.getInstancia.addif(contador, total, "<", true_if);
             Master.getInstancia.addGoto(false_if);
             Master.getInstancia.addLabel(true_if);
             Copiar_cadena(inicial_asig, inicial_valor, contador);
@@ -564,7 +564,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             string retorno = Master.getInstancia.newLabel();
 
             Master.getInstancia.addLabel(retorno);
-            Master.getInstancia.addif(contador, total, "<=", true_if);
+            Master.getInstancia.addif(contador, total, "<", true_if);
             Master.getInstancia.addGoto(false_if);
 
             Master.getInstancia.addLabel(true_if);

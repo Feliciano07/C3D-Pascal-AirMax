@@ -413,7 +413,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             string false_if = Master.getInstancia.newLabel();
 
             Master.getInstancia.addLabel(retorno);
-            Master.getInstancia.addif(contador, tope, "<=", true_if);
+            Master.getInstancia.addif(contador, tope, "<", true_if);
             Master.getInstancia.addGoto(false_if);
 
             Master.getInstancia.addLabel(true_if);
@@ -436,7 +436,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             string false_if = Master.getInstancia.newLabel();
 
             Master.getInstancia.addLabel(retorno);
-            Master.getInstancia.addif(contador, tope, "<=", true_if);
+            Master.getInstancia.addif(contador, tope, "<", true_if);
             Master.getInstancia.addGoto(false_if);
 
             Master.getInstancia.addLabel(true_if);
@@ -465,7 +465,7 @@ namespace C3D_Pascal_AirMax.Instruccion.Variables
             string posicion = Master.getInstancia.newTemporalEntero();
 
             Master.getInstancia.addLabel(retorno);
-            Master.getInstancia.addif(contador, tope, "<=", true_if);
+            Master.getInstancia.addif(contador, tope, "<", true_if);
             Master.getInstancia.addGoto(false_if);
 
             Master.getInstancia.addLabel(true_if);
