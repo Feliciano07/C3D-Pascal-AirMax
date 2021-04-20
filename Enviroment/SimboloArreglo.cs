@@ -142,26 +142,30 @@ namespace C3D_Pascal_AirMax.Enviroment
 
         public string Posicion_Tres_dimensiones(string pos1, string pos2, string pos3)
         {
-            //TODO: Esto aun no funciona del todo bien
-            string tem2 = Posicion_Dos_Dimensiones(pos1, pos2);
+
+            string tem1 = Posicion_Una_dimension(pos1);
+
+            string n2 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(n2, this.aux_dim[1].superior.ToString(), "1", "+");
+
+            Master.getInstancia.addBinaria(n2, tem1, n2, "*");
+
+            string tem2 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(tem2, pos2, this.aux_dim[1].inferior.ToString(), "-");
+
+            Master.getInstancia.addBinaria(n2, tem2, n2, "+");
+
+            string n3 = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(n3, this.aux_dim[2].superior.ToString(), "1", "+");
+
+            Master.getInstancia.addBinaria(n3, n2, n3, "*");
 
             string tem3 = Master.getInstancia.newTemporalEntero();
             Master.getInstancia.addBinaria(tem3, pos3, this.aux_dim[2].inferior.ToString(), "-");
 
-            string auxiliar = Master.getInstancia.newTemporalEntero();
+            Master.getInstancia.addBinaria(n3, n3, tem3, "+");
 
-            Master.getInstancia.addUnaria(auxiliar, this.aux_dim[2].superior.ToString());
-
-            string multi = Master.getInstancia.newTemporalEntero();
-
-            Master.getInstancia.addBinaria(multi, tem2, auxiliar, "*");
-
-            string sum = Master.getInstancia.newTemporalEntero();
-
-            Master.getInstancia.addBinaria(sum, multi, tem3, "+");
-
-            return sum;
-
+            return n3;
         }
 
     }
