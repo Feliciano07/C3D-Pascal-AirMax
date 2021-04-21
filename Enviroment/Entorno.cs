@@ -92,6 +92,7 @@ namespace C3D_Pascal_AirMax.Enviroment
                  this.anterior == null ? true : false);
             simbolo.isReferencia = false;
             this.variables.Add(id, simbolo);
+            Manejador.Master.getInstancia.addSimbolo(simbolo);
             return simbolo;
         }
 
@@ -116,6 +117,7 @@ namespace C3D_Pascal_AirMax.Enviroment
                 simbolo.isReferencia = true;
             }
             this.variables.Add(id, simbolo);
+            Manejador.Master.getInstancia.addSimbolo(simbolo);
             return simbolo;
         }
 
@@ -261,14 +263,14 @@ namespace C3D_Pascal_AirMax.Enviroment
         public string Retornar_Simbolos()
         {
             string salida = "";
-            foreach(KeyValuePair<string,Simbolo> kvp in this.variables)
+            foreach(Simbolo kvp in Manejador.Master.getInstancia.todas_variables)
             {
                 salida += "<tr>";
-                salida += "<td>" + kvp.Value.getId() + "</td>\n";
-                salida += "<td>" + kvp.Value.getTipo().ToString() + "</td>\n";
-                salida += "<td>" + kvp.Value.getEntorno() + "</td>\n";
-                salida += "<td>" + kvp.Value.getRol().ToString()+ "</td>\n";
-                salida += "<td>" + kvp.Value.getPosicion() + "</td>\n";
+                salida += "<td>" + kvp.getId() + "</td>\n";
+                salida += "<td>" + kvp.getTipo().ToString() + "</td>\n";
+                salida += "<td>" + kvp.getEntorno() + "</td>\n";
+                salida += "<td>" + kvp.getRol().ToString()+ "</td>\n";
+                salida += "<td>" + kvp.getPosicion() + "</td>\n";
                 salida += "</tr>";
             }
             return salida;
@@ -303,6 +305,41 @@ namespace C3D_Pascal_AirMax.Enviroment
             return salida;
         }
 
+        public string Simbolos_Arrays()
+        {
+            string salida = "";
+
+            foreach(KeyValuePair<string, SimboloArreglo> kvp in this.arreglos)
+            {
+                salida += "<tr>";
+                salida += "<td>" + kvp.Value.id + "</td>\n";
+                salida += "<td>" + kvp.Value.objeto.getObjetoId().ToUpper() + "</td>\n";
+                salida += "<td>" + "Global" + "</td>\n";
+                salida += "<td>" + "Type array" + "</td>\n";
+                salida += "<td>" + "-" + "</td>\n";
+                salida += "</tr>";
+            }
+
+            return salida;
+        }
+
+        public string Simbolo_Funcion()
+        {
+            string salida = "";
+            foreach(KeyValuePair<string, SimboloFuncion> kvp in this.funciones)
+            {
+                salida += "<tr>";
+                salida += "<td>" + kvp.Value.id + "</td>\n";
+                salida += "<td>" + kvp.Value.objeto.getObjetoId().ToUpper() + "</td>\n";
+                salida += "<td>" + "Global" + "</td>\n";
+                salida += "<td>" + "Funcion" + "</td>\n";
+                salida += "<td>" + "-" + "</td>\n";
+                salida += "</tr>";
+            }
+
+            return salida;
+        }
+
 
         public void TablaGeneral()
         {
@@ -324,6 +361,8 @@ namespace C3D_Pascal_AirMax.Enviroment
             fichero.WriteLine("</tr>");
             fichero.Write(this.Retornar_Simbolos());
             fichero.Write(this.Simbolo_Objetos());
+            fichero.Write(this.Simbolos_Arrays());
+            fichero.Write(this.Simbolo_Funcion());
             fichero.Write("</table>");
             fichero.WriteLine("</center>" + "</body>" + "</html>");
             fichero.Close();

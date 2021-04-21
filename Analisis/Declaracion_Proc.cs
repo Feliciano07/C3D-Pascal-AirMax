@@ -25,7 +25,7 @@ namespace C3D_Pascal_AirMax.Analisis
 
             
             LinkedList<Parametro> parametros = Obtener_parametros(entrada.ChildNodes[3]);
-            Objeto objeto = new Objeto(Objeto.TipoObjeto.VOID);
+            Objeto objeto = new Objeto(Objeto.TipoObjeto.VOID, "VOID");
 
             if (entrada.ChildNodes.Count == 8)
             {

@@ -24,6 +24,8 @@ namespace C3D_Pascal_AirMax.Manejador
 
         public LinkedList<Nodo> types_objetos = new LinkedList<Nodo>();
 
+        public LinkedList<Simbolo> todas_variables = new LinkedList<Simbolo>();
+
 
         private LinkedList<Error> lista_errores = new LinkedList<Error>();
 
@@ -52,6 +54,11 @@ namespace C3D_Pascal_AirMax.Manejador
             {
                 return instancia;
             }
+        }
+
+        public void addSimbolo(Simbolo simbolo)
+        {
+            this.todas_variables.AddLast(simbolo);
         }
 
         public void addInstruccion(Nodo nodo)
