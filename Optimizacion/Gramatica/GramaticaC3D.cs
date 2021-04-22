@@ -154,14 +154,14 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
 
 
             cuerpo.Rule = funcion //-
-                          | operacion + TpuntoC
-                          | asignar + TpuntoC
+                          | operacion + TpuntoC //*
+                          | asignar + TpuntoC//*
                           | punto //-
                           | condicional + TpuntoC
-                          | no_condicional + TpuntoC
-                          | retorno
+                          | no_condicional + TpuntoC //-
+                          | retorno //-
                           | fin//-
-                          | printf
+                          | printf//-
                           | llamada; // -
             //| printf
             //| fin;

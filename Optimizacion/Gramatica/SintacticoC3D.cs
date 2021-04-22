@@ -20,7 +20,9 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
                 return false;
             }
 
-            Encabezado(raiz.ChildNodes[0]);
+            string salida = Encabezado(raiz.ChildNodes[0]);
+
+            Instrucciones(raiz.ChildNodes[1]);
 
             return true;
         }
@@ -75,33 +77,34 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
         {
             foreach(ParseTreeNode node in entrada.ChildNodes)
             {
-
+                instruccion(node);
             }
         }
 
-        public void instruccion(ParseTreeNode entrada)
+        public Nodo instruccion(ParseTreeNode entrada)
         {
-            string type = entrada.Term.Name;
+            string type = entrada.ChildNodes[0].Term.Name;
 
             switch (type)
             {
                 case "funcion":
-                    break;
+                    return getFuncion(entrada.ChildNodes[0]);
                 case "asignar":
-                    break;
+                    return getAsignacion(entrada.ChildNodes[0]);
                 case "no_condicional":
-                    break;
+                    return getCondicion(entrada.ChildNodes[0]);
                 case "punto":
-                    break;
+                    return getSalto(entrada.ChildNodes[0]);
                 case "retorno":
-                    break;
+                    return getRetorno(entrada.ChildNodes[0]);
                 case "llamada":
-                    break;
+                    return getLlamada(entrada.ChildNodes[0]);
                 case "printf":
-                    break;
+                    return getPrint(entrada.ChildNodes[0]);
                 case "fin":
-                    break;
+                    return getFin(entrada.ChildNodes[0]);
             }
+            return null;
         }
 
         public Nodo getFuncion(ParseTreeNode entrada)
@@ -142,6 +145,107 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
             int fila = entrada.Span.Location.Line;
             return new Salto(fila, label);
         }
+
+        public Nodo getPrint(ParseTreeNode entrada)
+        {
+            int fila = entrada.Span.Location.Line;
+            string formato = entrada.ChildNodes[2].Token.Text;
+            string tipo = entrada.ChildNodes[5].Token.Text;
+            string valor = getTerminal(entrada.ChildNodes[7]);
+            return new Printf(fila, formato, tipo, valor);
+        }
+
+        public Nodo getOperacion(ParseTreeNode entrada)
+        {
+            string id = getTerminal(entrada.ChildNodes[0]);
+            string left = getAux_terminal(entrada.ChildNodes[2]);
+            string right = getAux_terminal(entrada.ChildNodes[4]);
+            string simbolo = entrada.ChildNodes[3].Token.Text;
+            int fila = entrada.Span.Location.Line;
+
+            return new Operacion(fila, id, left, simbolo, right);
+        }
+
+        public Nodo getAsignacion(ParseTreeNode entrada)
+        {
+            int fila = entrada.Span.Location.Line;
+
+            if(entrada.ChildNodes.Count == 3)
+            {
+                string direccion = getTerminal(entrada.ChildNodes[0]);
+                string valor = getAux_terminal(entrada.ChildNodes[2]);
+                return new Asignacion1(fila, direccion, valor);
+            }
+            else
+            {
+                string tipo = entrada.ChildNodes[0].Term.Name;
+                switch (tipo)
+                {
+                    case "no_terminal":
+                        {
+                            string direccion = getNo_terminal(entrada.ChildNodes[0]);
+                            string posicion = getAux_terminal(entrada.ChildNodes[2]);
+                            string valor = getAux_terminal(entrada.ChildNodes[5]);
+                            return new Asignacion2(fila, direccion, posicion, valor);
+                        }
+                    default:
+                        {
+                            string direccion = getTerminal(entrada.ChildNodes[0]);
+                            string valor = getNo_terminal(entrada.ChildNodes[2]);
+                            string posicion = getAux_terminal(entrada.ChildNodes[4]);
+                            return new Asignacion3(fila, direccion, valor, posicion);
+                        }
+                }
+            }
+        }
+
+        public Nodo getCondicion(ParseTreeNode entrada)
+        {
+            int fila = entrada.Span.Location.Line;
+
+            string left = getAux_terminal(entrada.ChildNodes[2]);
+            string right = getAux_terminal(entrada.ChildNodes[4]);
+            string operacion = entrada.ChildNodes[3].Token.Text;
+
+            string label = entrada.ChildNodes[6].Token.Text;
+
+            return new Condicion(fila, left, right, operacion, label);
+        }
+
+        public Nodo getFin(ParseTreeNode entrada)
+        {
+            int fila = entrada.Span.Location.Line;
+            return new Fin(fila);
+        }
+
+        public string getTerminal(ParseTreeNode entrada)
+        {
+            string type = entrada.ChildNodes[0].Token.Text;
+
+            return type;
+        }
+
+        public string getAux_terminal(ParseTreeNode entrada)
+        {
+            if(entrada.ChildNodes.Count == 2)
+            {
+                string salida = "-" + getTerminal(entrada.ChildNodes[1]);
+                return salida;
+            }
+            else
+            {
+                string salida = getTerminal(entrada.ChildNodes[0]);
+                return salida;
+            }
+        }
+
+        public string getNo_terminal(ParseTreeNode entrada)
+        {
+            string salida = entrada.ChildNodes[0].Token.Text;
+            return salida;
+        }
+
+        
 
     }
 }

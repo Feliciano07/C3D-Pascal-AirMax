@@ -4,16 +4,19 @@ using System.Text;
 
 namespace C3D_Pascal_AirMax.Optimizacion.Arbol
 {
-    public class Printf : Nodo
+    public class Operacion : Nodo
     {
-        private string formato;
-        private string tipo;
-        private string valor;
-        public Printf(int fila, string formato, string tipo, string valor) : base(fila)
+        public string id;
+        public string operacion;
+        public string left;
+        public string right;
+
+        public Operacion(int fila, string id, string left, string operacion, string right) : base(fila)
         {
-            this.formato = formato;
-            this.tipo = tipo;
-            this.valor = valor;
+            this.id = id;
+            this.operacion = operacion;
+            this.left = left;
+            this.right = right;
         }
 
         public override string getOriginal()
