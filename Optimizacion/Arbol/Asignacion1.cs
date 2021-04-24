@@ -22,7 +22,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
 
         public override void Mirilla(Interprete interprete)
         {
-            throw new NotImplementedException();
+            interprete.IP++;
         }
     }
 }

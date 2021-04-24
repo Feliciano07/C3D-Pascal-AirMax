@@ -26,10 +26,10 @@ namespace C3D_Pascal_AirMax.Utilidades
             REGLA_16
         }
 
-        private int fila;
-        private string original;
-        private string nueva;
-        private Regla regla;
+        public int fila;
+        public string original;
+        public string nueva;
+        public Regla regla;
 
         public Optimized(int fila, string original, string nueva, Regla regla)
         {

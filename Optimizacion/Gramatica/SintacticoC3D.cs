@@ -24,6 +24,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
             LinkedList<Nodo> instrucciones =  Instrucciones(raiz.ChildNodes[1]); // obtiene istrucciones
             Interprete interprete = new Interprete(salida, instrucciones);
             interprete.Mirrilla();
+            interprete.GenerarCodigo();
 
             return true;
         }
@@ -51,7 +52,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
         {
             string salida = entrada.ChildNodes[0].Token.Text +" ";
             salida += Lista_temporales(entrada.ChildNodes[1]);
-            salida += "\n";
+            salida += "; \n";
             return salida;
         }
 
@@ -216,7 +217,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
             string right = getAux_terminal(entrada.ChildNodes[4]);
             string operacion = entrada.ChildNodes[3].Token.Text;
 
-            string label = entrada.ChildNodes[6].Token.Text;
+            string label = entrada.ChildNodes[7].Token.Text;
 
             return new Condicion(fila, left, right, operacion, label);
         }

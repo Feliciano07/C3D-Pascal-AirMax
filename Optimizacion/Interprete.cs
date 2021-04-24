@@ -13,6 +13,8 @@ namespace C3D_Pascal_AirMax.Optimizacion
         public string header;
         public int IP;// saber en que instruccion vamos navegando
 
+        public string label_or;
+
         public Interprete(string header, LinkedList<Nodo> instrucciones)
         {
             this.original = instrucciones;
@@ -20,6 +22,7 @@ namespace C3D_Pascal_AirMax.Optimizacion
             this.instrucciones = new Nodo[this.original.Count];
             this.original.CopyTo(this.instrucciones, 0); // copia la lista a un arreglo
             this.IP = 0;
+            this.label_or = "";
         }
 
 
@@ -51,6 +54,16 @@ namespace C3D_Pascal_AirMax.Optimizacion
         }
 
 
+        public void GenerarCodigo()
+        {
+            for(int i = 0; i< this.instrucciones.Length; i++)
+            {
+                if (this.instrucciones[i].isEnable)
+                {
+                    Master.getInstancia.addOptimizedCode(this.instrucciones[i].getOriginal());
+                }
+            }
+        }
 
     }
 }

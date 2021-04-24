@@ -12,17 +12,21 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
         public string left;
         public string right;
 
+        public string salida;
+
         public Operacion(int fila, string id, string left, string operacion, string right) : base(fila)
         {
             this.id = id;
             this.operacion = operacion;
             this.left = left;
             this.right = right;
+            this.salida = this.id + "=" + this.left + this.operacion + this.right + ";";
         }
 
         public override string getOriginal()
         {
-            return this.id + "=" + this.left + this.operacion + this.right + ";";
+
+            return this.salida;
         }
 
         public override void Mirilla(Interprete interprete)
@@ -36,9 +40,11 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
                             switch (this.operacion)
                             {
                                 case "+":
+                                    base.isEnable = false;
                                     Master.getInstancia.addOptimized(this.fila, this.getOriginal(), "", Utilidades.Optimized.Regla.REGLA_6);
                                     break;
                                 case "-":
+                                    base.isEnable = false;
                                     Master.getInstancia.addOptimized(this.fila, this.getOriginal(), "", Utilidades.Optimized.Regla.REGLA_7);
                                     break;
                             }
@@ -49,9 +55,11 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
                             switch (this.operacion)
                             {
                                 case "*":
+                                    base.isEnable = false;
                                     Master.getInstancia.addOptimized(this.fila, this.getOriginal(), "", Utilidades.Optimized.Regla.REGLA_8);
                                     break;
                                 case "/":
+                                    base.isEnable = false;
                                     Master.getInstancia.addOptimized(this.fila, this.getOriginal(), "", Utilidades.Optimized.Regla.REGLA_9);
                                     break;
                             }
@@ -68,6 +76,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
                     {
                         string nueva = this.id + " = " + "0;";
                         Master.getInstancia.addOptimized(this.fila, this.getOriginal(), nueva, Utilidades.Optimized.Regla.REGLA_16);
+                        this.salida = nueva;
                     }
                 }
 
@@ -86,7 +95,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
                                 case "*":
                                     string nueva = this.id + " = " + "0;";
                                     Master.getInstancia.addOptimized(this.fila, this.getOriginal(), nueva, Utilidades.Optimized.Regla.REGLA_15);
-                                    //TODO: guardar el codigo aca?
+                                    this.salida = nueva;
                                     break;
 
                             }
@@ -112,7 +121,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
                                 case "*":
                                     string nueva = this.id + " = " + this.left + " + " + this.left + ";";
                                     Master.getInstancia.addOptimized(this.fila, this.getOriginal(), nueva, Utilidades.Optimized.Regla.REGLA_14);
-                                    //TODO: guardar codigo aca ?
+                                    this.salida = nueva;
                                     break;
 
                             }
@@ -120,6 +129,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
                         break;
                 }
             }
+            interprete.IP++;
         }
 
         
@@ -127,8 +137,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
         {
             string nueva = this.id + " = " + this.left + ";";
             Master.getInstancia.addOptimized(this.fila, this.getOriginal(), nueva, regla);
-
-            //TODO: guardar el codigo aca?
+            this.salida = nueva;
         }
         
     }

@@ -503,5 +503,46 @@ namespace C3D_Pascal_AirMax.Manejador
             Optimized optimized = new Optimized(fila, original, nueva, regla);
             this.optimizeds.AddLast(optimized);
         }
+
+
+        public void ReporteOptimizacion()
+        {
+            string ruta = @"C:\compiladores2";
+            StreamWriter fichero = new StreamWriter(ruta + "\\" + "reporte_optimizacion" + ".html");
+            fichero.WriteLine("<html>");
+            fichero.WriteLine("<head><title>Optimizacion</title></head>");
+            fichero.WriteLine("<body>");
+            fichero.WriteLine("<h2>" + "Mirilla" + "</h2>");
+            fichero.WriteLine("<br></br>");
+            fichero.WriteLine("<center>" +
+            "<table border=3 width=60% height=7%>");
+            fichero.WriteLine("<tr>");
+            fichero.WriteLine("<th>Fila</th>");
+            fichero.WriteLine("<th>Codigo Eliminado</th>");
+            fichero.WriteLine("<th>Codigo Agregado</th>");
+            fichero.WriteLine("<th>Regla</th>");
+            fichero.WriteLine("</tr>");
+            fichero.WriteLine(ListaOptimizar());
+            fichero.Write("</table>");
+            fichero.WriteLine("</center>" + "</body>" + "</html>");
+            fichero.Close();
+        }
+
+        public string ListaOptimizar()
+        {
+            string salida = "";
+
+            foreach(Optimized optimized in this.optimizeds)
+            {
+                salida += "<tr>";
+                salida += "<td>" + optimized.fila + "</td>\n";
+                salida += "<td>" + optimized.original + "</td>\n";
+                salida += "<td>" + optimized.nueva + "</td>\n";
+                salida += "<td>" + optimized.regla + "</td>\n";
+                salida += "</tr>";
+            }
+
+            return salida;
+        }
     }
 }

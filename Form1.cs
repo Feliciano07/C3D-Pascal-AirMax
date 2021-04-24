@@ -48,6 +48,9 @@ namespace C3D_Pascal_AirMax
             if (salida)
             {
                 var result = MessageBox.Show("Analisis correcto");
+                string txt = Manejador.Master.getInstancia.getSalida();
+                richTextBox2.Text = txt;
+                Manejador.Master.getInstancia.ReporteOptimizacion();
             }
             else
             {
