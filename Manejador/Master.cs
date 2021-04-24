@@ -1,5 +1,6 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
+using C3D_Pascal_AirMax.Optimizacion;
 using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,10 @@ namespace C3D_Pascal_AirMax.Manejador
 
         private int puntero_heap = 0;
         private int puntero_stack = 0;
+
+        //Estructura para controlar la optimizacion
+        public LinkedList<Optimized> optimizeds = new LinkedList<Optimized>();
+
 
         public static Master getInstancia
         {
@@ -483,5 +488,61 @@ namespace C3D_Pascal_AirMax.Manejador
             return salida;
         }
 
+
+        /*
+         * Parte de optimizacion de codigo 3 direcciones
+         */
+
+        public void addOptimizedCode(string codigo)
+        {
+            this.codigo.AddLast(codigo);
+        }
+
+        public void addOptimized(int fila, string original, string nueva, Optimized.Regla regla)
+        {
+            Optimized optimized = new Optimized(fila, original, nueva, regla);
+            this.optimizeds.AddLast(optimized);
+        }
+
+
+        public void ReporteOptimizacion()
+        {
+            string ruta = @"C:\compiladores2";
+            StreamWriter fichero = new StreamWriter(ruta + "\\" + "reporte_optimizacion" + ".html");
+            fichero.WriteLine("<html>");
+            fichero.WriteLine("<head><title>Optimizacion</title></head>");
+            fichero.WriteLine("<body>");
+            fichero.WriteLine("<h2>" + "Mirilla" + "</h2>");
+            fichero.WriteLine("<br></br>");
+            fichero.WriteLine("<center>" +
+            "<table border=3 width=60% height=7%>");
+            fichero.WriteLine("<tr>");
+            fichero.WriteLine("<th>Fila</th>");
+            fichero.WriteLine("<th>Codigo Eliminado</th>");
+            fichero.WriteLine("<th>Codigo Agregado</th>");
+            fichero.WriteLine("<th>Regla</th>");
+            fichero.WriteLine("</tr>");
+            fichero.WriteLine(ListaOptimizar());
+            fichero.Write("</table>");
+            fichero.WriteLine("</center>" + "</body>" + "</html>");
+            fichero.Close();
+        }
+
+        public string ListaOptimizar()
+        {
+            string salida = "";
+
+            foreach(Optimized optimized in this.optimizeds)
+            {
+                salida += "<tr>";
+                salida += "<td>" + optimized.fila + "</td>\n";
+                salida += "<td>" + optimized.original + "</td>\n";
+                salida += "<td>" + optimized.nueva + "</td>\n";
+                salida += "<td>" + optimized.regla + "</td>\n";
+                salida += "</tr>";
+            }
+
+            return salida;
+        }
     }
 }
