@@ -12,7 +12,7 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
         }
         public override string getOriginal()
         {
-            throw new NotImplementedException();
+            return "}";
         }
 
         public override void Mirilla(Interprete interprete)

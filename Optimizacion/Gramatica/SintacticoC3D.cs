@@ -20,9 +20,10 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
                 return false;
             }
 
-            string salida = Encabezado(raiz.ChildNodes[0]);
-
-            Instrucciones(raiz.ChildNodes[1]);
+            string salida = Encabezado(raiz.ChildNodes[0]);// obtiene el encabezado
+            LinkedList<Nodo> instrucciones =  Instrucciones(raiz.ChildNodes[1]); // obtiene istrucciones
+            Interprete interprete = new Interprete(salida, instrucciones);
+            interprete.Mirrilla();
 
             return true;
         }
@@ -73,12 +74,15 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
             return salida;
         }
 
-        public void Instrucciones(ParseTreeNode entrada)
+        public LinkedList<Nodo> Instrucciones(ParseTreeNode entrada)
         {
+            LinkedList<Nodo> salida = new LinkedList<Nodo>();
+
             foreach(ParseTreeNode node in entrada.ChildNodes)
             {
-                instruccion(node);
+                salida.AddLast(instruccion(node));
             }
+            return salida;
         }
 
         public Nodo instruccion(ParseTreeNode entrada)
@@ -91,10 +95,10 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
                     return getFuncion(entrada.ChildNodes[0]);
                 case "asignar":
                     return getAsignacion(entrada.ChildNodes[0]);
-                case "no_condicional":
+                case "condicional":
                     return getCondicion(entrada.ChildNodes[0]);
                 case "punto":
-                    return getSalto(entrada.ChildNodes[0]);
+                    return getEtiqueta(entrada.ChildNodes[0]);
                 case "retorno":
                     return getRetorno(entrada.ChildNodes[0]);
                 case "llamada":
@@ -103,6 +107,11 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
                     return getPrint(entrada.ChildNodes[0]);
                 case "fin":
                     return getFin(entrada.ChildNodes[0]);
+                case "no_condicional":
+                    return getSalto(entrada.ChildNodes[0]);
+                case "operacion":
+                    return getOperacion(entrada.ChildNodes[0]);
+
             }
             return null;
         }
@@ -149,8 +158,8 @@ namespace C3D_Pascal_AirMax.Optimizacion.Gramatica
         public Nodo getPrint(ParseTreeNode entrada)
         {
             int fila = entrada.Span.Location.Line;
-            string formato = entrada.ChildNodes[2].Token.Text;
-            string tipo = entrada.ChildNodes[5].Token.Text;
+            string formato = entrada.ChildNodes[2].ChildNodes[0].Token.Text;
+            string tipo = entrada.ChildNodes[5].ChildNodes[0].Token.Text;
             string valor = getTerminal(entrada.ChildNodes[7]);
             return new Printf(fila, formato, tipo, valor);
         }

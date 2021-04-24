@@ -6,9 +6,9 @@ namespace C3D_Pascal_AirMax.Optimizacion.Arbol
 {
     public abstract class Nodo
     {
-        public int index;
+        public int index; // sirve para el instruction pointer
         public int fila;
-        public bool isEnable;// sirve para saber si se incluye en la salida
+        public bool isEnable;// sirve para saber si la instruccion se incluye en la salida optimizada
 
         public Nodo(int fila)
         {

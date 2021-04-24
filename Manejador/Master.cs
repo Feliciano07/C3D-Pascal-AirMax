@@ -1,5 +1,6 @@
 ﻿using C3D_Pascal_AirMax.Abstract;
 using C3D_Pascal_AirMax.Enviroment;
+using C3D_Pascal_AirMax.Optimizacion;
 using C3D_Pascal_AirMax.Utilidades;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,10 @@ namespace C3D_Pascal_AirMax.Manejador
 
         private int puntero_heap = 0;
         private int puntero_stack = 0;
+
+        //Estructura para controlar la optimizacion
+        public LinkedList<Optimized> optimizeds = new LinkedList<Optimized>();
+
 
         public static Master getInstancia
         {
@@ -483,5 +488,20 @@ namespace C3D_Pascal_AirMax.Manejador
             return salida;
         }
 
+
+        /*
+         * Parte de optimizacion de codigo 3 direcciones
+         */
+
+        public void addOptimizedCode(string codigo)
+        {
+            this.codigo.AddLast(codigo);
+        }
+
+        public void addOptimized(int fila, string original, string nueva, Optimized.Regla regla)
+        {
+            Optimized optimized = new Optimized(fila, original, nueva, regla);
+            this.optimizeds.AddLast(optimized);
+        }
     }
 }
