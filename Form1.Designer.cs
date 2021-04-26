@@ -39,7 +39,9 @@ namespace C3D_Pascal_AirMax
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(32, 31);
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.richTextBox1.Location = new System.Drawing.Point(32, 40);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(392, 414);
             this.richTextBox1.TabIndex = 0;
@@ -48,15 +50,19 @@ namespace C3D_Pascal_AirMax
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(32, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(47, 15);
+            this.label1.Size = new System.Drawing.Size(153, 19);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Entrada";
+            this.label1.Text = "Alto Nivel y C3D";
             // 
             // richTextBox2
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(467, 31);
+            this.richTextBox2.BackColor = System.Drawing.SystemColors.InfoText;
+            this.richTextBox2.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.richTextBox2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.richTextBox2.Location = new System.Drawing.Point(467, 40);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.Size = new System.Drawing.Size(416, 414);
             this.richTextBox2.TabIndex = 2;
@@ -65,15 +71,16 @@ namespace C3D_Pascal_AirMax
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.label2.Location = new System.Drawing.Point(467, 13);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 15);
+            this.label2.Size = new System.Drawing.Size(63, 19);
             this.label2.TabIndex = 3;
             this.label2.Text = "Salida";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(32, 460);
+            this.button1.Location = new System.Drawing.Point(32, 471);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(83, 31);
             this.button1.TabIndex = 4;
@@ -83,7 +90,7 @@ namespace C3D_Pascal_AirMax
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(149, 460);
+            this.button2.Location = new System.Drawing.Point(149, 471);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(93, 30);
             this.button2.TabIndex = 5;
@@ -95,6 +102,7 @@ namespace C3D_Pascal_AirMax
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(936, 555);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -103,7 +111,7 @@ namespace C3D_Pascal_AirMax
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Pascal";
             this.ResumeLayout(false);
             this.PerformLayout();
 

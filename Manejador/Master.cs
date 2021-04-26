@@ -52,6 +52,26 @@ namespace C3D_Pascal_AirMax.Manejador
         //Estructura para controlar la optimizacion
         public LinkedList<Optimized> optimizeds = new LinkedList<Optimized>();
 
+        public void clear()
+        {
+            this.instrucciones.Clear();
+            this.compilacion.Clear();
+            this.compilar_funcion.Clear();
+            this.nativas.Clear();
+            this.types_objetos.Clear();
+            this.todas_variables.Clear();
+            this.lista_errores.Clear();
+            this.temporal = 0;
+            this.label = 0;
+            this.codigo.Clear();
+            this.storageTemp.Clear();
+            this.storageTempInt.Clear();
+            this.storageLabel.Clear();
+            this.puntero_heap = 0;
+            this.puntero_stack = 0;
+            this.optimizeds.Clear();
+        }
+
 
         public static Master getInstancia
         {

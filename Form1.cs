@@ -30,12 +30,14 @@ namespace C3D_Pascal_AirMax
             {
                 var result = MessageBox.Show("Analisis correcto");
                 string txt = Manejador.Master.getInstancia.getSalida();
+                
                 richTextBox2.Text = txt;
             }
             else
             {
                 var result = MessageBox.Show("Analisis incorrecto");
             }
+            Manejador.Master.getInstancia.clear();
 
         }
 
@@ -49,14 +51,17 @@ namespace C3D_Pascal_AirMax
             {
                 var result = MessageBox.Show("Analisis correcto");
                 string txt = Manejador.Master.getInstancia.getSalida();
+                
                 richTextBox2.Text = txt;
                 Manejador.Master.getInstancia.ReporteOptimizacion();
+
             }
             else
             {
                 var result = MessageBox.Show("Analisis incorrecto");
             }
-            
+            Manejador.Master.getInstancia.clear();
+
         }
     }
 }
